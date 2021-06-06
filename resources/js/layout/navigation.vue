@@ -120,13 +120,8 @@
                     </v-list-item-content>
                 </v-list-item>
             </div>
-            <div v-if="$store.state.auth.user.user_type === 'admin'">
-                <v-list-item>
-                    <v-list-item-content>
-                        <v-list-item-title class="title">Сотрудники</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item to="/user/service" link>
+            <div v-if="$vuetify.breakpoint.mobile && $store.state.auth.token" >
+                <v-list-item  @click="$emit('logout')" link>
                     <v-list-item-action>
                         <v-avatar size="30">
                             <img
@@ -136,7 +131,7 @@
                         </v-avatar>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title>Сотрудники</v-list-item-title>
+                        <v-list-item-title>Выход</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </div>
@@ -156,7 +151,7 @@
             return {
                 drawers: this.initDrawers
             }
-        }
+        },
     };
 </script>
 

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'auth-api', // For one login endpoint to few user roles
         'passwords' => 'users',
     ],
 
@@ -36,15 +36,26 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'admins' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
+        ],
+        'librarians' => [
+            'driver' => 'passport',
+            'provider' => 'librarians',
+        ],
+        'clients' => [
+            'driver' => 'passport',
+            'provider' => 'village-users',
+        ],
+        //for only login action with session guard
+        'auth' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
-        'api' => [
-            'driver' => 'token',
+        'auth-api' => [
+            'driver' => 'passport',
             'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -68,13 +79,20 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => \App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'village-users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Users\VillageUser::class,
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Users\Admin::class,
+        ],
+        'librarians' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Users\Librarian::class,
+        ],
     ],
 
     /*

@@ -20,14 +20,6 @@
 
       <v-spacer />
       <v-divider light vertical inset></v-divider>
-
-      <v-avatar size="30">
-        <img
-                src="/img/clock_icon.png"
-                alt="John"
-        >
-      </v-avatar>
-      <v-divider light vertical inset></v-divider>
     <v-btn to="/" icon>
       <v-avatar size="30">
         <img
@@ -47,7 +39,7 @@
       </v-btn>
       <v-btn to="/" plain>{{$store.state.auth.user.name}}
       </v-btn>
-      <v-btn plain @click="logout()">Выйти
+      <v-btn plain @click="$emit('logout')">Выйти
       </v-btn>
   </v-app-bar>
 </template>
@@ -65,12 +57,6 @@ export default {
       }
   },
   methods: {
-    logout() {
-
-      this.$store.dispatch('auth/toggleLoggingOut', true);
-      this.$store.dispatch('auth/logout')
-        .catch(err => console.log(err));
-    },
   },
   created() {
   },

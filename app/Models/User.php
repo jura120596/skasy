@@ -2,14 +2,49 @@
 
 namespace App\Models;
 
+use App\Exceptions\AppException;
+use App\Mail\PasswordMail;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Laravel\Passport\HasApiTokens;
+use Psy\Util\Str;
 
+/**
+ * Class User
+ * @package App\Models
+ * @mixin  Model
+ * @mixin Builder
+ * @property int id
+ * @property int role
+ * @property boolean blocked
+ * @property string password
+ * @property Carbon|null password_reset_at
+ */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
+    public const MIN_PASSWORD_LENGTH = 6;
+    public const ADMIN_ROLE = 1024;
+    public const LIBRARIAN_ROLE = 128;
+    public const VILLAGE_ROLE = 1;
+    public const ROLE = 0;
+    public const ROLES = [
+        self::VILLAGE_ROLE => 'Житель',
+        self::LIBRARIAN_ROLE => 'Библиотекарь',
+        self::ADMIN_ROLE => 'Сотрудник администрации',
+    ];
+
+    protected $dates = [
+        'password_reset_at',
+        'email_verified_at',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -40,4 +75,52 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('user_role_scope', function (Builder $builder) {
+            if (static::ROLE) $builder->where('role', static::ROLE);
+            return $builder;
+        });
+    }
+
+
+    /**
+     * @param array $attributes
+     * @return static|Model
+     */
+    public function fill(array $attributes)
+    {
+        $fill = parent::fill($attributes);
+        if (is_null($this->role)  && static::ROLE) $fill->role = static::ROLE;
+        return $fill;
+    }
+
+    /**
+     * @return bool
+     */
+    public  function isBlocked()
+    {
+        return $this->blocked;
+    }
+
+    /**
+     * @throws AppException
+     */
+    public function sendPasswordMail()
+    {
+        if ($this->password_reset_at && $this->password_reset_at->gt(Carbon::now()->addMinutes($m = 5)))
+            throw new AppException(sprintf('Вы не можете менять пароль чаще, чем %s раз в минут.', $m));
+        $this->password = Hash::make($word = \Illuminate\Support\Str::random(8));
+        $this->password_reset_at = Carbon::now();
+        $this->save();
+        Mail::to($this)->send(new PasswordMail($word));
+    }
 }

@@ -1,8 +1,10 @@
 <template>
     <v-app  mobile-breakpoint="600">
-        <navigation :initDrawers="drawers" />
+        <navigation :initDrawers="drawers"
+                    @logout="logout"/>
         <template v-if="$store.state.auth.token">
-            <layout-header :initDrawers="drawers"
+            <layout-header  v-if="!$vuetify.breakpoint.mobile" :initDrawers="drawers"
+                            @logout="logout"
                            @toggleDrawer="drawers.navigate = !drawers.navigate" />
             <v-main v-if="!$store.state.auth.loggingOut">
                 <router-view :key="$route.fullPath"/>
@@ -13,7 +15,8 @@
                 <router-view />
             </v-main>
         </template>
-        <layout-footer @toggleDrawer="drawers.navigate = !drawers.navigate"/>
+        <layout-footer v-if="$vuetify.breakpoint.mobile"
+                       @toggleDrawer="drawers.navigate = !drawers.navigate"/>
         <v-snackbar
                 v-model="snackbar"
                 :timeout="timeout"
@@ -73,6 +76,12 @@
         methods: {
             onResize () {
                 this.isMobile = window.innerWidth < 600
+            },
+            logout() {
+
+                this.$store.dispatch('auth/toggleLoggingOut', true);
+                this.$store.dispatch('auth/logout')
+                    .catch(err => console.log(err));
             },
         },
 

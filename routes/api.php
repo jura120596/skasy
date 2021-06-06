@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AppAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'auth' ], function (){
+    Route::post('login', [AppAuthController::class, 'login']);
+    Route::post('logout', [AppAuthController::class, 'logout']);
+    Route::post('refresh', [AppAuthController::class, 'refresh']);
+    Route::post('reset', [AppAuthController::class, 'resetPassword']);
+    Route::post('profile', [AppAuthController::class, 'profile']);
+
 });
