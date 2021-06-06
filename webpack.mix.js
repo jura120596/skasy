@@ -21,6 +21,7 @@ mix.sourceMaps();
 
 mix.webpackConfig(wc)
     .js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
     .vue({version:2})
     .extract(['vue']);
 

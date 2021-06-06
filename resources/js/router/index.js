@@ -8,7 +8,7 @@ const routes = [
     {
         path: '/login',
         name: 'login-page',
-        component:  () => import('@/App'),
+        component:  () => import('@/pages/Login'),
     },
     // {
     //     path: '/reset-password',

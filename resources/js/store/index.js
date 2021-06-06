@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// import StoreAuth from '@/store/modules/auth';
+import StoreAuth from '@/store/modules/auth';
 
 Vue.use(Vuex);
 
@@ -10,7 +10,7 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
     modules: {
-        // auth: StoreAuth,
+        auth: StoreAuth,
     },
     state: {
         appName : `${process.env.MIX_APP_NAME}`,
