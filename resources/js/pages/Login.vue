@@ -52,6 +52,8 @@
                             height="auto"
                             tile
                     >
+
+                        <router-link to="/registration">Регистрация</router-link> <v-spacer vertical ></v-spacer>
                         <v-dialog
                                 v-model="resetDialogShow"
                                 transition="dialog-top-transition"
@@ -60,11 +62,13 @@
                                 ref="resetDialog"
                         >
                             <template v-slot:activator="{ on, attrs }">
-                                <a
+                                <v-card elevation="0" justify-space-between>
+                                    <a
                                         v-bind="attrs"
                                         v-on="on"
                                         @click="resetDialogShow = true"
-                                >Забыли пароль?</a>
+                                    >Забыли пароль?</a>
+                                </v-card>
                             </template>
                             <template v-slot:default="dialog">
                                 <v-card>

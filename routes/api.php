@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth' ], function (){
+    Route::post('signup', [AppAuthController::class, 'signUp']);
     Route::post('login', [AppAuthController::class, 'login']);
     Route::post('logout', [AppAuthController::class, 'logout']);
     Route::post('refresh', [AppAuthController::class, 'refresh']);

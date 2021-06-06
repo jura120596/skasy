@@ -37,8 +37,7 @@ Axios.interceptors.response.use(response => {
             if ('/404' !== router.currentRoute.path) router.push('/404');
     } else  if (error.response.status >= 400 &&
                 (error.response.status !== 422
-                    || !error.response.data.errors
-                    || !error.response.data.errors.form_confirmed.length)
+                    || !error.response.data.errors)
     ) {
         router.app.$root.$children[0].snackbarText = error.response.data.message
             ? error.response.data.message

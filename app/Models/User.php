@@ -112,15 +112,16 @@ class User extends Authenticatable
     }
 
     /**
+     * @param bool $new
      * @throws AppException
      */
-    public function sendPasswordMail()
+    public function sendPasswordMail(bool $new = false)
     {
         if ($this->password_reset_at && $this->password_reset_at->gt(Carbon::now()->addMinutes($m = 5)))
             throw new AppException(sprintf('Вы не можете менять пароль чаще, чем %s раз в минут.', $m));
         $this->password = Hash::make($word = \Illuminate\Support\Str::random(8));
         $this->password_reset_at = Carbon::now();
         $this->save();
-        Mail::to($this)->send(new PasswordMail($word));
+        Mail::to($this)->send(new PasswordMail($word, $new));
     }
 }

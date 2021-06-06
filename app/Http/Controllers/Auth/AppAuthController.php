@@ -8,6 +8,7 @@ use App\Http\Middleware\Transaction;
 use App\Http\Requests\ApiAuth\LoginRequest;
 use App\Http\Requests\ApiAuth\ResetPasswordLinkRequest;
 use App\Http\Requests\ApiAuth\ResetPasswordRequest;
+use App\Http\Requests\ApiAuth\UserSignUpRequest;
 use App\Mail\PasswordMail;
 use App\Models\User;
 use App\Models\Users\Admin;
@@ -16,6 +17,7 @@ use App\Models\Users\Librarian;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +38,7 @@ class AppAuthController extends Controller
     {
         $this->middleware('guest')->only(['resetPassword', 'login']);
         $this->middleware('auth:auth-api')->only('logout', 'profile','refresh');
-        $this->middleware(Transaction::class)->only(['resetPassword']);
+        $this->middleware(Transaction::class)->only(['resetPassword', 'signUp']);
         $this->middleware('throttle:10,1')->only(['resetPassword']);
     }
 
@@ -108,7 +110,7 @@ class AppAuthController extends Controller
         else
             $token->expires_at = Carbon::now()->addDays(1);
         $token->save();
-        return $this->respondWithToken($tokenResult);
+        return $this->tokenResponse($tokenResult);
     }
 
     /**
@@ -118,7 +120,7 @@ class AppAuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken(PersonalAccessTokenResult $token)
+    protected function tokenResponse(PersonalAccessTokenResult $token)
     {
         return $this->response([trans('responses.controllers.login.token'), true, [
             'access_token' => $token->accessToken,
@@ -144,6 +146,17 @@ class AppAuthController extends Controller
         }
         $user->sendPasswordMail();
         return $this->response([trans('responses.controllers.login.resetLink')]);
+    }
+
+    public function signUp(UserSignUpRequest $request) : JsonResponse
+    {
+        $u = VillageUser::query()->newModelInstance();
+        $u->name = trim(sprintf('%s %s %s', $request->second_name ?:'', $request->name?: '', $request->last_name ?:''));
+        $u->email = $request->email;
+        $u->password = '';
+        $u->save();
+        $u->sendPasswordMail();
+        return $this->refresh($u);
     }
 
 }

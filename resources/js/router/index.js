@@ -18,6 +18,14 @@ const routes = [
             for_guest: true,
         }
     },
+    {
+        path: '/registration',
+        name : 'sign-up',
+        component: () => import('@/pages/Registration'),
+        meta: {
+            for_guest: true,
+        }
+    },
     // {
     //     path: '/reset-password',
     //     name: 'reset-password-page',

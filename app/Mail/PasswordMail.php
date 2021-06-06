@@ -11,14 +11,17 @@ class PasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
     private $password;
+    private $new;
 
     /**
      * Create a new message instance.
      *
      * @param string $password
+     * @param bool $new
      */
-    public function __construct(string $password)
+    public function __construct(string $password, bool $new)
     {
+        $this->new = $new;
         $this->password = $password;
     }
 
@@ -29,7 +32,7 @@ class PasswordMail extends Mailable
      */
     public function build()
     {
-        $this->subject = 'Восстановление пароля';
-        return $this->view('email.password',  ['password' => $this->password]);
+        $this->subject = $this->new ? config('app.name') . '. Регистрация' : 'Восстановление пароля';
+        return $this->view('email.password',  ['password' => $this->password, 'new' => $this->new]);
     }
 }
