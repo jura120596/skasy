@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer v-model="drawers.navigate" app clipped>
+    <v-navigation-drawer v-model="drawers.navigate" app clipped class="app-navigation">
         <v-list-item>
             <v-list-item-content>
                 <v-list-item-title class="title">
@@ -9,7 +9,7 @@
             </v-list-item-content>
         </v-list-item>
         <v-list dense>
-            <v-list-item to="/" link>
+            <v-list-item to="/map" link>
                 <v-list-item-action>
                     <v-avatar size="30">
                         <img
@@ -19,7 +19,7 @@
                     </v-avatar>
                 </v-list-item-action>
                 <v-list-item-content>
-                    <v-list-item-title>Рабочий стол</v-list-item-title>
+                    <v-list-item-title>Карта поселения</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
 
@@ -156,5 +156,7 @@
 </script>
 
 <style scoped>
-
+    .app-navigation {
+        z-index:1001;
+    }
 </style>

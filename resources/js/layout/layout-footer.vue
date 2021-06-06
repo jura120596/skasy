@@ -1,5 +1,5 @@
 <template>
-  <v-footer app>
+  <v-footer app class="app-footer">
     <v-app-bar-nav-icon v-on:click="$emit('toggleDrawer')" />
   </v-footer>
 </template>
@@ -11,5 +11,8 @@ export default {
 </script>
 
 <style scoped>
-
+  .app-footer {
+    z-index: 1000;
+    heigth: 5vh;
+  }
 </style>

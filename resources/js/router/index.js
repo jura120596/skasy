@@ -10,6 +10,14 @@ const routes = [
         name: 'login-page',
         component:  () => import('@/pages/Login'),
     },
+    {
+        path: '/map',
+        name: 'map-page',
+        component:  () => import('@/pages/Map'),
+        meta: {
+            for_guest: true,
+        }
+    },
     // {
     //     path: '/reset-password',
     //     name: 'reset-password-page',
@@ -54,7 +62,7 @@ router.beforeEach( (to, from, next) => {
                 break;
             }
         default:
-            if (!Store.getters['auth/authenticated']) {
+            if (!Store.getters['auth/authenticated'] && !to.meta.for_guest) {
                 next({name: 'login-page'});
                 break;
             }
