@@ -22,5 +22,6 @@ Route::group(['prefix' => 'auth' ], function (){
     Route::post('refresh', [AppAuthController::class, 'refresh']);
     Route::post('reset', [AppAuthController::class, 'resetPassword']);
     Route::post('profile', [AppAuthController::class, 'profile']);
+    Route::put('profile', [AppAuthController::class, 'profileUpdate']);
 
 });

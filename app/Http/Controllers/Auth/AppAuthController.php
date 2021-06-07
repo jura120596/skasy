@@ -8,6 +8,7 @@ use App\Http\Middleware\Transaction;
 use App\Http\Requests\ApiAuth\LoginRequest;
 use App\Http\Requests\ApiAuth\ResetPasswordLinkRequest;
 use App\Http\Requests\ApiAuth\ResetPasswordRequest;
+use App\Http\Requests\ApiAuth\UserProfileRequest;
 use App\Http\Requests\ApiAuth\UserSignUpRequest;
 use App\Mail\PasswordMail;
 use App\Models\User;
@@ -19,6 +20,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -37,8 +39,8 @@ class AppAuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->only(['resetPassword', 'login']);
-        $this->middleware('auth:auth-api')->only('logout', 'profile','refresh');
-        $this->middleware(Transaction::class)->only(['resetPassword', 'signUp']);
+        $this->middleware('auth:auth-api')->only('logout', 'profile','refresh', 'profileUpdate');
+        $this->middleware(Transaction::class)->only(['resetPassword', 'signUp', 'profileUpdate']);
         $this->middleware('throttle:10,1')->only(['resetPassword']);
     }
 
@@ -151,12 +153,23 @@ class AppAuthController extends Controller
     public function signUp(UserSignUpRequest $request) : JsonResponse
     {
         $u = VillageUser::query()->newModelInstance();
-        $u->name = trim(sprintf('%s %s %s', $request->second_name ?:'', $request->name?: '', $request->last_name ?:''));
+        $u->fill($request->validated());
         $u->email = $request->email;
         $u->password = '';
         $u->save();
         $u->sendPasswordMail();
         return $this->refresh($u);
+    }
+
+    public function profileUpdate(UserProfileRequest $request) : JsonResponse
+    {
+        $u = User::query()->findOrFail(Auth::id());
+        $u->fill($request->validated());
+        if ($pswd = Arr::get($request->validated(), 'password')){
+            $u->password = Hash::make($pswd);
+        }
+        $u->save();
+        return $this->profile();
     }
 
 }

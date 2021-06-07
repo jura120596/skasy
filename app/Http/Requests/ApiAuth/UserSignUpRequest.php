@@ -21,8 +21,6 @@ class UserSignUpRequest extends AppRequest
             'email' => 'string|email|unique:users',
             'name' => 'string|min:2|regex:/'.self::FIO_PATTERN . '/u',
             'second_name' => 'string|min:2|regex:/'.self::FIO_PATTERN . '/u',
-//            'password' => 'string|min:'.User::MIN_PASSWORD_LENGTH.'|confirmed' .
-//                '|regex:/.*[a-z].*/|regex:/.*[0-9].*/|regex:/.*[\W\D\S].*/',
             'accept' => 'boolean|in:1,true,TRUE',
         ];
     }

@@ -27,7 +27,8 @@ class UsersTableSeeder extends Seeder
                 'email' => $email,
                 'password' => Hash::make(env('ADMIN_USER_PASSWORD', Str::random(25))),
                 'role' => User::ADMIN_ROLE,
-                'name' => 'Super Admin',
+                'name' => 'Админ',
+                'second_name' => 'Супер',
             ],
         ]);
     }

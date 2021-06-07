@@ -36,20 +36,6 @@
                             name="last_name"
                             type="text"
                     />
-                    <v-text-field
-                            v-model="account.password"
-                            :error-messages="messages.password"
-                            label="Пароль"
-                            name="password"
-                            type="password"
-                    />
-                    <v-text-field
-                            v-model="account.password_confirmation"
-                            :error-messages="messages.password_confirmation"
-                            label="Подтвердите пароль"
-                            name="password"
-                            type="password"
-                    />
                     <v-checkbox
                             v-model="account.accept"
                             :error-messages="messages.accept"
@@ -103,8 +89,6 @@
                 return this.account.email
                     && this.account.second_name
                     && this.account.name
-                    && this.account.password
-                    && this.account.password_confirmation
                     && this.account.accept
             },
         },

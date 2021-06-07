@@ -150,6 +150,22 @@ export default {
         commit('clearTTL');
       }
     },
+    async updateProfile({ commit,dispatch }, profileData) {
+      let data = {
+          name: profileData.name,
+          email: profileData.email,
+          second_name: profileData.second_name,
+          last_name: profileData.last_name,
+      };
+      if (profileData.password || profileData.password_confirmation) {
+          data.password = profileData.password;
+          data.password_confirmation = profileData.password_confirmation;
+      }
+      const response = await Axios.put('/auth/profile', profileData);
+      commit('setUser', response.data.data);
+      return response;
+
+    },
 
     /**
      * Verify token and get current authenticated user account details.

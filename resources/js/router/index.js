@@ -11,6 +11,11 @@ const routes = [
         component:  () => import('@/pages/Login'),
     },
     {
+        path: '/profile',
+        name: 'profile-page',
+        component:  () => import('@/pages/Profile'),
+    },
+    {
         path: '/map',
         name: 'map-page',
         component:  () => import('@/pages/Map'),
