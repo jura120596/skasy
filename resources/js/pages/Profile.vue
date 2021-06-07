@@ -3,7 +3,7 @@
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="4">
-                <v-toolbar-title align="center" justify="center">Редактирование профиля</v-toolbar-title>
+                <v-toolbar-title align="center" justify="center" class="pa-3">Редактирование профиля</v-toolbar-title>
                 <v-form  @keyup.native.enter="signUp" ref="form">
 
                     <v-text-field
