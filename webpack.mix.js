@@ -22,6 +22,7 @@ mix.sourceMaps();
 mix.webpackConfig(wc)
     .js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
+    .copy('resources/js/service-worker.js', 'public/service-worker.js')
     .vue({version:2})
     .extract(['vue']);
 
