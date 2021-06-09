@@ -29,4 +29,5 @@ Route::group(['prefix' => 'auth' ], function (){
 });
 
 Route::apiResource('post', PosttController::class);
+Route::apiResource('user/post', \App\Http\Controllers\UserPosttController::class);
 Route::apiResource('event', VillageEventController::class);

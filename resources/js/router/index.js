@@ -45,6 +45,19 @@ const routes = [
         component: () => import('@/pages/PostEdit')
     },
     {
+        path: '/user/posts',
+        name : 'uposts',
+        component: () => import('@/pages/UserPosts'),
+        meta: {
+            for_guest: true,
+        }
+    },
+    {
+        path: '/user/post/:id',
+        name : 'upost',
+        component: () => import('@/pages/UserPostEdit')
+    },
+    {
         path: '/events',
         name : 'events',
         component: () => import('@/pages/Events'),

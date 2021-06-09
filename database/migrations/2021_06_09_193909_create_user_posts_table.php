@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablePostsTable extends Migration
+class CreateUserPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateTablePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::dropIfExists('user_posts');
+        Schema::create('user_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title', 40);
             $table->text('description');
@@ -25,13 +26,14 @@ class CreateTablePostsTable extends Migration
                 ->onUpdate('cascade');
             $table->timestamps();
         });
-        Schema::create('post_photos', function (Blueprint $table) {
+        Schema::dropIfExists('user_post_photos');
+        Schema::create('user_post_photos', function (Blueprint $table) {
             $table->id();
             $table->string('file', 255);
-            $table->unsignedBigInteger('post_id');
-            $table->foreign('post_id')
+            $table->unsignedBigInteger('user_post_id');
+            $table->foreign('user_post_id')
                 ->references('id')
-                ->on('posts')
+                ->on('user_posts')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->timestamps();
@@ -45,7 +47,7 @@ class CreateTablePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
-        Schema::dropIfExists('post_photos');
+        Schema::dropIfExists('user_posts');
+        Schema::dropIfExists('user_post_photos');
     }
 }
