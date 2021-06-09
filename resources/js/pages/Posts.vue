@@ -3,7 +3,7 @@
         <v-toolbar-title align="center" justify="center" class="mb-2"
                          v-text="'Последние новости'">
         </v-toolbar-title>
-        <div v-if="posts.length > 0" >
+        <div v-if="posts.length > 0">
             <v-layout class="d-flex flex-row flex-wrap">
 
                 <v-flex
@@ -11,7 +11,7 @@
                         sm6
                         md6
                         lg4
-                        v-for="(post, y) in posts" :key="y" >
+                        v-for="(post, y) in posts" :key="y">
 
                     <v-card
                             elevation="0"
@@ -23,14 +23,36 @@
                                 show =  true
                             "
                     >
-                        <div v-text="post.date" style="position:absolute; right: 5px; top: 5px; font-size: 10px"></div>
+                        <div v-if="$store.state.auth.user.role === 1024"
+                             class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
+                            <v-btn
+                                    color="yellow"
+                                    fab
+                                    small
+                                    @click="$router.push('/post/'+post.id)"
+                                    dark>
+                                <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
+                            <v-btn color="red"
+                                   fab
+                                   small
+                                   @click="delete_id = post.id"
+                                   dark>
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </div>
+
+                        <div
+                                v-else
+                                v-text="'Опубликовано: '+post.date"
+                                style="position:absolute; right: 5px; top: 5px; font-size: 10px"></div>
                         <v-container>
                             <v-spacer></v-spacer>
-                            <v-toolbar-title class="text-center">{{post.title}}</v-toolbar-title>
+                            <v-toolbar-title class="text-center mt-3 mb-2">{{post.title}}</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-container>
 
-                        <v-container>
+                        <v-container class="ma-0 pa-0">
                             <div v-if="post.photos.length" class="user-photo-module">
                                 <v-carousel>
                                     <v-carousel-item
@@ -55,8 +77,17 @@
             </div>
         </div>
         <div v-else>
-            {{posts}}
+            <div class="text-center my-3">Новостей пока нет</div>
         </div>
+
+        <v-btn class="save-btn"
+               v-if="$store.state.auth.user.role === 1024"
+               color="success"
+               fab
+               @click="$router.push('/post/0')"
+               dark>
+            <v-icon>mdi-plus</v-icon>
+        </v-btn>
         <v-dialog
                 v-if="!!dialogPost"
                 v-model="show"
@@ -64,7 +95,7 @@
                     show = false
                     dialogPost = null
                 "
-                :fullscreen="$vuetify.breakpoint.mobileBreakpoint"
+                :fullscreen="$vuetify.breakpoint.mobile"
         >
             <template slot:default>
                 <v-container class="px-0 mx-0 pt-0 mt-0 cover" style="background-color: white !important;">
@@ -87,7 +118,8 @@
                         <v-btn color="primary" @click="
                             show = false
                             dialogPost = null
-                        ">Закрыть</v-btn>
+                        ">Закрыть
+                        </v-btn>
                     </v-toolbar-title>
 
                 </v-container>
@@ -105,6 +137,7 @@
                 posts: [],
                 page: 1,
                 dialogPost: null,
+                delete_id: 0,
                 show: false
             }
         },
@@ -113,25 +146,42 @@
         },
         methods: {
             getPage() {
-                window.axios.get('/post/', {params: {page:this.page, per_page: 10}}).then((response) => {
+                window.axios.get('/post/', {params: {page: this.page, per_page: 10}}).then((response) => {
                     this.posts = response.data.data;
                     this.l = response.data.last_page
                 }).catch((e) => {
                     console.log(e);
                 });
+            },
+            delete() {
+                if (this.delete_id > 0)
+                    window.axios.delete('/post/' + this.delete_id).then((response) => {
+                        this.getPage()
+                        delete_id = 0
+                    }).catch((e) => {
+                        console.log(e);
+                    });
             }
         },
         watch: {
             page() {
-                    console.log(this.page)
-                    this.getPage();
+                console.log(this.page)
+                this.getPage();
+            },
+            delete_id(nv) {
+                if (nv > 0) this.delete()
             }
         }
     }
 </script>
 
 <style>
-    .v-dialog{
+    .v-dialog {
         background-color: white !important;
+    }
+
+    .crud .v-btn--fab.v-size--small {
+        height: 30px;
+        width: 30px;
     }
 </style>

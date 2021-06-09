@@ -18,12 +18,11 @@ Axios.interceptors.response.use(response => {
     const ttl = Store.getters['auth/ttl'];
     const isRefreshing = Store.getters['auth/isRefreshing'];
 
-    if (!isRefreshing &&
+    if (!isRefreshing && (!router.app || !router.app.$route.meta.for_guest) &&
         (response.config.url !== '/auth/login'
             && response.config.url !== '/auth/reset') && ttl < Date.now()) {
         Store.dispatch('auth/refresh');
     }
-    console.log(response);
     if (router.app && response.config.method !== 'get') {
         router.app.$root.$children[0].snackbarText = response.data.message;
         router.app.$root.$children[0].snackbar = true;

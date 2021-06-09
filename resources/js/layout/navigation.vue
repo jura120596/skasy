@@ -113,7 +113,8 @@
                     </v-list-item-content>
                 </v-list-item>
             </div>
-            <div v-if="$vuetify.breakpoint.mobile && $store.state.auth.token" >
+            <div v-if="$store.state.auth.token" >
+
                 <v-list-item  to="/profile" link>
                     <v-list-item-action>
                         <v-avatar size="30">

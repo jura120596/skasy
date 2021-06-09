@@ -65,7 +65,6 @@ export default {
      * Set current authenticated user.
      */
     setUser: (state, payload) => {
-
       state.user = payload;
     },
     /**
@@ -143,6 +142,7 @@ export default {
       try {
         const response = await Axios.post('/auth/profile');
         commit('setUser', response.data.data);
+        console.log(state)
       }
       catch (error) {
         console.log(error)
