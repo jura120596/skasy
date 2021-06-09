@@ -44,6 +44,19 @@ const routes = [
         name : 'post',
         component: () => import('@/pages/PostEdit')
     },
+    {
+        path: '/events',
+        name : 'events',
+        component: () => import('@/pages/Events'),
+        meta: {
+            for_guest: true,
+        }
+    },
+    {
+        path: '/event/:id',
+        name : 'event',
+        component: () => import('@/pages/EventEdit')
+    },
     // {
     //     path: '/reset-password',
     //     name: 'reset-password-page',

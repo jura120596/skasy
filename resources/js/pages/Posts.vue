@@ -181,12 +181,4 @@
 </script>
 
 <style>
-    .v-dialog {
-        background-color: white !important;
-    }
-
-    .crud .v-btn--fab.v-size--small {
-        height: 30px;
-        width: 30px;
-    }
 </style>

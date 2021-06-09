@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AppAuthController;
 use App\Http\Controllers\PosttController;
+use App\Http\Controllers\VillageEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,4 @@ Route::group(['prefix' => 'auth' ], function (){
 });
 
 Route::apiResource('post', PosttController::class);
+Route::apiResource('event', VillageEventController::class);
