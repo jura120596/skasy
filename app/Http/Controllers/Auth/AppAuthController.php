@@ -129,7 +129,7 @@ class AppAuthController extends Controller
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $token->token->expires_at
-            )->toDateTimeString()
+            )->timestamp
         ]]);
     }
 

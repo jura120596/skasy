@@ -10,10 +10,10 @@
         />
 
         <v-btn class="btn my-2" @click="clickOnInput">Добавить фотографию</v-btn>
-        <div v-if="loadedPhotos.length" class="user-photo-module">
+        <div v-if="carouselPhotos.length" class="user-photo-module">
             <v-carousel v-model="n">
                 <v-carousel-item
-                        v-for="(photo, i) in loadedPhotos"
+                        v-for="(photo, i) in carouselPhotos"
                         :key="i"
                         :src="photo"
                         contain
@@ -39,10 +39,14 @@
                 n: 0,
                 photo: '',
                 loadedPhotos: [],
+                carouselPhotos:[],
                 fileImg: null,
             }
         },
         methods: {
+            getPhotos() {
+                return this.loadedPhotos;
+            },
             returnFormData(val) {
                 this.$emit('save-photo', val)
             },
@@ -67,7 +71,8 @@
                     this.$root.$children[0].snackbar = true
                     return;
                 }
-                this.loadedPhotos.push(URL.createObjectURL(this.fileImg))
+                this.carouselPhotos.push(URL.createObjectURL(this.fileImg))
+                this.loadedPhotos.push(this.fileImg)
                 this.n = this.loadedPhotos.length-1
                 this.fileImg = null;
             },

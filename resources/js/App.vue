@@ -90,6 +90,7 @@
 <style>
     .cover {
         min-height: 92vh !important;
+        padding-bottom: 8vh !important;
     }
     .tox {
 

@@ -145,6 +145,7 @@ export default {
         commit('setUser', response.data.data);
       }
       catch (error) {
+        console.log(error)
         commit('clearUser');
         commit('clearToken');
         commit('clearTTL');
@@ -182,6 +183,7 @@ export default {
         });
       }
       catch (error) {
+        console.log(error)
         commit('clearUser');
         commit('clearToken');
         commit('clearTTL');

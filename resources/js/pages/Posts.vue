@@ -1,0 +1,137 @@
+<template>
+    <v-container class="cover">
+        <v-toolbar-title align="center" justify="center" class="mb-2"
+                         v-text="'Последние новости'">
+        </v-toolbar-title>
+        <div v-if="posts.length > 0" >
+            <v-layout class="d-flex flex-row flex-wrap">
+
+                <v-flex
+                        xs12
+                        sm6
+                        md6
+                        lg4
+                        v-for="(post, y) in posts" :key="y" >
+
+                    <v-card
+                            elevation="0"
+                            outlined
+                            style="position: relative;"
+                            class="ma-1"
+                            @click="
+                                dialogPost = post
+                                show =  true
+                            "
+                    >
+                        <div v-text="post.date" style="position:absolute; right: 5px; top: 5px; font-size: 10px"></div>
+                        <v-container>
+                            <v-spacer></v-spacer>
+                            <v-toolbar-title class="text-center">{{post.title}}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-container>
+
+                        <v-container>
+                            <div v-if="post.photos.length" class="user-photo-module">
+                                <v-carousel>
+                                    <v-carousel-item
+                                            v-for="(photo, i) in post.photos"
+                                            :key="i"
+                                            :src="photo.file"
+                                            contain
+                                    >
+                                    </v-carousel-item>
+                                </v-carousel>
+                            </div>
+                        </v-container>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+            <div class="text-center xs-12">
+                <v-pagination
+                        :length="l"
+                        :total-visible="3"
+                        v-model="page"
+                ></v-pagination>
+            </div>
+        </div>
+        <div v-else>
+            {{posts}}
+        </div>
+        <v-dialog
+                v-if="!!dialogPost"
+                v-model="show"
+                @close="
+                    show = false
+                    dialogPost = null
+                "
+                :fullscreen="$vuetify.breakpoint.mobileBreakpoint"
+        >
+            <template slot:default>
+                <v-container class="px-0 mx-0 pt-0 mt-0 cover" style="background-color: white !important;">
+                    <v-toolbar-title class="text-center my-3">{{dialogPost.title}}</v-toolbar-title>
+
+                    <div v-if="dialogPost.photos && dialogPost.photos.length > 0" class="user-photo-module my-2">
+                        <v-carousel>
+                            <v-carousel-item
+                                    v-for="(photo, i) in dialogPost.photos"
+                                    :key="i"
+                                    :src="photo.file"
+                                    contain
+                            >
+                            </v-carousel-item>
+                        </v-carousel>
+                    </div>
+                    <v-container v-html="dialogPost.description"></v-container>
+
+                    <v-toolbar-title class="text-center my-3">
+                        <v-btn color="primary" @click="
+                            show = false
+                            dialogPost = null
+                        ">Закрыть</v-btn>
+                    </v-toolbar-title>
+
+                </v-container>
+            </template>
+        </v-dialog>
+    </v-container>
+</template>
+
+<script>
+    export default {
+        name: "Posts",
+        data: (vm) => {
+            return {
+                l: 1,
+                posts: [],
+                page: 1,
+                dialogPost: null,
+                show: false
+            }
+        },
+        mounted() {
+            this.getPage();
+        },
+        methods: {
+            getPage() {
+                window.axios.get('/post/', {params: {page:this.page, per_page: 10}}).then((response) => {
+                    this.posts = response.data.data;
+                    this.l = response.data.last_page
+                }).catch((e) => {
+                    console.log(e);
+                });
+            }
+        },
+        watch: {
+            page() {
+                    console.log(this.page)
+                    this.getPage();
+            }
+        }
+    }
+</script>
+
+<style>
+    .v-dialog{
+        background-color: white !important;
+    }
+</style>

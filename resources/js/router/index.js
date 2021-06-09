@@ -32,6 +32,14 @@ const routes = [
         }
     },
     {
+        path: '/posts',
+        name : 'posts',
+        component: () => import('@/pages/Posts'),
+        meta: {
+            for_guest: true,
+        }
+    },
+    {
         path: '/post/:id',
         name : 'post',
         component: () => import('@/pages/PostEdit')

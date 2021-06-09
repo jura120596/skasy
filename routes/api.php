@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AppAuthController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\PosttController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +27,4 @@ Route::group(['prefix' => 'auth' ], function (){
 
 });
 
-Route::apiResource('post', PostController::class);
+Route::apiResource('post', PosttController::class);

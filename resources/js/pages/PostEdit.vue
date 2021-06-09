@@ -27,14 +27,23 @@
         >
         </editor>
         <v-spacer/>
-        <photo-loader v-if="$route"></photo-loader>
+        <photo-loader v-if="$route.params.id > 0" ref="loader"></photo-loader>
         <v-btn class="save-btn"
+               v-if="$route.params.id == 0"
                color="success"
                fab
                @click="create"
                :disabled="!(post.description && post.title)"
                dark>
             <v-icon>mdi-plus</v-icon>
+        </v-btn>
+        <v-btn class="save-btn"
+               v-else
+               @click="update"
+               color="success"
+               fab
+               dark>
+            <v-icon>mdi-check-outline</v-icon>
         </v-btn>
     </v-container>
 </template>
@@ -77,17 +86,43 @@
             create() {
                 window.axios.post('/post', this.post)
                     .then((r) => {
-                        this.$root.$children[0].snackbarText = r.data.message;
-                        this.$root.$children[0].snackbar = true;
                         this.$router.push({name: "post", params: {id: r.data.data.id}});
                     }).catch((e) => {
-                        if (e.response && e.response.status === 422) {
-                            let errors = e.response.data.errors
-                            Object.keys(this.messages).forEach((k)=> {
-                                this.messages[k] = errors[k]?.[0] || '';
-                            });
+                    if (e.response && e.response.status === 422) {
+                        let errors = e.response.data.errors
+                        Object.keys(this.messages).forEach((k)=> {
+                            this.messages[k] = errors[k]?.[0] || '';
+                        });
+                    }
+                })
+            },
+             update() {
+                window.axios.put('/post/'+ this.post.id, this.post)
+                    .then((r) => {
+                        let newPhotos = this.$refs.loader.getPhotos();
+                        if (newPhotos.length) {
+                            const formData = new FormData()
+                            newPhotos.forEach((photo, i) => {
+                                formData.append('post_photos['+i+']', photo, photo.name)
+                            })
+                            formData.append('_method', 'PUT')
+                            try {
+                                window.axios.post('/post/'+this.post.id, formData)
+                            } catch (e) {
+                                this.$root.$children[0].snackbarText =  `Ошибка сохранения фотографии`
+                                this.$root.$children[0].snackbar = true
+                            }
                         }
-                    })
+                        this.$router.push({name: "posts"});
+                    }).catch((e) => {
+                    console.log(e);
+                    if (e.response && e.response.status === 422) {
+                        let errors = e.response.data.errors
+                        Object.keys(this.messages).forEach((k)=> {
+                            this.messages[k] = errors[k]?.[0] || '';
+                        });
+                    }
+                })
             }
         }
     }

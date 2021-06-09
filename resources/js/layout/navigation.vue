@@ -23,28 +23,21 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <div v-if="$store.state.auth.user.companies && $store.state.auth.user.companies.length"
-                 v-for="company in $store.state.auth.user.companies" :key="company.id">
-                <v-list-item>
-                    <v-list-item-content>
-                        <v-list-item-title class="title">{{company.name}}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item
-                        :to="'/company/'+company.id +'/case/'" link>
-                    <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/case_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Портфели</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </div>
+            <v-list-item
+                    :to="'/posts'" link>
+                <v-list-item-action>
+                    <v-avatar size="30">
+                        <img
+                                src="/img/case_icon.png"
+                                alt="John"
+                        >
+                    </v-avatar>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Новости</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
             <div v-if="$store.state.auth.user.user_group >= 64">
                 <v-list-item>
                     <v-list-item-content>
