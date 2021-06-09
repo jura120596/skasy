@@ -31,6 +31,11 @@ const routes = [
             for_guest: true,
         }
     },
+    {
+        path: '/post/:id',
+        name : 'post',
+        component: () => import('@/pages/PostEdit')
+    },
     // {
     //     path: '/reset-password',
     //     name: 'reset-password-page',

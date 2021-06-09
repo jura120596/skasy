@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AppAuthController;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,5 @@ Route::group(['prefix' => 'auth' ], function (){
     Route::put('profile', [AppAuthController::class, 'profileUpdate']);
 
 });
+
+Route::apiResource('post', PostController::class);

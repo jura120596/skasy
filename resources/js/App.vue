@@ -87,3 +87,21 @@
 
     };
 </script>
+<style>
+    .cover {
+        min-height: 92vh !important;
+    }
+    .tox {
+
+        height: 1px;
+        min-height: 80vh;
+    }
+    .save-btn {
+        position: fixed;
+        bottom: calc(8vh + 10px);
+        right: 10px;
+    }
+    .v-btn--has-bg.save-btn{
+        background-color: gray !important;
+    }
+</style>
