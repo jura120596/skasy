@@ -113,21 +113,21 @@
                     </v-list-item-content>
                 </v-list-item>
             </div>
-            <div v-if="$store.state.auth.token" >
 
-                <v-list-item  to="/profile" link>
-                    <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/users_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Профиль</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+            <v-list-item  to="/profile" link>
+                <v-list-item-action>
+                    <v-avatar size="30">
+                        <img
+                                src="/img/users_icon.png"
+                                alt="John"
+                        >
+                    </v-avatar>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Профиль</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <div v-if="$store.state.auth.token" >
                 <v-list-item  @click="$emit('logout')" link>
                     <v-list-item-action>
                         <v-avatar size="30">

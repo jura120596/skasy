@@ -18,13 +18,17 @@
                             outlined
                             style="position: relative;"
                             class="ma-1"
-                            @click="
-                                dialogPost = post
-                                show =  true
-                            "
                     >
                         <div v-if="$store.state.auth.user.role === 1024"
                              class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
+                            <v-btn color="red"
+                                   fab
+                                   small
+                                   @click="delete_id = post.id"
+                                   class="mr-3"
+                                   dark>
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
                             <v-btn
                                     color="yellow"
                                     fab
@@ -32,13 +36,6 @@
                                     @click="$router.push('/post/'+post.id)"
                                     dark>
                                 <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
-                            <v-btn color="red"
-                                   fab
-                                   small
-                                   @click="delete_id = post.id"
-                                   dark>
-                                <v-icon>mdi-delete</v-icon>
                             </v-btn>
                         </div>
 
@@ -48,11 +45,20 @@
                                 style="position:absolute; right: 5px; top: 5px; font-size: 10px"></div>
                         <v-container>
                             <v-spacer></v-spacer>
-                            <v-toolbar-title class="text-center mt-3 mb-2">{{post.title}}</v-toolbar-title>
+                            <v-toolbar-title
+                                class="text-center mt-3 mb-2"
+                                @click="
+                                    dialogPost = post
+                                    show =  true
+                            ">{{post.title}}</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-container>
 
-                        <v-container class="ma-0 pa-0">
+                        <v-container class="ma-0 pa-0"
+                             @click="
+                                dialogPost = post
+                                show =  true
+                        ">
                             <div v-if="post.photos.length" class="user-photo-module">
                                 <v-carousel>
                                     <v-carousel-item
@@ -68,7 +74,7 @@
                     </v-card>
                 </v-flex>
             </v-layout>
-            <div class="text-center xs-12">
+            <div class="text-center xs-12" v-if="l > 1">
                 <v-pagination
                         :length="l"
                         :total-visible="3"
@@ -157,7 +163,7 @@
                 if (this.delete_id > 0)
                     window.axios.delete('/post/' + this.delete_id).then((response) => {
                         this.getPage()
-                        delete_id = 0
+                        this.delete_id = 0
                     }).catch((e) => {
                         console.log(e);
                     });
@@ -165,7 +171,6 @@
         },
         watch: {
             page() {
-                console.log(this.page)
                 this.getPage();
             },
             delete_id(nv) {

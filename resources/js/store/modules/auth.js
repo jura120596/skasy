@@ -142,13 +142,14 @@ export default {
       try {
         const response = await Axios.post('/auth/profile');
         commit('setUser', response.data.data);
-        console.log(state)
       }
       catch (error) {
         console.log(error)
-        commit('clearUser');
-        commit('clearToken');
-        commit('clearTTL');
+        if (error.response) {
+            commit('clearUser');
+            commit('clearToken');
+            commit('clearTTL');
+        }
       }
     },
     async updateProfile({ commit,dispatch }, profileData) {
