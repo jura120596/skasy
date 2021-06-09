@@ -23,7 +23,7 @@ Axios.interceptors.response.use(response => {
             && response.config.url !== '/auth/reset') && ttl < Date.now()) {
         Store.dispatch('auth/refresh');
     }
-    if (router.app && response.config.method !== 'get') {
+    if (router.app && response.config.method !== 'get' && response.data.message) {
         router.app.$root.$children[0].snackbarText = response.data.message;
         router.app.$root.$children[0].snackbar = true;
     }

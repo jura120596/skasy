@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AppException;
 use App\Http\Requests\Post\AddPostRequest;
 use App\Http\Requests\Post\EditPostRequest;
 use App\Models\Post;
 use App\Models\PostPhoto;
+use App\Models\User;
 use App\Models\UserPost;
 use App\Models\UserPostPhoto;
+use App\Models\Users\Admin;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class UserPosttController extends Controller
 {
@@ -30,12 +37,24 @@ class UserPosttController extends Controller
      */
     public function index()
     {
+        $userId = Auth::id();
+        $likesRaw = <<<SQL
+            (select count(distinct user_id) from user_post_likes ul where ul.user_post_id = user_posts.id) 
+SQL;
+        $query = \request('mode') === 'me' ? Auth::user()->posts() : UserPost::query();
+        $query->whereRaw('(state <> ? or (state = ? and updated_at > ?))',
+            [UserPost::STATE_CONFIRMED, UserPost::STATE_PROCESSED, Carbon::now()->subWeek()]);
         return $this->response([
             'Список жалоб',
-            UserPost::with(['photos', 'author' => function($q) {
+            $query->with(['photos', 'author' => function($q) {
                 $q->selectRaw('id, name, last_name, second_name');
             }])
-                ->orderBy('id', 'desc')
+                ->orderByRaw(Auth::user()->role == User::VILLAGE_ROLE ? 'id desc' : ($likesRaw . ' desc')
+            )
+                ->selectRaw('* ,' .($likesRaw . ' as likes') . <<<SQL
+                , exists (select 1 from user_post_likes ul where ul.user_post_id = user_posts.id and ul.user_id = ${userId}) as user_like
+SQL
+ )
                 ->paginate(((int) \request('per_page'))?: null)
         ]);
     }
@@ -77,6 +96,9 @@ class UserPosttController extends Controller
      */
     public function update(EditPostRequest $request, UserPost $post)
     {
+        $this->checkPostAccess($post);
+        if ($post->created_at->lt(Carbon::now()->subDays(1)))
+            throw new AppException('Обращение доступно для редактирования только в первые 24 часа', 406);
         $post->fill($v = $request->validated());
         if (Arr::has($v, 'post_photos')) {
             $photos = [];
@@ -91,18 +113,52 @@ class UserPosttController extends Controller
         return $this->response(['Изменения сохранены', $post]);
     }
 
+    protected function checkPostAccess(UserPost $post) : void
+    {
+        if($post->user_id !== Auth::id()) throw new AccessDeniedHttpException('Доступ запрещен');
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(UserPost $post)
     {
+        $this->checkPostAccess($post);
         $post->delete();
         return $this->response([
             'Удалено',
             true
         ]);
+    }
+
+    public function actions(UserPost $post, string $action) : JsonResponse
+    {
+        switch ($action) {
+            case 'confirm':
+                $this->checkPostAccess($post);
+                $post->state = UserPost::STATE_CONFIRMED;
+                $post->save();
+                return $this->response(['Статус изменен', $post]);
+            case 'like':
+                $post->likes()->syncWithoutDetaching([Auth::id()]);
+                break;
+            case 'dislike':
+                $post->likes()->detach([Auth::id()]);
+                break;
+            case 'accept' :
+                if (!$this->isAdmin()) $this->notFound();
+                $this->validate(\request(), [
+                    'comment' => 'required|string|min:10',
+                ]);
+                $post->state = UserPost::STATE_PROCESSED;
+                $post->comment = \request('comment');
+                $post->save();
+                return $this->response(['Статус изменен', $post]);
+                break;
+            default: $this->notFound();
+        }
+        return $this->response([null]);
     }
 }

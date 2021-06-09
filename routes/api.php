@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AppAuthController;
 use App\Http\Controllers\PosttController;
+use App\Http\Controllers\UserPosttController;
 use App\Http\Controllers\VillageEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,5 +30,6 @@ Route::group(['prefix' => 'auth' ], function (){
 });
 
 Route::apiResource('post', PosttController::class);
-Route::apiResource('user/post', \App\Http\Controllers\UserPosttController::class);
+Route::post('/user/post/{post}/{any}', [UserPosttController::class, 'actions'])->where('any', '.*');
+Route::apiResource('user/post', UserPosttController::class);
 Route::apiResource('event', VillageEventController::class);

@@ -51,6 +51,20 @@
                     <v-list-item-title>Обращения</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item
+                    :to="'/user/posts?mode=me'" link>
+                <v-list-item-action>
+                    <v-avatar size="30">
+                        <img
+                                src="/img/case_icon.png"
+                                alt="John"
+                        >
+                    </v-avatar>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Мои обращения</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
 
             <v-list-item
                     :to="'/events'" link>

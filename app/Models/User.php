@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -99,14 +100,14 @@ class User extends Authenticatable
     public function fill(array $attributes)
     {
         $fill = parent::fill($attributes);
-        if (is_null($this->role)  && static::ROLE) $fill->role = static::ROLE;
+        if (is_null($this->role) && static::ROLE) $fill->role = static::ROLE;
         return $fill;
     }
 
     /**
      * @return bool
      */
-    public  function isBlocked()
+    public function isBlocked()
     {
         return $this->blocked;
     }
@@ -123,5 +124,17 @@ class User extends Authenticatable
         $this->password_reset_at = Carbon::now();
         $this->save();
         Mail::to($this)->send(new PasswordMail($word, $new));
+    }
+
+    public function toArray()
+    {
+        $a = parent::toArray();
+        $a['full_name'] = trim($this->second_name . ' ' . $this->name . ' ' . $this->last_name);
+        return $a;
+    }
+
+    public function posts() : HasMany
+    {
+        return $this->hasMany(UserPost::class, 'user_id');
     }
 }

@@ -18,6 +18,8 @@ class CreateUserPostsTable extends Migration
             $table->id();
             $table->string('title', 40);
             $table->text('description');
+            $table->string('comment',255)->nullable();
+            $table->mediumInteger('state')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
@@ -38,6 +40,22 @@ class CreateUserPostsTable extends Migration
                 ->onUpdate('cascade');
             $table->timestamps();
         });
+        Schema::create('user_post_likes', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_post_id');
+            $table->foreign('user_post_id')
+                ->references('id')
+                ->on('user_posts')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
     }
 
     /**
@@ -47,7 +65,8 @@ class CreateUserPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_posts');
+        Schema::dropIfExists('user_post_likes');
         Schema::dropIfExists('user_post_photos');
+        Schema::dropIfExists('user_posts');
     }
 }
