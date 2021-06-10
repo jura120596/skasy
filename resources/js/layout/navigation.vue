@@ -11,12 +11,7 @@
         <v-list dense>
             <v-list-item to="/map" link>
                 <v-list-item-action>
-                    <v-avatar size="30">
-                        <img
-                                src="/img/dashboard_icon.png"
-                                alt="John"
-                        >
-                    </v-avatar>
+                    <v-icon>mdi-google-maps</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Карта поселения</v-list-item-title>
@@ -26,12 +21,7 @@
             <v-list-item
                     :to="'/posts'" link>
                 <v-list-item-action>
-                    <v-avatar size="30">
-                        <img
-                                src="/img/case_icon.png"
-                                alt="John"
-                        >
-                    </v-avatar>
+                    <v-icon>mdi-newspaper</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Новости</v-list-item-title>
@@ -40,12 +30,7 @@
             <v-list-item
                     :to="'/user/posts'" link>
                 <v-list-item-action>
-                    <v-avatar size="30">
-                        <img
-                                src="/img/case_icon.png"
-                                alt="John"
-                        >
-                    </v-avatar>
+                    <v-icon>mdi-file-document-outline</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Обращения</v-list-item-title>
@@ -54,12 +39,7 @@
             <v-list-item
                     :to="'/schedule'" link>
                 <v-list-item-action>
-                    <v-avatar size="30">
-                        <img
-                                src="/img/case_icon.png"
-                                alt="John"
-                        >
-                    </v-avatar>
+                    <v-icon>mdi-clock-outline</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Расписание автобуса</v-list-item-title>
@@ -69,12 +49,7 @@
             <v-list-item
                     :to="'/events'" link>
                 <v-list-item-action>
-                    <v-avatar size="30">
-                        <img
-                                src="/img/case_icon.png"
-                                alt="John"
-                        >
-                    </v-avatar>
+                    <v-icon>mdi-calendar-star</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Мероприятия</v-list-item-title>
@@ -84,12 +59,7 @@
                 <v-list-item v-if="$store.state.auth.user.role < 128"
                         :to="'/user/posts?mode=me'" link>
                     <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/case_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
+                            <v-icon>mdi-file-document-outline</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Мои обращения</v-list-item-title>
@@ -98,12 +68,7 @@
                 <v-list-item  v-if="$store.state.auth.user.role === 1024"
                               :to="'/types'" link>
                     <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/case_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
+                            <v-icon>mdi-file-document-outline</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Типы запросов</v-list-item-title>
@@ -111,14 +76,9 @@
                 </v-list-item>
                 <v-list-item  v-if="$store.state.auth.user.role < 128"
                               :to="'/files'" link>
-                    <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/case_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
-                    </v-list-item-action>
+                        <v-list-item-action>
+                            <v-icon>mdi-file-document-multiple</v-icon>
+                        </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Мои файлы</v-list-item-title>
                     </v-list-item-content>
@@ -126,46 +86,32 @@
                 <v-list-item
                         :to="'/requests'" link>
                     <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/case_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
+                        <v-icon>mdi-file-document-outline</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Запросы</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-
-
-                <v-list-item  to="/profile" link>
-                    <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/users_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Профиль</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item  @click="$emit('logout')" link>
-                    <v-list-item-action>
-                        <v-avatar size="30">
-                            <img
-                                    src="/img/users_icon.png"
-                                    alt="John"
-                            >
-                        </v-avatar>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Выход</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
             </div>
+
+
+
+            <v-list-item  to="/profile" link>
+                <v-list-item-action>
+                    <v-icon>mdi-account</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Профиль</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-list-item  @click="$emit('logout')" link  v-if="$store.state.auth.token" >
+                <v-list-item-action>
+                    <v-icon>mdi-account-arrow-left-outline</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Выход</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
 
 
         </v-list>

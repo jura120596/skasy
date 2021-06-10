@@ -123,22 +123,22 @@ const routes = [
     //     name: 'reset-password-page',
     //     component:  () => import('@/views/auth/reset'),
     // },
-    // {
-    //     path: '/',
-    //     name: 'site-dashboard',
-    //     component: () => import('@/views/dashboard'),
-    // },
+    {
+        path: '/',
+        name: 'site-dashboard',
+        redirect:'/map'
+    },
 
-    // {
-    //     path: '/403',
-    //     name: 'no-permission',
-    //     component: () => import('@/views/403'),
-    // },
-    // {
-    //     path: '*',
-    //     name: 'not-found',
-    //     component: () => import('@/views/404'),
-    // },
+    {
+        path: '/403',
+        name: 'no-permission',
+        component: () => import('@/pages/403'),
+    },
+    {
+        path: '*',
+        name: 'not-found',
+        component: () => import('@/pages/404'),
+    },
 
 ];
 
@@ -155,7 +155,7 @@ router.beforeEach( (to, from, next) => {
         case 'login-page':
         case 'reset-password-page':
             if (Store.getters['auth/authenticated']) {
-                next({name: 'site-dashboard'});
+                next({name: 'profile-page'});
                 break;
             } else {
                 next();

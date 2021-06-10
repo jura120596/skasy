@@ -63,11 +63,11 @@ class AppAuthController extends Controller
             Auth::guard('auth')->logout();
             $user = Admin::find($user) ?? Librarian::find($user) ?? User::findOrFail($user);
             if ($user->isBlocked()) {
-                throw new AccessDeniedHttpException(trans('responses.exceptions.permissions.default'));
+                throw new AccessDeniedHttpException('Доступ запрещен.');
             }
             return $this->refresh($user);
         }
-        throw new AuthenticationException(trans('responses.exceptions.login.credentials'));
+        throw new AuthenticationException('Пользователь не существует или пароль неверен');
     }
 
     /**
@@ -80,7 +80,7 @@ class AppAuthController extends Controller
         if (($u = Auth::user())->role == User::VILLAGE_ROLE)
             $u = VillageUser::query()->newModelInstance()->forceFill($u->getAttributes());
         return $this->response([
-            trans('responses.controllers.login.profile'),
+            "",
             $u,
         ]);
     }
@@ -93,7 +93,7 @@ class AppAuthController extends Controller
     public function logout()
     {
         Auth::user()->token()->revoke();
-        return $this->response([trans('responses.controllers.login.logout'), true]);
+        return $this->response(["Сессия завершена", true]);
     }
 
     /**
@@ -124,7 +124,7 @@ class AppAuthController extends Controller
      */
     protected function tokenResponse(PersonalAccessTokenResult $token)
     {
-        return $this->response([trans('responses.controllers.login.token'), true, [
+        return $this->response(['Успешная авторизация', true, [
             'access_token' => $token->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
@@ -144,10 +144,10 @@ class AppAuthController extends Controller
             'email'=> $request->email,
         ])->first();
         if ($user->isBlocked()) {
-            throw new AccessDeniedHttpException(trans('responses.exceptions.permissions.default'));
+            throw new AccessDeniedHttpException("Доступ запрещен!");
         }
         $user->sendPasswordMail();
-        return $this->response([trans('responses.controllers.login.resetLink')]);
+        return $this->response(['Пароль для входа был отправлен на вашу почту']);
     }
 
     public function signUp(UserSignUpRequest $request) : JsonResponse

@@ -26,7 +26,7 @@ class UserPosttController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('store', 'destroy');
+        $this->middleware('auth')->except('store', 'destroy', 'index');
         $this->middleware('auth:clients')->only('store', 'destroy');
     }
 
@@ -37,7 +37,8 @@ class UserPosttController extends Controller
      */
     public function index()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
+        $userId = $user ? $user->id : 0;
         $likesRaw = <<<SQL
             (select count(distinct user_id) from user_post_likes ul where ul.user_post_id = user_posts.id) 
 SQL;
@@ -49,7 +50,7 @@ SQL;
             $query->with(['photos', 'author' => function($q) {
                 $q->selectRaw('id, name, last_name, second_name');
             }])
-                ->orderByRaw(Auth::user()->role == User::VILLAGE_ROLE ? 'id desc' : ($likesRaw . ' desc')
+                ->orderByRaw(($user ? $user->role : 0) <= User::VILLAGE_ROLE ? 'id desc' : ($likesRaw . ' desc')
             )
                 ->selectRaw('* ,' .($likesRaw . ' as likes') . <<<SQL
                 , exists (select 1 from user_post_likes ul where ul.user_post_id = user_posts.id and ul.user_id = ${userId}) as user_like

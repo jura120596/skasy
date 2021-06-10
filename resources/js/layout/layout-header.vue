@@ -7,37 +7,25 @@
             src="/img/logo.png"
     ></v-img>
       <v-app-bar-nav-icon v-on:click="$emit('toggleDrawer')" />
-      <v-btn to="/" icon>
+      <v-btn to="/map" icon>
         <v-avatar size="30">
           <img
-                  src="/img/dashboard_icon.png"
+                  src="/img/icons/android-chrome-192x192.png"
                   alt="John"
           >
         </v-avatar>
       </v-btn>
-      <v-btn to="/" plain>{{$store.state.appName}}
+      <v-btn to="/map" plain>{{$store.state.appName}}
       </v-btn>
 
       <v-spacer />
-      <v-divider light vertical inset></v-divider>
-    <v-btn to="/" icon>
-      <v-avatar size="30">
-        <img
-                src="/img/bell_icon.png"
-                alt="John"
-        >
-      </v-avatar>
-    </v-btn>
+
       <v-divider light vertical inset></v-divider>
       <v-btn to="/profile" icon>
-        <v-avatar size="30">
-          <img
-                  src="/img/profile_icon.png"
-                  alt="John"
-          >
-        </v-avatar>
+
+        <v-icon>mdi-account</v-icon>
       </v-btn>
-      <v-btn to="/" plain>{{$store.state.auth.user.name}}
+      <v-btn to="/profile" plain>{{$store.state.auth.user.full_name}}
       </v-btn>
       <v-btn plain @click="$emit('logout')">Выйти
       </v-btn>
