@@ -88,7 +88,7 @@
                                  style="position:absolute; left: 5px; bottom: 5px; font-size: 10px"></div>
                             <v-spacer></v-spacer>
                             <v-toolbar-title
-                                class="text-center mt-2 mb-7"
+                                class="text-center mt-2 mb-9"
                                 @click="
                                     dialogPost = post
                                     show =  true

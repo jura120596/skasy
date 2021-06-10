@@ -22,7 +22,7 @@ class BusEventController extends Controller
     {
         $events = BusEvent::query()
             ->orderBy('time', 'asc')
-            ->paginate(((int)\request('per_page'))?:null);
+            ->get();
         return $this->response(['events', $events]);
     }
 

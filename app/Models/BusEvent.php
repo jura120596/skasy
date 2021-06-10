@@ -26,7 +26,8 @@ class BusEvent extends Model
         $arr = parent::toArray();
         $date = Carbon::parse($this->time);
         $arr['color']= Carbon::parse(Carbon::now()->format('H:i'))->diffInHours($date) < 1 ? 'red' : 'green';
-        $arr['skip']= Carbon::parse(Carbon::now()->format('H:i'))->lt($date);
+        $arr['skip']= Carbon::parse(Carbon::now()->format('H:i'))->gt($date);
+        if ($arr['skip']) $arr['color'] = 'gray';
         return $arr;
     }
 }

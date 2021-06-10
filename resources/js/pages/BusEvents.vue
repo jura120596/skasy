@@ -4,7 +4,17 @@
                          v-text="'Расписание автобуса'">
         </v-toolbar-title>
         <div v-if="events.length > 0">
-            <v-container>
+
+            <v-container
+                    class="my-0 text-center"
+            >
+                <v-checkbox
+                        class="mt-0 ml-9"
+                        v-model="skip"
+                        :label="`Показать всё расписание`"
+                ></v-checkbox>
+            </v-container>
+            <v-container class="pt-0 mt-0">
                 <v-timeline dense>
                     <div v-for="(entry, index) in events" :key="index" style="position: relative">
 
@@ -20,8 +30,8 @@
                             </v-btn>
                         </div>
                         <v-timeline-item
+                                v-if="!entry.skip || skip"
                                 small
-                                left
                                 :color="entry.color || '#11a506'"
                         >
                             <v-card elevation="0" class="container ma-0 pa-0 d-flex flex-column">
@@ -38,13 +48,6 @@
                     </div>
                 </v-timeline>
             </v-container>
-            <div class="text-center xs-12" v-if="l > 1">
-                <v-pagination
-                        :length="l"
-                        :total-visible="3"
-                        v-model="page"
-                ></v-pagination>
-            </div>
         </div>
         <div v-else>
             <div class="text-center my-3">Расписание еще не создано</div>
@@ -71,17 +74,18 @@
                 page: 1,
                 dialogPost: null,
                 delete_id: 0,
-                show: false
+                show: false,
+                skip: false,
             }
         },
         mounted() {
             this.getPage();
+
         },
         methods: {
             getPage() {
                 window.axios.get('/bus/event/', {params: {page: this.page, per_page: 10}}).then((response) => {
                     this.events = response.data.data;
-                    this.l = response.data.last_page
                 }).catch((e) => {
                     console.log(e);
                 });
