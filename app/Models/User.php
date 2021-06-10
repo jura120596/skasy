@@ -137,4 +137,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserPost::class, 'user_id');
     }
+
+    public function requests() : HasMany
+    {
+        return $this->hasMany(UserRequest::class, 'user_id');
+    }
+    public function files() : HasMany
+    {
+        return $this->hasMany(UserFile::class, 'user_id');
+    }
 }

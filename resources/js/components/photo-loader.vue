@@ -9,8 +9,9 @@
                 accept="image/jpeg,image/png,image/jpg"
         />
 
-        <v-btn class="btn my-2" @click="clickOnInput">Добавить фотографию</v-btn>
-        <div v-if="carouselPhotos.length" class="user-photo-module">
+        <v-btn class="btn my-2" @click="clickOnInput" v-if="!one || !carouselPhotos.length">Добавить фотографию</v-btn>
+        <div v-if="one && loadedPhotos.length" class="text-center">{{loadedPhotos[0].name}}</div>
+        <div v-if="!one && carouselPhotos.length" class="user-photo-module">
             <v-carousel v-model="n">
                 <v-carousel-item
                         v-for="(photo, i) in carouselPhotos"
@@ -32,6 +33,10 @@
             radius: {
                 type: Number,
             },
+            one: {
+                type: Boolean,
+                default: false,
+            }
         },
         components: {},
         data() {
@@ -46,6 +51,9 @@
         methods: {
             getPhotos() {
                 return this.loadedPhotos;
+            },
+            getFirst() {
+                return this.loadedPhotos[0];
             },
             returnFormData(val) {
                 this.$emit('save-photo', val)

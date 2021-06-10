@@ -80,6 +80,26 @@ const routes = [
         name : 'type',
         component: () => import('@/pages/TypeEdit')
     },
+    {
+        path: '/requests',
+        name : 'requests',
+        component: () => import('@/pages/Requests'),
+    },
+    {
+        path: '/request/:id',
+        name : 'requests',
+        component: () => import('@/pages/RequestEdit')
+    },
+    {
+        path: '/files',
+        name : 'files',
+        component: () => import('@/pages/Files'),
+    },
+    // {
+    //     path: '/file/:id',
+    //     name : 'requests',
+    //     component: () => import('@/pages/RequestEdit')
+    // },
     // {
     //     path: '/reset-password',
     //     name: 'reset-password-page',

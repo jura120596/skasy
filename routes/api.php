@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\AppAuthController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\PosttController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\UserPosttController;
+use App\Http\Controllers\UserRewuestController;
 use App\Http\Controllers\VillageEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +37,7 @@ Route::post('/user/post/{post}/{any}', [UserPosttController::class, 'actions'])-
 Route::apiResource('user/post', UserPosttController::class);
 Route::apiResource('event', VillageEventController::class);
 Route::apiResource('type', TypesController::class);
+Route::apiResource('request', UserRewuestController::class);
+Route::get('request/{request}/messages', [UserRewuestController::class, 'messages']);
+Route::post('request/{request}/messages', [UserRewuestController::class, 'send']);
+Route::apiResource('file', FileController::class);

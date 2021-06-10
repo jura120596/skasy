@@ -29,6 +29,7 @@ class CreateUserRequestsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('user_request_messages', function (Blueprint $table) {
             $table->id();

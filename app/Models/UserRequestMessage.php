@@ -18,4 +18,12 @@ class UserRequestMessage extends Model
     {
         return $this->belongsTo(UserRequest::class);
     }
+
+
+    public function toArray()
+    {
+        $arr = parent::toArray();
+        $arr['date']= $this->created_at->format('d.m.Y H:i');
+        return $arr;
+    }
 }

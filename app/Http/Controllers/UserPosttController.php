@@ -115,7 +115,7 @@ SQL
 
     protected function checkPostAccess(UserPost $post) : void
     {
-        if($post->user_id !== Auth::id()) throw new AccessDeniedHttpException('Доступ запрещен');
+        if($post->user_id !== Auth::id()) throw new AppException('Доступ запрещен', 403);
     }
     /**
      * Remove the specified resource from storage.
