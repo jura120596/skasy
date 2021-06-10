@@ -1,12 +1,13 @@
 <template>
     <v-container class="cover">
         <v-toolbar-title align="center" justify="center" class="mb-2"
-                         v-text="'Мои файлы'">
+                         v-text="$route.params.user_id > 0 ? 'Файлы пользователя' : 'Мои файлы'">
         </v-toolbar-title>
         <div v-if="files.length > 0">
             <v-container>
                 <v-card  v-for="(entry, index) in files" :key="index"
                          style="position:relative;"
+                         class="ma-2"
                         elevation="0">
                     <div
                          class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
@@ -18,8 +19,15 @@
                                dark>
                             <v-icon>mdi-delete</v-icon>
                         </v-btn>
+                        <v-btn color="green"
+                               fab
+                               small
+                               @click="download(entry.id)"
+                               dark>
+                            <v-icon>mdi-download</v-icon>
+                        </v-btn>
                     </div>
-                    <h4>{{ entry.title }}</h4>
+                    <h4 style="max-width: 60%">{{ entry.title }}</h4>
                 </v-card>
                 <div class="text-center xs-12" v-if="l > 1">
                     <v-pagination
@@ -129,7 +137,10 @@
                 this.show = false;
             },
             getPage() {
-                window.axios.get('file?page='+this.page).then((r) => {
+                window.axios.get('file?', {params: {
+                        page: this.page,
+                        user_id: (this.$route.params.user_id > 0 ? this.$route.params.user_id : null)
+                }}).then((r) => {
                     this.files = r.data.data;
                     this.l = r.data.last_page
                 })
@@ -154,6 +165,19 @@
                     }
                 }
                 this.closeDialog()
+            },
+            download(id) {
+                window.axios.get('file/'+id, {
+                    method: 'GET',
+                    responseType: 'blob',
+                }).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', decodeURIComponent(response.headers['content-disposition'].split(';')[2].split("utf-8''")[1]));
+                    document.body.appendChild(link);
+                    link.click();
+                });
             },
             delete() {
                 try {

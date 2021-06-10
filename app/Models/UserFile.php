@@ -11,4 +11,5 @@ class UserFile extends Model
     protected $fillable = [
         'title', 'file'
     ];
+    protected $hidden = ['file'];
 }

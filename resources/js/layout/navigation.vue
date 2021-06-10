@@ -81,7 +81,7 @@
                 </v-list-item-content>
             </v-list-item>
             <div v-if="$store.state.auth.token" >
-                <v-list-item
+                <v-list-item v-if="$store.state.auth.user.role < 128"
                         :to="'/user/posts?mode=me'" link>
                     <v-list-item-action>
                         <v-avatar size="30">
@@ -110,7 +110,7 @@
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item  v-if="$store.state.auth.user.role < 128"
-                              :to="'/file'" link>
+                              :to="'/files'" link>
                     <v-list-item-action>
                         <v-avatar size="30">
                             <img

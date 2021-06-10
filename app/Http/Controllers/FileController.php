@@ -6,6 +6,7 @@ use App\Exceptions\AppException;
 use App\Models\User;
 use App\Models\UserFile;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,8 @@ class FileController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:clients');
+        $this->middleware('auth:clients')->except('index');
+        $this->middleware('auth')->only('index');
     }
 
     /**
@@ -24,7 +26,8 @@ class FileController extends Controller
      */
     public function index()
     {
-        $user  = $this->isAdmin() ? User::findOrFail((int) \request('id')) : Auth::user();
+        if ($this->isLibrarian()) $this->notFound();
+        $user  = $this->isAdmin() ? User::findOrFail((int) \request('user_id')) : Auth::user();
         return $this->response(['files', $user->files()->orderBy('id', 'desc')->paginate(10)]);
     }
 
@@ -53,6 +56,12 @@ class FileController extends Controller
 
     }
 
+
+    public function show($id)
+    {
+        $f = ($this->isAdmin() ? UserFile::query() : Auth::user()->files())->findOrFail((int)$id);
+        return response()->download(public_path($f->file), $f->title . '.'.(pathinfo($f->file)['extension']));
+    }
 
     /**
      * Remove the specified resource from storage.

@@ -99,9 +99,11 @@
                     </v-toolbar>
 
                     <v-container style="position:relative;">
-
-                        <div v-text="'От гражданина: '+(dialogModel.user_id == $store.state.auth.user.id ? 'Вы' : dialogModel.user.full_name)"
-                             style="font-size: 10px"></div>
+                        <div v-if="$store.state.auth.user.role == 1024"
+                             style="font-size: 10px">
+                            {{'От гражданина: '+(dialogModel.user_id == $store.state.auth.user.id ? 'Вы ' : dialogModel.user.full_name + '  ')}}(
+                            <router-link :to="'/files/'+ dialogModel.user_id">Файлы пользователя</router-link>)
+                        </div>
                         <div v-text="'Требование:'"
                              style="font-size: 10px"></div>
                         <div>

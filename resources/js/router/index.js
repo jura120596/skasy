@@ -108,6 +108,11 @@ const routes = [
         name : 'files',
         component: () => import('@/pages/Files'),
     },
+    {
+        path: '/files/:user_id',
+        name : 'files',
+        component: () => import('@/pages/Files'),
+    },
     // {
     //     path: '/file/:id',
     //     name : 'requests',
