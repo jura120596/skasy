@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AppAuthController;
+use App\Http\Controllers\BusEventController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PosttController;
 use App\Http\Controllers\TypesController;
@@ -36,6 +37,7 @@ Route::apiResource('post', PosttController::class);
 Route::post('/user/post/{post}/{any}', [UserPosttController::class, 'actions'])->where('any', '.*');
 Route::apiResource('user/post', UserPosttController::class);
 Route::apiResource('event', VillageEventController::class);
+Route::apiResource('bus/event', BusEventController::class);
 Route::apiResource('type', TypesController::class);
 Route::apiResource('request', UserRewuestController::class);
 Route::get('request/{request}/messages', [UserRewuestController::class, 'messages']);

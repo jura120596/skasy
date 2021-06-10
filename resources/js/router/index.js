@@ -71,6 +71,19 @@ const routes = [
         component: () => import('@/pages/EventEdit')
     },
     {
+        path: '/schedule',
+        name : 'bus-events',
+        component: () => import('@/pages/BusEvents'),
+        meta: {
+            for_guest: true,
+        }
+    },
+    {
+        path: '/bus/event/:id',
+        name : 'bus-event',
+        component: () => import('@/pages/BusEventEdit')
+    },
+    {
         path: '/types',
         name : 'types',
         component: () => import('@/pages/Types'),
