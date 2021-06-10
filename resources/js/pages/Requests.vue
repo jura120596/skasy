@@ -113,7 +113,7 @@
                     <v-container
                             v-if="dialogModel.messages && dialogModel.messages.length || $store.state.auth.user.role >= 128"
                             class="ma-0 pa-0">
-                        <v-container class="ma-0 pa-0">
+                        <v-container class="ma-0 pa-0" v-if="dialogModel.messages && dialogModel.messages.length>0">
                             <div>
 
                                 <v-card>
@@ -130,7 +130,7 @@
 
                                     </v-app-bar>
 
-                                    <v-card-text v-if="dialogModel.messages && dialogModel.messages.length>0">
+                                    <v-card-text>
 
                                         <div
                                                 v-for="message in dialogModel.messages"
