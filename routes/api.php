@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AppAuthController;
 use App\Http\Controllers\PosttController;
+use App\Http\Controllers\TypesController;
 use App\Http\Controllers\UserPosttController;
 use App\Http\Controllers\VillageEventController;
 use Illuminate\Http\Request;
@@ -33,3 +34,4 @@ Route::apiResource('post', PosttController::class);
 Route::post('/user/post/{post}/{any}', [UserPosttController::class, 'actions'])->where('any', '.*');
 Route::apiResource('user/post', UserPosttController::class);
 Route::apiResource('event', VillageEventController::class);
+Route::apiResource('type', TypesController::class);

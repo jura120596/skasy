@@ -71,6 +71,14 @@
         mounted () {
             this.onResize()
             window.addEventListener('resize', this.onResize, { passive: true })
+            window.axios.get('type').then((r) => {
+                r.data.data.forEach((v) => {
+                    this.$store.state.types.push({
+                        value: v.id,
+                        text: v.name,
+                    })
+                })
+            })
         },
 
         methods: {

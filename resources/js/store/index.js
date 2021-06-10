@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     state: {
         appName : `${process.env.MIX_APP_NAME}`,
         passwordLength: 6,
+        types: [],
     }
 });
 

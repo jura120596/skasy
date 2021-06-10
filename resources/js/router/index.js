@@ -70,6 +70,16 @@ const routes = [
         name : 'event',
         component: () => import('@/pages/EventEdit')
     },
+    {
+        path: '/types',
+        name : 'types',
+        component: () => import('@/pages/Types'),
+    },
+    {
+        path: '/type/:id',
+        name : 'type',
+        component: () => import('@/pages/TypeEdit')
+    },
     // {
     //     path: '/reset-password',
     //     name: 'reset-password-page',
