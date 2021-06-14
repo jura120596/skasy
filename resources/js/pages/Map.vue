@@ -17,6 +17,14 @@
                 zoomOffset: -1,
                 accessToken: 'your.mapbox.access.token'
             }).addTo(mymap);
+            let markers = [
+                [[55.530648, 47.505122], 'Дом культуры<br> Администрация послеления'],
+            ];
+            markers.forEach(function(v) {
+                L.marker(v[0]).addTo(mymap)
+                    .bindPopup(v[1])
+                    .openPopup()
+            });
         },
         methods: {
 

@@ -110,7 +110,7 @@ const routes = [
     },
     {
         path: '/request/:id',
-        name : 'requests',
+        name : 'request',
         component: () => import('@/pages/RequestEdit')
     },
     {
@@ -120,7 +120,7 @@ const routes = [
     },
     {
         path: '/files/:user_id',
-        name : 'files',
+        name : 'file',
         component: () => import('@/pages/Files'),
     },
     // {
