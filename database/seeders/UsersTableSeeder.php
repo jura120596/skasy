@@ -19,16 +19,34 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-//        $email = Factory::create()->email;
-        $email = env('ADMIN_USER_EMAIL', 'jura120596@gmail.com');
-        if (DB::table('users')->where(compact('email'))->count()) return;
         DB::table('users')->insert([
             [
-                'email' => $email,
+                'email' => env('ADMIN_USER_EMAIL', 'a@mail.ru'),
                 'password' => Hash::make(env('ADMIN_USER_PASSWORD', Str::random(25))),
                 'role' => User::ADMIN_ROLE,
-                'name' => 'Админ',
-                'second_name' => 'Супер',
+                'name' => 'Администратор',
+                'second_name' => 'Семенов',
+            ],
+            [
+                'email' => 'l@mail.ru',
+                'password' => Hash::make(env('ADMIN_USER_PASSWORD', Str::random(25))),
+                'role' => User::LIBRARIAN_ROLE,
+                'name' => 'Библиотекарь',
+                'second_name' => 'Степанова',
+            ],
+            [
+                'email' => 'u1@mail.ru',
+                'password' => Hash::make(env('ADMIN_USER_PASSWORD', Str::random(25))),
+                'role' => User::VILLAGE_ROLE,
+                'name' => 'Житель',
+                'second_name' => 'Первый',
+            ],
+            [
+                'email' => 'u2@mail.ru',
+                'password' => Hash::make(env('ADMIN_USER_PASSWORD', Str::random(25))),
+                'role' => User::VILLAGE_ROLE,
+                'name' => 'Житель',
+                'second_name' => 'Второй',
             ],
         ]);
     }
