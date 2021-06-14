@@ -40,6 +40,7 @@ class UsersTableSeeder extends Seeder
                 'role' => User::VILLAGE_ROLE,
                 'name' => 'Житель',
                 'second_name' => 'Первый',
+                'phone' => '9279931787',
             ],
             [
                 'email' => 'u2@mail.ru',
@@ -47,6 +48,7 @@ class UsersTableSeeder extends Seeder
                 'role' => User::VILLAGE_ROLE,
                 'name' => 'Житель',
                 'second_name' => 'Второй',
+                'phone' => '9073322129',
             ],
         ]);
     }
