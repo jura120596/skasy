@@ -16,6 +16,14 @@
                             type="email"
                     />
                     <v-text-field
+                            v-model="account.phone"
+                            :error-messages="messages.phone"
+                            label="Введите ваш телефон"
+                            prefix="+7"
+                            name="phone"
+                            type="number"
+                    />
+                    <v-text-field
                             v-model="account.second_name"
                             :error-messages="messages.second_name"
                             label="Фамилия"
@@ -73,16 +81,19 @@
                 last_name: '',
                 password: 'qweqaz12',
                 password_confirmation: 'qweqaz12',
+                phone: '',
                 accept: false,
             },
             messages: {
+                phone: '',
                 email: '',
                 name: '',
                 second_name: '',
                 last_name: '',
                 password: '',
                 password_confirmation: '',
-                accept: '',},
+                accept: '',
+            },
         }),
         computed: {
             isFormValid : function() {
@@ -90,6 +101,7 @@
                     && this.account.second_name
                     && this.account.name
                     && this.account.accept
+                    && this.account.phone
             },
         },
         methods :{
@@ -98,6 +110,7 @@
                     .then((r) => {
                         this.$root.$children[0].snackbarText = r.data.message;
                         this.$root.$children[0].snackbar = true;
+                        this.$router.push('/login')
                     }).catch((e) => {
                         if (e.response && e.response.status === 422) {
                             let errors = e.response.data.errors

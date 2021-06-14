@@ -99,6 +99,11 @@ const routes = [
         component: () => import('@/pages/Requests'),
     },
     {
+        path: '/users',
+        name : 'users',
+        component: () => import('@/pages/Users'),
+    },
+    {
         path: '/requests-lib',
         name : 'requests-lib',
         component: () => import('@/pages/Requests'),

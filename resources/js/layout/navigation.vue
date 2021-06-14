@@ -68,10 +68,19 @@
                 <v-list-item  v-if="$store.state.auth.user.role === 1024"
                               :to="'/types'" link>
                     <v-list-item-action>
-                            <v-icon>mdi-file-document-outline</v-icon>
+                        <v-icon>mdi-file-document-outline</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Типы запросов</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item  v-if="$store.state.auth.user.role === 1024"
+                              :to="'/users'" link>
+                    <v-list-item-action>
+                        <v-icon>mdi-account-box-multiple</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Список пользователей</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item  v-if="$store.state.auth.user.role < 128"

@@ -158,7 +158,7 @@ class AppAuthController extends Controller
         $u->password = '';
         $u->save();
         $u->sendPasswordMail();
-        return $this->refresh($u);
+        return $this->response(['Пароль для входа был отправлен на вашу почту']);
     }
 
     public function profileUpdate(UserProfileRequest $request) : JsonResponse
