@@ -64,7 +64,7 @@
             </div>
         </div>
         <div v-else>
-            <div class="text-center my-3">Пользовтаели не найдены</div>
+            <div class="text-center my-3">Пользователи не найдены</div>
         </div>
     </v-container>
 </template>
