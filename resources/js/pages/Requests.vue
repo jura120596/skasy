@@ -19,7 +19,7 @@
                             style="position: relative;"
                             class="ma-1"
                     >
-                        <div v-if="$store.state.auth.user.id === req.user_id || req.can_close"
+                        <div v-if="$store.state.auth.user.id === req.user_id || $store.state.auth.user.role === 1024"
                              class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
                             <v-btn color="red"
                                    fab
@@ -65,7 +65,7 @@
                v-if="$store.state.auth.user.role === 1"
                color="success"
                fab
-               @click="$router.push('/request/0')"
+               @click="$router.push('/request/0?role=' + ($route.fullPath === '/requests' ? 1024 : 128))"
                dark>
             <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -222,7 +222,11 @@
         },
         methods: {
             getPage() {
-                window.axios.get('/request/', {params: {page: this.page, per_page: 10}}).then((response) => {
+                window.axios.get('/request/', {params: {
+                    page: this.page,
+                    per_page: 10,
+                    role: this.$route.fullPath === '/requests' ? 1024 : 128,
+                }}).then((response) => {
                     this.requests = response.data.data;
                     this.l = response.data.last_page
                 }).catch((e) => {

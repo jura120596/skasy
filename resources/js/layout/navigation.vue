@@ -3,7 +3,7 @@
         <v-list-item>
             <v-list-item-content>
                 <v-list-item-title class="title">
-                    Навигация
+                    {{$store.state.appName}}
                     <v-divider></v-divider>
                 </v-list-item-title>
             </v-list-item-content>
@@ -28,15 +28,6 @@
                 </v-list-item-content>
             </v-list-item>
             <v-list-item
-                    :to="'/user/posts'" link>
-                <v-list-item-action>
-                    <v-icon>mdi-file-document-outline</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>Обращения</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item
                     :to="'/schedule'" link>
                 <v-list-item-action>
                     <v-icon>mdi-clock-outline</v-icon>
@@ -53,6 +44,15 @@
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Мероприятия</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-list-item
+                    :to="'/user/posts'" link>
+                <v-list-item-action>
+                    <v-icon>mdi-file-document-outline</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Обращения</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
             <div v-if="$store.state.auth.token" >
@@ -89,7 +89,16 @@
                         <v-icon>mdi-file-document-outline</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title>Запросы</v-list-item-title>
+                        <v-list-item-title>Запросы в администрацию</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item
+                        :to="'/requests-lib'" link>
+                    <v-list-item-action>
+                        <v-icon>mdi-file-document-outline</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Запросы в библиотеку</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </div>

@@ -5,6 +5,7 @@
         v-text="'Новый запрос' ">
         </v-toolbar-title>
         <v-combobox
+                v-if="!request.role"
                 v-model="request.role"
                 :erro-messages="messages.role"
                 :items="roles"
@@ -13,7 +14,7 @@
         ></v-combobox>
         <v-combobox
                 v-model="request.type"
-                :erro-messages="messages.type"
+                :error-messages="messages.type"
                 :items="types"
                 label="Тип заявления"
                 dense
@@ -53,7 +54,7 @@
                 request: {
                     id: vm.$route.params.id,
                     type: null,
-                    role: null,
+                    role: { value:vm.$route.query.role},
                     text: '',
                 },
                 roles: [

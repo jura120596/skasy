@@ -18,7 +18,7 @@
                 <v-timeline dense>
                     <div v-for="(entry, index) in events" :key="index" style="position: relative">
 
-                        <div v-if="$store.state.auth.user.role === 1024"
+                        <div v-if="$store.state.auth.user.role === 1024 && (!entry.skip || skip)"
                              class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
                             <v-btn color="red"
                                    fab

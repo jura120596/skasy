@@ -43,7 +43,7 @@
                                     dark>
                                 {{post.likes}}
                             </v-btn>
-                            <v-btn v-if="$store.state.auth.user.id === post.user_id"
+                            <v-btn v-if="$store.state.auth.user.id === post.user_id || $store.state.auth.user.role ===1024"
                                    color="red"
                                    fab
                                    small
@@ -108,6 +108,7 @@
                                             :key="i"
                                             :src="photo.file"
                                             contain
+                                            min-heigth="100px"
                                     >
                                     </v-carousel-item>
                                 </v-carousel>

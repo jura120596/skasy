@@ -51,6 +51,7 @@
             }
         },
         mounted() {
+            this.getPage()
         },
         methods: {
             getPage() {

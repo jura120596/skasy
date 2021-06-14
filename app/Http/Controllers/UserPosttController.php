@@ -26,8 +26,8 @@ class UserPosttController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('store', 'destroy', 'index');
-        $this->middleware('auth:clients')->only('store', 'destroy');
+        $this->middleware('auth')->except('store');
+        $this->middleware('auth:clients')->only('store');
     }
 
     /**
@@ -126,7 +126,7 @@ SQL
      */
     public function destroy(UserPost $post)
     {
-        $this->checkPostAccess($post);
+        if (!$this->isAdmin()) $this->checkPostAccess($post);
         $post->delete();
         return $this->response([
             'Удалено',

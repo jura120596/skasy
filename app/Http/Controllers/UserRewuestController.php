@@ -42,14 +42,15 @@ class UserRewuestController extends Controller
     public function index()
     {
         $query = $this->isVillageUser() ? Auth::user()->requests() : UserRequest::query();
-        if($this->isAdmin() || $this->isLibrarian()) {
+        if (!$this->isLibrarian() && request()->has('role')){
+            $query->where('role', (int) request('role'));
+        }else if($this->isAdmin() || $this->isLibrarian()) {
             $query->where('role', Auth::user()->role);
         }
 
         $query->with(['user' => function($q) {
             $q->selectRaw('id, name, last_name, second_name');
         }]);
-        $query->selectRaw('*, exists(select 1 from user_request_messages um where um.user_id = user_requests.user_id) as can_close');
         return $this->response([
             'Список запросов',
             $query
@@ -124,8 +125,7 @@ class UserRewuestController extends Controller
      */
     public function destroy(UserRequest $request)
     {
-        if ($request->user_id !== Auth::id())
-            throw new AppException('Доступ запрещен', 403);
+        $this->checkPostAccess($request);
         $request->delete();
         return $this->response([
             'Удалено',
@@ -133,7 +133,7 @@ class UserRewuestController extends Controller
         ]);
     }
 
-    public function actions(UserPost $request, string $action) : JsonResponse
+    public function actions(UserRequest $request, string $action) : JsonResponse
     {
         switch ($action) {
             case 'confirm':

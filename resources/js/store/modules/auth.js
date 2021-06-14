@@ -135,7 +135,7 @@ export default {
       if(ttl && refreshTTL) {
         // get half time to expire, when we hit this time refresh the token
         commit('setTTL', Date.now() + (ttl/2) * 1000);
-      } else {
+      } else if (ttl){
         commit('setTTL', ttl);
       }
 

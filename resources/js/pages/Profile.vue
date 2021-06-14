@@ -92,6 +92,9 @@
                     password: '',
                     password_confirmation: '',
                 }
+                if (this.user.email) {
+                    this.$store.dispatch('auth/attempt', {});
+                }
         },
         computed: {
             isFormValid : function () {

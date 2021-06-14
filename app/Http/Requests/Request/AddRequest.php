@@ -16,4 +16,10 @@ class AddRequest extends AppRequest
             'type' => 'exists:user_request_types,id'
         ];
     }
+    public function messages()
+    {
+        return [
+            'type.required' => 'Выберите значение из списка',
+        ];
+    }
 }

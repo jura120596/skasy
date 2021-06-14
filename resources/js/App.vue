@@ -123,4 +123,7 @@
         width: 30px;
         z-index: 100
     }
+    .v-carousel, .v-carousel .v-carousel__item {
+        height:auto !important;
+    }
 </style>
