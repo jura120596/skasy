@@ -8,6 +8,7 @@
     "production": "mix --production",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000"
+    "postinstall": "npm run prod"
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
