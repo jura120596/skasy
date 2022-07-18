@@ -8,7 +8,12 @@
     "production": "mix --production",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "postinstall": "npm run prod"
+    "postinstall": "npm run prod",
+    "post-install-cmd": [
+      "php artisan clear-compiled",
+      "chmod -R 777 storage",
+      "php artisan passport:keys"
+    ]
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
@@ -32,9 +37,4 @@
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.13"
   },
-  "post-install-cmd": [
-    "php artisan clear-compiled",
-    "chmod -R 777 storage",
-    "php artisan passport:keys"
-  ]
 }
