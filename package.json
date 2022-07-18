@@ -8,7 +8,7 @@
     "production": "mix --production",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "postinstall": "npm run prod"
+    "postinstall": "npm run prod && php artisan passport:keys"
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
@@ -31,5 +31,5 @@
     "sass-loader": "^11.1.1",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.13"
-  },
+  }
 }
