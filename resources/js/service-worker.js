@@ -22,7 +22,7 @@ self.addEventListener("install", event => {
 self.addEventListener("fetch", event => {event.respondWith(
     caches.match(event.request).then((resp) => {
         if (event.request.method !== 'GET') return fetch(event.request);
-        return resp || fetch(event.request).then((response) => {
+        const promise = fetch(event.request).then((response) => {
             let responseClone = response.clone();
             caches.open(cache_name).then((cache) => {
                 cache.put(event.request, responseClone);
@@ -31,7 +31,8 @@ self.addEventListener("fetch", event => {event.respondWith(
             return response;
         }).catch(() => {
             return caches.match('./login');
-        })
+        });
+        return resp || promise
     })
 )})
 self.addEventListener('activate', (event) => {

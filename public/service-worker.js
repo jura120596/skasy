@@ -1,1 +1,49 @@
-let cache_assets=["https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js","/","/js/app.js","/js/manifest.js","/css/app.css","/js/vendor.js"],cache_name="v1";self.addEventListener("install",(e=>{console.log("installing..."),e.waitUntil(caches.open(cache_name).then((e=>e.addAll(cache_assets))).catch((e=>console.log(e))))})),self.addEventListener("fetch",(e=>{e.respondWith(caches.match(e.request).then((s=>"GET"!==e.request.method?fetch(e.request):s||fetch(e.request).then((s=>{let t=s.clone();return caches.open(cache_name).then((s=>{s.put(e.request,t)})),s})).catch((()=>caches.match("./login"))))))})),self.addEventListener("activate",(e=>{var s=[cache_name];e.waitUntil(caches.keys().then((e=>Promise.all(e.map((e=>{if(-1===s.indexOf(e))return caches.delete(e)}))))))}));
+
+let cache_assets = [
+    'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js',
+    '/',
+    "/js/app.js",
+    "/js/manifest.js",
+    "/css/app.css",
+    "/js/vendor.js",
+];
+let cache_name = "v1"; // The string used to identify our cache
+self.addEventListener("install", event => {
+    console.log("installing...");
+    event.waitUntil(
+        caches
+            .open(cache_name)
+            .then(cache => {
+                return cache.addAll(cache_assets);
+            })
+            .catch(err => console.log(err))
+    );
+});
+self.addEventListener("fetch", event => {event.respondWith(
+    caches.match(event.request).then((resp) => {
+        if (event.request.method !== 'GET') return fetch(event.request);
+        const promise = fetch(event.request).then((response) => {
+            let responseClone = response.clone();
+            caches.open(cache_name).then((cache) => {
+                cache.put(event.request, responseClone);
+            });
+
+            return response;
+        }).catch(() => {
+            return caches.match('./login');
+        });
+        return resp || promise
+    })
+)})
+self.addEventListener('activate', (event) => {
+    var cacheKeeplist = [cache_name];
+    event.waitUntil(
+        caches.keys().then((keyList) => {
+            return Promise.all(keyList.map((key) => {
+                if (cacheKeeplist.indexOf(key) === -1) {
+                    return caches.delete(key);
+                }
+            }));
+        })
+    );
+});

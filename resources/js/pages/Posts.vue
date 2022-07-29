@@ -66,9 +66,13 @@
                                             :key="i"
                                             :src="photo.file"
                                             contain
+                                            style="height: 300px"
                                     >
                                     </v-carousel-item>
                                 </v-carousel>
+                            </div>
+                            <div v-else class="user-photo-module">
+                                <v-container v-html="post.description"></v-container>
                             </div>
                         </v-container>
                     </v-card>
@@ -181,4 +185,9 @@
 </script>
 
 <style>
+    .user-photo-module{
+        height: 300px;
+        max-height: 300px;
+        overflow-y: scroll;
+    }
 </style>

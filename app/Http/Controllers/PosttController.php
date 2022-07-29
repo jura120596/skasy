@@ -80,7 +80,7 @@ class PosttController extends Controller
             /** @var UploadedFile $photo */
             foreach ($v['post_photos'] as $photo) {
                 $photos[] = $pm = new PostPhoto();
-                $pm->file = '/storage/'. (Storage::disk('public')->put(Carbon::now()->format('Y/m//d/'), $photo));
+                $pm->file = '/storage/'. (Storage::disk('public')->put(Carbon::now()->format('Y/m/d/'), $photo));
             }
             if ($photos) $post->photos()->saveMany($photos);
         }

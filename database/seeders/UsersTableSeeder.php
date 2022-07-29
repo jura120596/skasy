@@ -26,6 +26,7 @@ class UsersTableSeeder extends Seeder
                 'role' => User::ADMIN_ROLE,
                 'name' => 'Администратор',
                 'second_name' => 'Семенов',
+                'phone' => '1',
             ],
             [
                 'email' => 'l@mail.ru',
@@ -33,6 +34,7 @@ class UsersTableSeeder extends Seeder
                 'role' => User::LIBRARIAN_ROLE,
                 'name' => 'Библиотекарь',
                 'second_name' => 'Степанова',
+                'phone' => '2',
             ],
             [
                 'email' => 'u1@mail.ru',
