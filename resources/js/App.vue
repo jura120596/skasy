@@ -126,4 +126,7 @@
     .v-carousel, .v-carousel .v-carousel__item {
         height:auto !important;
     }
+    .v-dialog__content {
+        z-index: 1001!important;
+    }
 </style>
