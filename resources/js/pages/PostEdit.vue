@@ -27,7 +27,7 @@
         >
         </editor>
         <v-spacer/>
-        <photo-loader v-if="$route.params.id > 0" ref="loader"></photo-loader>
+        <photo-loader ref="loader" :photos="post.photos"/>
         <v-btn class="save-btn"
                v-if="$route.params.id == 0"
                color="success"
@@ -86,7 +86,8 @@
             create() {
                 window.axios.post('/post', this.post)
                     .then((r) => {
-                        this.$router.push({name: "post", params: {id: r.data.data.id}});
+                        this.post.id = r.data.data.id;
+                        this.update();
                     }).catch((e) => {
                     if (e.response && e.response.status === 422) {
                         let errors = e.response.data.errors

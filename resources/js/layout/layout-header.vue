@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left>
+  <v-app-bar app clipped-left class="header">
     <v-img
             height="100%"
             class="app-nav-logo"
@@ -57,5 +57,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .header{
+    z-index: 1001;
+  }
 </style>

@@ -29,6 +29,7 @@ Axios.interceptors.response.use(response => {
     }
     return response;
 }, error => {
+    if (!error.response) return Promise.reject(error);
     if (error.response.status === 401 || error.response.status === 403) {
         if (error.response.config.url === '/auth/logout') {
             Store.dispatch('auth/logout');

@@ -45,3 +45,4 @@ Route::get('request/{request}/messages', [UserRewuestController::class, 'message
 Route::post('request/{request}/messages', [UserRewuestController::class, 'send']);
 Route::apiResource('file', FileController::class);
 Route::apiResource('user', UserController::class);
+Route::apiResource('mapObject', \App\Http\Controllers\MapObjectController::class);
