@@ -18,5 +18,6 @@ class MapObject extends Model
     protected $casts = [
         'app_type'=> 'int',
         'coords'=> 'array',
+        'color'=> 'string',
     ];
 }
