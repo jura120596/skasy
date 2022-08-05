@@ -3,7 +3,7 @@
         <form class="drop-form">
             <input type="file" id="fileElem" multiple accept="image/*"
                    @change="(e) => $emit('change', e)" class="hide">
-            <label class="drop-btn" for="fileElem">{{!yet ? 'Загрузить' : 'Загрузить еще'}}</label>
+            <label class="drop-btn" for="fileElem">{{!yet ? 'Загрузить фото' : 'Загрузить еще'}}</label>
             <p class="format-file-desc">Формат – jpg, png</p>
             <p class="file-desc hover">Отпустите фотографию сюда</p>
         </form>
@@ -105,7 +105,7 @@
     .drop-btn {
         display: inline-block;
         cursor: pointer;
-        width: 150px;
+        min-width: 150px;
         border-radius: 4px;
         height: 35px;
         padding: 10px;

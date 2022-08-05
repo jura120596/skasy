@@ -16,7 +16,7 @@ class AddPostRequest extends AppRequest
     {
         return [
             'title' => 'string|min:10|max:50',
-            'description' => 'string|min:100'
+            'description' => 'string|min:50'
         ];
     }
 

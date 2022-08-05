@@ -48,6 +48,10 @@ return [
             'driver' => 'passport',
             'provider' => 'village-users',
         ],
+        'curators' => [
+            'driver' => 'passport',
+            'provider' => 'curator-users',
+        ],
         //for only login action with session guard
         'auth' => [
             'driver' => 'session',
@@ -92,6 +96,10 @@ return [
         'librarians' => [
             'driver' => 'eloquent',
             'model' => \App\Models\Users\Librarian::class,
+        ],
+        'curator-users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Users\Curator::class,
         ],
     ],
 

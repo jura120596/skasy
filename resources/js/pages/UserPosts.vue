@@ -79,14 +79,13 @@
                             </v-btn>
                         </div>
 
-                        <v-container >
+                        <v-container style="position:relative">
                             <div v-text="'Опубликовано: '+post.date"
                                  style="position:absolute; left: 5px; bottom: 35px; font-size: 10px"></div>
                             <div v-text="'Пользователь: '+(post.user_id == $store.state.auth.user.id ? 'Вы' : post.author.full_name)"
                                  style="position:absolute; left: 5px; bottom: 20px; font-size: 10px"></div>
                             <div v-text="'Статус: '+(statuses[post.state])"
                                  style="position:absolute; left: 5px; bottom: 5px; font-size: 10px"></div>
-                            <v-spacer></v-spacer>
                             <v-toolbar-title
                                 class="text-center mt-2 mb-9"
                                 @click="
@@ -112,6 +111,9 @@
                                     >
                                     </v-carousel-item>
                                 </v-carousel>
+                            </div>
+                            <div v-else class="user-photo-module">
+                                <v-container v-html="post.description"></v-container>
                             </div>
                         </v-container>
                     </v-card>
@@ -263,9 +265,8 @@
         },
         methods: {
             getPage() {
-                console.log(this.$route)
                 window.axios.get('/user/post/', {params: {page: this.page, per_page: 10, mode: this.$route.query.mode}}).then((response) => {
-                    this.posts = response.data.data;
+                    this.posts = [...response.data.data];
                     this.l = response.data.last_page
                 }).catch((e) => {
                     console.log(e);
@@ -314,4 +315,9 @@
 </script>
 
 <style>
+    .user-photo-module{
+        height: 300px;
+        max-height: 300px;
+        overflow-y: scroll;
+    }
 </style>

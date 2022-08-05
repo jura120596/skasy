@@ -1,7 +1,7 @@
 <template>
     <v-card class="d-flex flex-column pt-4 pb-4" justify-center align-center elevation="0">
         <div v-if="one && loadedPhotos.length" class="text-center">{{loadedPhotos[0].name}}</div>
-        <v-row v-if="!one" class="user-photo-module">
+        <v-row v-if="!one" class="">
             <v-col xs="6" md="3" sm="6" v-for="(photo, i) in carouselPhotos" :key="i" v-if="!!carouselPhotos[i]">
                 <edit-photo-card
                         :preload="preload"
@@ -89,7 +89,7 @@
                 document.getElementById('files').click()
 
             },
-            addPhoto(files) {
+            addPhoto(event) {
                 [...event.target.files].forEach((photo) => {
                     this.fileImg = photo;
                     if (this.fileImg.size > 5024000) {
@@ -102,7 +102,10 @@
                         this.$root.$children[0].snackbar = true
                         return;
                     }
-                    this.carouselPhotos.push(this.preload ? URL.createObjectURL(this.fileImg) : this.fileImg)
+                    this.carouselPhotos = [
+                        ...this.carouselPhotos,
+                        this.preload ? URL.createObjectURL(this.fileImg) : this.fileImg
+                    ];
                     this.loadedPhotos.push(this.fileImg)
                     this.n = this.loadedPhotos.length - 1
                     this.fileImg = null;
@@ -111,7 +114,6 @@
         },
         watch: {
             photos(nv) {
-                console.log(123);
                 this.carouselPhotos = nv.map((file) => file.file);
             }
         }
