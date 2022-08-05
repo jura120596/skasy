@@ -10,7 +10,7 @@
                         <v-timeline-item
                                 small
                                 left
-                                :color="'#11a506'"
+                                :color="entry.map_object.color"
                         >
                             <v-card elevation="0" class="container ma-0 pa-0 d-flex flex-column">
                                 <h4>{{ entry.map_object.name  }}</h4>
