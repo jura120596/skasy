@@ -26,6 +26,8 @@ use Psy\Util\Str;
  * @property int role
  * @property boolean blocked
  * @property string password
+ * @property int $points
+ * @property string $card_id
  * @property Carbon|null password_reset_at
  */
 class User extends Authenticatable
@@ -34,10 +36,12 @@ class User extends Authenticatable
     public const MIN_PASSWORD_LENGTH = 6;
     public const ADMIN_ROLE = 1024;
     public const LIBRARIAN_ROLE = 128;
+    public const CURATOR_ROLE = 32;
     public const VILLAGE_ROLE = 1;
     public const ROLE = 0;
     public const ROLES = [
         self::VILLAGE_ROLE => 'Житель',
+        self::CURATOR_ROLE => 'Староста',
         self::LIBRARIAN_ROLE => 'Библиотекарь',
         self::ADMIN_ROLE => 'Сотрудник администрации',
     ];
@@ -57,6 +61,9 @@ class User extends Authenticatable
         'second_name',
         'last_name',
         'phone',
+        'points',
+        'blocked',
+        'card_id',
     ];
 
     /**
@@ -88,7 +95,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::addGlobalScope('user_role_scope', function (Builder $builder) {
-            if (static::ROLE) $builder->where('role', static::ROLE);
+            if (static::ROLE) $builder->whereRaw('0 < role & '. static::ROLE);
             return $builder;
         });
     }
@@ -131,12 +138,18 @@ class User extends Authenticatable
     {
         $a = parent::toArray();
         $a['full_name'] = trim($this->second_name . ' ' . $this->name . ' ' . $this->last_name);
+        $a['curator'] = !!($this->role & self::CURATOR_ROLE);
         return $a;
     }
 
     public function posts() : HasMany
     {
         return $this->hasMany(UserPost::class, 'user_id');
+    }
+
+    public function events() : HasMany
+    {
+        return $this->hasMany(UserMapEvent::class, 'user_id');
     }
 
     public function requests() : HasMany

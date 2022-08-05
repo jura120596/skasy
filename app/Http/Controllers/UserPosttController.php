@@ -101,6 +101,9 @@ SQL
         if ($post->created_at->lt(Carbon::now()->subDays(1)))
             throw new AppException('Обращение доступно для редактирования только в первые 24 часа', 406);
         $post->fill($v = $request->validated());
+        if (Arr::has($v, 'delete_photos')) {
+            $post->photos()->whereIn('id', $v['delete_photos'])->delete();
+        }
         if (Arr::has($v, 'post_photos')) {
             $photos = [];
             /** @var UploadedFile $photo */

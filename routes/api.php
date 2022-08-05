@@ -33,10 +33,12 @@ Route::group(['prefix' => 'auth' ], function (){
     Route::put('profile', [AppAuthController::class, 'profileUpdate']);
 
 });
-
+Route::post('/token/client', [\App\Http\Controllers\Auth\OauthClientsController::class, 'token']);
+Route::post('/client/event', [\App\Http\Controllers\PointsController::class, 'event']);
 Route::apiResource('post', PosttController::class);
 Route::post('/user/post/{post}/{any}', [UserPosttController::class, 'actions'])->where('any', '.*');
 Route::apiResource('user/post', UserPosttController::class);
+Route::apiResource('user/event', \App\Http\Controllers\UserMapEventController::class);
 Route::apiResource('event', VillageEventController::class);
 Route::apiResource('bus/event', BusEventController::class);
 Route::apiResource('type', TypesController::class);

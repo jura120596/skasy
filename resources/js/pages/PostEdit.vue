@@ -28,22 +28,11 @@
         </editor>
         <v-spacer/>
         <photo-loader ref="loader" :photos="post.photos"/>
-        <v-btn class="save-btn"
-               v-if="$route.params.id == 0"
+        <v-btn class="save-btn-text"
+               @click="() => post.id ? update() : create()"
                color="success"
-               fab
-               @click="create"
-               :disabled="!(post.description && post.title)"
-               dark>
-            <v-icon>mdi-plus</v-icon>
-        </v-btn>
-        <v-btn class="save-btn"
-               v-else
-               @click="update"
-               color="success"
-               fab
-               dark>
-            <v-icon>mdi-check-outline</v-icon>
+               :disabled="!(post.id> 0) && (!post.description || !post.title)">
+            Сохранить
         </v-btn>
     </v-container>
 </template>
@@ -104,7 +93,8 @@
                         if (newPhotos.length) {
                             const formData = new FormData()
                             newPhotos.forEach((photo, i) => {
-                                formData.append('post_photos['+i+']', photo, photo.name)
+                                if (photo.name) formData.append('post_photos['+i+']', photo, photo.name)
+                                else formData.append('delete_photos['+i+']', photo)
                             })
                             formData.append('_method', 'PUT')
                             try {

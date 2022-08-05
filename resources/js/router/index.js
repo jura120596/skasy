@@ -58,6 +58,11 @@ const routes = [
         component: () => import('@/pages/UserPostEdit')
     },
     {
+        path: '/points-history',
+        name : 'upost',
+        component: () => import('@/pages/UserPointsHistory')
+    },
+    {
         path: '/events',
         name : 'events',
         component: () => import('@/pages/Events'),
@@ -102,6 +107,11 @@ const routes = [
         path: '/users',
         name : 'users',
         component: () => import('@/pages/Users'),
+    },
+    {
+        path: '/user/:id',
+        name : 'user',
+        component: () => import('@/pages/UserEdit'),
     },
     {
         path: '/requests-lib',

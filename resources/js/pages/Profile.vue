@@ -3,7 +3,8 @@
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="4">
-                <v-toolbar-title align="center" justify="center" class="pa-3">Редактирование профиля</v-toolbar-title>
+                <v-toolbar-title v-if="user.points" align="left" class="pl-0 pb-3 ml-0">Вы заслужили {{user.points}} балл(ов)</v-toolbar-title>
+                <v-toolbar-title v-else align="center" justify="center" class="pa-3">Редактирование профиля</v-toolbar-title>
                 <v-form  @keyup.native.enter="signUp" ref="form">
 
                     <v-text-field
@@ -13,6 +14,13 @@
                             label="Ваш E-mail"
                             name="email"
                             type="email"
+                    />
+                    <v-text-field
+                            v-model="user.phone"
+                            :disabled="true"
+                            :error-messages="messages.phone"
+                            label="Ваш телефон"
+                            type="phone"
                     />
                     <v-text-field
                             v-model="user.second_name"
@@ -35,6 +43,8 @@
                             name="last_name"
                             type="text"
                     />
+                </v-form>
+                <v-form>
                     <v-text-field
                             v-model="user.password"
                             :error-messages="messages.password"
@@ -95,6 +105,9 @@
                 if (this.user.email) {
                     this.$store.dispatch('auth/attempt', {});
                 }
+        },
+        mounted() {
+            this.$store.dispatch('auth/updateProfile', this.$store.state.auth.user)
         },
         computed: {
             isFormValid : function () {

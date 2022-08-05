@@ -18,6 +18,14 @@
                                    dark>
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
+                            <v-btn
+                                    color="yellow"
+                                    fab
+                                    small
+                                    @click="$router.push('/event/'+entry.id)"
+                                    dark>
+                                <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
                         </div>
                         <v-timeline-item
                                 small
@@ -27,6 +35,7 @@
                             <v-card elevation="0" class="container ma-0 pa-0 d-flex flex-column">
                                 <h4>{{ entry.title }}</h4>
                                 <span>Место проведения: {{ entry.place }}</span>
+                                <span v-if="entry.points > 0">{{ entry.points }} баллов благодарности</span>
                                 <span
                                         class="text-right history-time"
                                         :title="entry.date"

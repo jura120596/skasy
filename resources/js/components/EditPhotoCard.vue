@@ -1,11 +1,10 @@
 <template>
     <div class="site-photo-card"
-         :class="{focused: focus, filled}"
-         @click="$emit('click', $attrs['value']); open=true">
+         :class="{focused: focus, filled}">
         <div class="site-photo-card-content" style="z-index: 1;">
             <slot name="default">
                 <v-img v-if="loaded && src" :src="src" cover
-                       height="100%"/>
+                       height="100%" @click="$emit('click', $attrs['value']); open=true"/>
                 <v-row v-else-if="!loaded && !error" xs="12" class="pa-8" style="align-items: center">
                     <progress-bar :progress="progress"/>
                 </v-row>
@@ -13,7 +12,13 @@
         </div>
         <div class="site-photo-card-actions" style="z-index: 2;">
             <slot name="actions">
-                <v-row xs="12" class="pl-5 pr-5 pt-2">
+                <v-row xs="12" class="pl-5 pr-5 pt-2 justify-end">
+                    <v-btn fab
+                           small
+                           @click="$emit('delete')"
+                           class="mr-3">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
                 </v-row>
             </slot>
         </div>
@@ -168,8 +173,7 @@
 
     .site-photo-card-actions {
         position: absolute;
-        width: 100%;
-        height: 100%;
+        right: 0;
         cursor: pointer;
     }
 
@@ -180,6 +184,7 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
+        cursor: pointer;
     }
 
     .edit-photo-icon {

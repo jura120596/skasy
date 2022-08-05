@@ -27,23 +27,12 @@
         >
         </editor>
         <v-spacer/>
-        <photo-loader v-if="$route.params.id > 0" ref="loader"></photo-loader>
-        <v-btn class="save-btn"
-               v-if="$route.params.id == 0"
+        <photo-loader ref="loader"  :photos="post.photos"/>
+        <v-btn class="save-btn-text"
+               @click="() => post.id>0 ? update() : create()"
                color="success"
-               fab
-               @click="create"
-               :disabled="!(post.description && post.title)"
-               dark>
-            <v-icon>mdi-plus</v-icon>
-        </v-btn>
-        <v-btn class="save-btn"
-               v-else
-               @click="update"
-               color="success"
-               fab
-               dark>
-            <v-icon>mdi-check-outline</v-icon>
+               :disabled="!(post.id> 0) && (!post.description || !post.title)">
+            Сохранить
         </v-btn>
     </v-container>
 </template>
@@ -63,6 +52,7 @@
                     id: vm.$route.params.id,
                     title: '',
                     description: '',
+                    photos: [],
                 },
                 messages: {
                     title: '',
@@ -86,7 +76,8 @@
             create() {
                 window.axios.post('/user/post', this.post)
                     .then((r) => {
-                        this.$router.push({name: "upost", params: {id: r.data.data.id}});
+                        this.post.id = r.data.data.id;
+                        this.update();
                     }).catch((e) => {
                     if (e.response && e.response.status === 422) {
                         let errors = e.response.data.errors
@@ -103,7 +94,8 @@
                         if (newPhotos.length) {
                             const formData = new FormData()
                             newPhotos.forEach((photo, i) => {
-                                formData.append('post_photos['+i+']', photo, photo.name)
+                                if (photo.name) formData.append('post_photos['+i+']', photo, photo.name)
+                                else formData.append('delete_photos['+i+']', photo)
                             })
                             formData.append('_method', 'PUT')
                             try {

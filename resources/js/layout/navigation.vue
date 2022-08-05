@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer v-model="drawers.navigate" app clipped class="app-navigation">
-        <v-list-item>
+        <v-list-item v-if="$vuetify.breakpoint.mobile">
             <v-list-item-content>
                 <v-list-item-title class="title">
                     {{$store.state.appName}}
@@ -74,7 +74,7 @@
                         <v-list-item-title>Типы запросов</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item  v-if="$store.state.auth.user.role === 1024"
+                <v-list-item  v-if="$store.state.auth.user.role === 1024 || !!($store.state.auth.user.role & 32)"
                               :to="'/users'" link>
                     <v-list-item-action>
                         <v-icon>mdi-account-box-multiple</v-icon>
@@ -120,6 +120,14 @@
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Профиль</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-list-item  to="/points-history" link>
+                <v-list-item-action>
+                    <v-icon>mdi-clock-outline</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>История баллов</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
             <v-list-item  @click="$emit('logout')" link  v-if="$store.state.auth.token" >

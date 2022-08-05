@@ -1,12 +1,6 @@
 <template>
   <v-app-bar app clipped-left class="header">
-    <v-img
-            height="100%"
-            class="app-nav-logo"
-            contain
-            src="/img/logo.png"
-    ></v-img>
-      <v-app-bar-nav-icon v-on:click="$emit('toggleDrawer')" />
+      <v-app-bar-nav-icon v-on:click="$emit('toggleDrawer')" class="pl-2 ml-0" />
       <v-btn to="/map" icon>
         <v-avatar size="30">
           <img

@@ -108,7 +108,9 @@
     .save-btn {
         position: fixed;
         bottom: calc(8vh + 10px);
-        right: 10px;
+        right: 30px;
+    }
+    .save-btn-text{
     }
     .v-btn--has-bg.save-btn{
         background-color: gray !important;

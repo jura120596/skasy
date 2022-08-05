@@ -24,32 +24,40 @@
                             style="position: relative;"
                             class="ma-1"
                     >
-                        <div v-if="$store.state.auth.user.role === 1024"
-                             class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
+                        <div class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
                             <v-btn color="red"
-                                   v-if="!user.blocked"
+                                   v-if="$store.state.auth.user.role === 1024 && !user.blocked"
                                    fab
                                    small
-                                   @click="block_id = user.id"
+                                   @click="block_user = user"
                                    class="mr-3"
                                    dark>
                                 <v-icon>mdi-lock-outline</v-icon>
                             </v-btn>
                             <v-btn color="red"
                                    fab
-                                   v-else
+                                   v-else-if="$store.state.auth.user.role === 1024"
                                    small
-                                   @click="block_id = user.id"
+                                   @click="block_user = user"
                                    class="mr-3"
                                    dark>
                                 <v-icon>mdi-lock-open-variant-outline</v-icon>
+                            </v-btn>
+                            <v-btn color="yellow"
+                                   fab
+                                   small
+                                   @click="$router.push('/user/'+user.id)"
+                                   class="mr-3"
+                                   dark>
+                                <v-icon>mdi-pencil</v-icon>
                             </v-btn>
                         </div>
 
                         <v-card elevation="0" class="pa-1">
                             <div v-text="'Почта: '+user.email"></div>
                             <div v-text="'Телефон: '+(user.phone ? user.phone : ' не указан')"></div>
-                            <div v-text="'ФИО:'+ user.full_name"></div>
+                            <div v-text="'ФИО: '+ user.full_name"></div>
+                            <div v-text="'Баллы: '+ user.points"></div>
                             <div v-text="'Статус: '+ (user.blocked ? ' заблокирован' : ' разблокирован')"></div>
                         </v-card>
                     </v-card>
@@ -77,7 +85,7 @@
                 l: 1,
                 users: [],
                 page: 1,
-                block_id: 0,
+                block_user: null,
                 show: false,
                 message: '',
                 messageText: '',
@@ -100,11 +108,12 @@
                     console.log(e);
                 });
             },
-            delete() {
-                if (this.block_id > 0)
-                    window.axios.put('/user/' + this.block_id).then((response) => {
+            block() {
+                if (this.block_user.id > 0)
+                    this.block_user.blocked = !this.block_user.blocked;
+                    window.axios.put('/user/' + this.block_user.id, {blocked: this.block_user.blocked}).then((response) => {
                         this.getPage()
-                        this.block_id = 0
+                        this.block_user = null
                     }).catch((e) => {
                         console.log(e);
                     });
@@ -114,8 +123,8 @@
             page() {
                 this.getPage();
             },
-            block_id(nv) {
-                if (nv > 0) this.delete()
+            block_user(nv) {
+                if (nv) this.block()
             },
         }
     }

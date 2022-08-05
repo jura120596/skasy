@@ -21,7 +21,7 @@
                                 v-model="place.color"
                                 swatches-max-height="200"
                         ></v-color-picker>
-                        <v-btn color="dark" @click="createPlace" :disabled="place.name == ''">
+                        <v-btn color="dark" @click="save" :disabled="place.name == ''">
                             Сохранить
                         </v-btn>
                     </v-card-text>
@@ -83,7 +83,7 @@
                 edit: {
                     featureGroup: this.editableLayers, //REQUIRED!!
                     remove: true,
-                    edit: false,
+                    edit: true,
                 }
             };
             this.mymap.addLayer(this.editableLayers);
@@ -97,8 +97,25 @@
                     coords: layer._latlngs,
                     layer,
                     type,
+                };
+                this.show = true;
+            });
+            this.mymap.on(L.Draw.Event.EDITED,  (e) => {
+                if (Object.values(e.layers._layers).length !== 1) {
+                    if (Object.values(e.layers._layers).length>1) {
+                        alert('Редактировать можно только 1 объект');
+                        window.location.reload();
+                    }
+                    return;
                 }
-                this.show = true;;
+                Object.values(e.layers._layers).forEach((l) => {
+                    this.place = {
+                        ...l.place,
+                        coords: l._latlngs,
+                        layer:l,
+                    };
+                    this.show = true;
+                });
             });
             this.mymap.on(L.Draw.Event.DELETED,  (e) => {
                 Object.values(e.layers._layers).forEach((l) => {
@@ -124,11 +141,17 @@
                     console.log(e);
                 });
             },
-            createPlace() {
-                let data = {...this.place};
-                delete data.layer;
-                data.color = data.color.hexa;
-                window.axios.post('/mapObject/', data).then((response) => {
+            save() {
+                let data = {
+                    id: this.place.id,
+                    color: this.place.color,
+                    coords: this.place.coords,
+                    name: this.place.name,
+                    points: this.place.points,
+                    type: this.place.type,
+                };
+                data.color = data.color.hexa || data.color;
+                window.axios[data.id ?'put' : 'post']('/mapObject/'+(data.id||''), data).then((response) => {
                     this.getPlaces();
                     this.place = {};
                     this.show = false;

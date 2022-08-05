@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserFilterRequest;
+use App\Http\Requests\User\UserEditRequest;
+use App\Http\Requests\User\UserFilterRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admins');
+        $this->middleware('auth:admins,curators');
     }
 
     /**
@@ -24,9 +25,20 @@ class UserController extends Controller
             $query->paginate(((int)$request->input('per_page')) ?: null)
         ]);
     }
+    public function show(int $user) {
+        return $this->response(['User data', User::findOrFail($user)]);
+    }
 
-    public function update(User $user) {
-        $user->blocked = !$user->blocked;
+    public function update(UserEditRequest $request, User $user) {
+        if ($request->user('admins') && $request->has('curator')) {
+            if ($request->curator) {
+                $user->role |= User::CURATOR_ROLE;
+            } else {
+                $user->role ^= User::CURATOR_ROLE;
+            }
+        }
+        $user->fill($request->validated());
+        $block = $user->isDirty('blocked');
         $user->save();
         if ($user->blocked) {
             foreach ($user->tokens()->get() as $token) {
@@ -34,7 +46,9 @@ class UserController extends Controller
             }
         }
         return $this->response([
-            !$user->blocked ? 'Пользователь разблокирован' : 'Пользователь заблокирован'
+            $block
+                ? (!$user->blocked ? 'Пользователь разблокирован' : 'Пользователь заблокирован')
+                : 'Данные сохранены'
         ]);
     }
 }

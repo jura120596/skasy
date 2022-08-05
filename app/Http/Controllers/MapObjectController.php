@@ -59,7 +59,16 @@ class MapObjectController extends Controller
      */
     public function update(Request $request, MapObject $mapObject)
     {
-        //
+        $valid = $this->validate($request, [
+            'name' => 'required|string',
+            'color' => 'string',
+            'coords' => 'required|array',
+            'points' => 'int',
+            'type' => 'required|string',
+        ]);
+        $mapObject->fill($valid);
+        $mapObject->save();
+        return $this->response(['Объект изменен', $mapObject]);
     }
 
     /**

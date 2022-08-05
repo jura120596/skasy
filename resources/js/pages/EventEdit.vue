@@ -24,14 +24,18 @@
                 v-model="event.date"
                 :error-messages="messages.date"
         ></v-text-field>
+        <v-text-field
+                name="points"
+                label="Баллы за участие"
+                v-model="event.points"
+                :error-messages="messages.points"
+        ></v-text-field>
         <v-spacer/>
-        <v-btn class="save-btn"
+        <v-btn class="save-btn-text"
                color="success"
-               fab
-               @click="create"
-               :disabled="!(event.place && event.title && event.date)"
-               dark>
-            <v-icon>mdi-plus</v-icon>
+               @click="save"
+               :disabled="!(event.place && event.title && event.date)">
+            Сохранить
         </v-btn>
     </v-container>
 </template>
@@ -48,6 +52,7 @@
                     title: '',
                     place: '',
                     date: '',
+                    points: 0,
                 },
                 messages: {
                     title: '',
@@ -57,10 +62,20 @@
             }
         },
         mounted() {
+            let modelId = this.$route.params.id;
+            if (modelId != 0) {
+                window.axios.get('/event/'+ modelId).then((response) => {
+                    this.event = response.data.data;
+                }).catch((e) => {
+                    console.log(e);
+                    this.$root.$children[0].snackbarText = e?.response?.error || 'Произошла ошибка';
+                    this.$root.$children[0].snackbar = true;
+                });
+            }
         },
         methods: {
-            create() {
-                window.axios.post('/event', this.event)
+            save() {
+                window.axios[this.event.id ? 'put' : 'post']('/event/' + (this.event.id || ''), this.event)
                     .then((r) => {
                         this.$router.push({name: "events"});
                     }).catch((e) => {
