@@ -58,7 +58,6 @@
                 fileImg: null,
         }),
         updated() {
-            console.log(this.carouselPhotos)
         },
         methods: {
             deletePhoto(photo, cpi) {
