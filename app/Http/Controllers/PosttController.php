@@ -75,6 +75,9 @@ class PosttController extends Controller
     public function update(EditPostRequest $request, Post $post)
     {
         $post->fill($v = $request->validated());
+        if (Arr::has($v, 'delete_photos')) {
+            $post->photos()->whereIn('id', $v['delete_photos'])->delete();
+        }
         if (Arr::has($v, 'post_photos')) {
             $photos = [];
             /** @var UploadedFile $photo */

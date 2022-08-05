@@ -1,25 +1,23 @@
 <template>
-    <v-card class="d-flex flex-column" justify-center align-center elevation="0">
-        <input
-                type="file"
-                id="files"
-                multiple
-                @change="addPhoto"
-                class="photo-input"
-                placeholder="azaz"
-                accept="image/jpeg,image/png,image/jpg"
-        />
-
-        <v-btn class="btn my-2" @click="clickOnInput" v-if="!one || !carouselPhotos.length">Добавить фотографию</v-btn>
+    <v-card class="d-flex flex-column pt-4 pb-4" justify-center align-center elevation="0">
         <div v-if="one && loadedPhotos.length" class="text-center">{{loadedPhotos[0].name}}</div>
-        <v-row v-if="!one && carouselPhotos.length" class="user-photo-module">
-            <v-col xs="6" md="3" sm="6" v-for="(photo, i) in carouselPhotos" :key="i">
+        <v-row v-if="!one" class="user-photo-module">
+            <v-col xs="6" md="3" sm="6" v-for="(photo, i) in carouselPhotos" :key="i" v-if="!!carouselPhotos[i]">
                 <edit-photo-card
                         :preload="preload"
                         :filled="true"
                         :file="photo"
+                        @delete="() => deletePhoto(photo, i)"
                         contain
-                >
+                />
+            </v-col>
+            <v-col xs="6" md="3" sm="6">
+                <edit-photo-card
+                    @click="() => $refs.btn.click()">
+                    <drop-area @change="addPhoto" :yet="carouselPhotos.length"/>
+                    <template v-slot:actions>
+                        <div class="hidden"></div>
+                    </template>
                 </edit-photo-card>
             </v-col>
         </v-row>
@@ -29,6 +27,7 @@
 <script>
 
     import EditPhotoCard from "./EditPhotoCard";
+    import DropArea from "./DropArea";
 
     export default {
         name: 'photo-loader',
@@ -49,17 +48,32 @@
                 default: false,
             }
         },
-        components: {EditPhotoCard},
+        components: {DropArea, EditPhotoCard},
         data: (vm) => ({
                 n: 0,
                 photo: '',
                 loadedPhotos: [],
+                deleted: [],
                 carouselPhotos: vm.photos,
                 fileImg: null,
         }),
+        updated() {
+            console.log(this.carouselPhotos)
+        },
         methods: {
+            deletePhoto(photo, cpi) {
+                if (photo.name) {
+                    this.loadedPhotos.forEach((file, i) => {
+                        if (file.name === photo.name) delete this.loadedPhotos[i];
+                    });
+                } else {
+                    this.deleted.push(this.photos[cpi].id);
+                }
+                delete this.carouselPhotos[cpi];
+                this.carouselPhotos = [...this.carouselPhotos];
+            },
             getPhotos() {
-                return this.loadedPhotos;
+                return this.loadedPhotos.concat(this.deleted);
             },
             getFirst() {
                 return this.loadedPhotos[0];
@@ -76,7 +90,7 @@
                 document.getElementById('files').click()
 
             },
-            addPhoto(event) {
+            addPhoto(files) {
                 [...event.target.files].forEach((photo) => {
                     this.fileImg = photo;
                     if (this.fileImg.size > 5024000) {
@@ -98,6 +112,7 @@
         },
         watch: {
             photos(nv) {
+                console.log(123);
                 this.carouselPhotos = nv.map((file) => file.file);
             }
         }
@@ -108,13 +123,5 @@
     .photo-input {
         position: absolute;
         visibility: hidden;
-    }
-
-    .user-photo {
-        border-radius: 200px;
-        width: 300px;
-        height: auto;
-        max-height: 500px;
-        border: 1px solid #01aefe;
     }
 </style>

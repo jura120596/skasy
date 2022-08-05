@@ -14,6 +14,7 @@ class VillageEvent extends Model
         'date',
         'place',
         'title',
+        'points',
     ];
     public function author() : BelongsTo
     {

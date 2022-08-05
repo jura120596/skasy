@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer v-model="drawers.navigate" app clipped class="app-navigation">
-        <v-list-item>
+        <v-list-item v-if="$vuetify.breakpoint.mobile">
             <v-list-item-content>
                 <v-list-item-title class="title">
                     {{$store.state.appName}}
