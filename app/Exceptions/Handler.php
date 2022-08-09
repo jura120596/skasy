@@ -38,4 +38,8 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function prepareResponse($request, Throwable $e)
+    {
+        return parent::prepareJsonResponse($request, $e);
+    }
 }
