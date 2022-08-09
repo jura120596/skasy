@@ -133,35 +133,6 @@ class UserRewuestController extends Controller
         ]);
     }
 
-    public function actions(UserRequest $request, string $action) : JsonResponse
-    {
-        switch ($action) {
-            case 'confirm':
-                $this->checkPostAccess($request);
-                $request->state = UserPost::STATE_CONFIRMED;
-                $request->save();
-                return $this->response(['Статус изменен', $request]);
-            case 'like':
-                $request->likes()->syncWithoutDetaching([Auth::id()]);
-                break;
-            case 'dislike':
-                $request->likes()->detach([Auth::id()]);
-                break;
-            case 'accept' :
-                if (!$this->isAdmin()) $this->notFound();
-                $this->validate(\request(), [
-                    'comment' => 'required|string|min:10',
-                ]);
-                $request->state = UserPost::STATE_PROCESSED;
-                $request->comment = \request('comment');
-                $request->save();
-                return $this->response(['Статус изменен', $request]);
-                break;
-            default: $this->notFound();
-        }
-        return $this->response([null]);
-    }
-
     public function messages(UserRequest $request) : JsonResponse
     {
         $this->checkPostAccess($request);

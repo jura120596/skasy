@@ -48,7 +48,8 @@ class UserController extends Controller
         return $this->response([
             $block
                 ? (!$user->blocked ? 'Пользователь разблокирован' : 'Пользователь заблокирован')
-                : 'Данные сохранены'
+                : 'Данные сохранены',
+            $user
         ]);
     }
 }

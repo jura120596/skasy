@@ -43,8 +43,6 @@ class UserPosttController extends Controller
             (select count(distinct user_id) from user_post_likes ul where ul.user_post_id = user_posts.id) 
 SQL;
         $query = \request('mode') === 'me' ? Auth::user()->posts() : UserPost::query();
-        $query->whereRaw('(state <> ? or (state = ? and updated_at > ?))',
-            [UserPost::STATE_CONFIRMED, UserPost::STATE_PROCESSED, Carbon::now()->subWeek()]);
         return $this->response([
             'Список жалоб',
             $query->with(['photos', 'author' => function($q) {
@@ -114,6 +112,7 @@ SQL
             if ($photos) $post->photos()->saveMany($photos);
         }
         $post->save();
+        $post->load('photos');
         return $this->response(['Изменения сохранены', $post]);
     }
 
