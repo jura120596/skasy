@@ -6,6 +6,7 @@ if (true
 //     process.env.NODE_ENV === "production" ||
 //     process.env.NODE_ENV === "staging"
 ) {
+  return;
   register(`/service-worker.js`, {
     ready() {
       console.log(
