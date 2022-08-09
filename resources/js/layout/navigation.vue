@@ -93,6 +93,7 @@
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item
+                        v-if="$store.state.auth.user.role >= 1024"
                         :to="'/requests'" link>
                     <v-list-item-action>
                         <v-icon>mdi-file-document-outline</v-icon>

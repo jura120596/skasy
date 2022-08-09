@@ -30,7 +30,7 @@
                             </v-btn>
                         </div>
                         <v-timeline-item
-                                v-if="!entry.skip || skip"
+                                v-if="!entry.skip || skip ||  skipped === events.length"
                                 small
                                 :color="entry.color || '#11a506'"
                         >
@@ -76,6 +76,7 @@
                 delete_id: 0,
                 show: false,
                 skip: false,
+                skipped: 0,
             }
         },
         mounted() {
@@ -85,6 +86,9 @@
         methods: {
             getPage() {
                 window.axios.get('/bus/event/', {params: {page: this.page, per_page: 10}}).then((response) => {
+                    response.data.data.forEach((event) => {
+                        this.skipped += event.skip ? 1 : 0;
+                    })
                     this.events = response.data.data;
                 }).catch((e) => {
                     console.log(e);

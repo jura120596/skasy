@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index(UserFilterRequest $request)
     {
-        $query = $request->prepareQuery(User::query());
+        $query = $request->prepareQuery(User::query())->orderBy('id');
         return $this->response([trans('responses.controllers.user.index'),
             $query->paginate(((int)$request->input('per_page')) ?: null)
         ]);

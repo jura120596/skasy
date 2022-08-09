@@ -50,7 +50,7 @@ class UserRewuestController extends Controller
 
         $query->with(['user' => function($q) {
             $q->selectRaw('id, name, last_name, second_name');
-        }]);
+        }])->orderBy('id', 'desc');
         return $this->response([
             'Список запросов',
             $query
@@ -125,7 +125,7 @@ class UserRewuestController extends Controller
      */
     public function destroy(UserRequest $request)
     {
-        $this->checkPostAccess($request);
+//        $this->checkPostAccess($request);
         $request->delete();
         return $this->response([
             'Удалено',

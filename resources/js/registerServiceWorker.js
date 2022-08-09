@@ -2,11 +2,10 @@
 
 import { register } from 'register-service-worker'
 import vue from 'vue';
-if (true
+if (false
 //     process.env.NODE_ENV === "production" ||
 //     process.env.NODE_ENV === "staging"
 ) {
-  return;
   register(`/service-worker.js`, {
     ready() {
       console.log(

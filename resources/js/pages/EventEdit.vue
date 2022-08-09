@@ -48,7 +48,7 @@
         data: (vm) => {
             return {
                 event: {
-                    id: vm.$route.params.id,
+                    id: Number.parseInt(vm.$route.params.id),
                     title: '',
                     place: '',
                     date: '',
@@ -58,6 +58,7 @@
                     title: '',
                     place: '',
                     date:'',
+                    points: '',
                 }
             }
         },

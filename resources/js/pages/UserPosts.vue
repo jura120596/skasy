@@ -107,12 +107,13 @@
                                             :key="i"
                                             :src="photo.file"
                                             contain
-                                            min-heigth="100px"
+                                            min-heigth="300px"
+                                            max-heigth="300px"
                                     >
                                     </v-carousel-item>
                                 </v-carousel>
                             </div>
-                            <div v-else class="user-photo-module">
+                            <div v-else class="user-post-description">
                                 <v-container v-html="post.description"></v-container>
                             </div>
                         </v-container>
@@ -148,16 +149,18 @@
                 :fullscreen="$vuetify.breakpoint.mobile"
         >
             <template slot:default>
-                <v-container class="px-0 mx-0 pt-0 mt-0 cover" style="background-color: white !important;">
+                <v-container class="px-0 mx-0 pt-0 mt-0 cover" style="background-color: white !important; max-width: 100% !important;">
                     <v-toolbar-title class="text-center my-3">{{dialogPost.title}}</v-toolbar-title>
 
-                    <div v-if="dialogPost.photos && dialogPost.photos.length > 0" class="user-photo-module my-2">
+                    <div v-if="dialogPost.photos && dialogPost.photos.length > 0" class="my-2 container">
                         <v-carousel>
                             <v-carousel-item
                                     v-for="(photo, i) in dialogPost.photos"
                                     :key="i"
                                     :src="photo.file"
                                     contain
+                                    max-height="500px"
+                                    min-height="500px"
                             >
                             </v-carousel-item>
                         </v-carousel>
@@ -316,6 +319,11 @@
 
 <style>
     .user-photo-module{
+        height: 300px;
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+    .user-post-description{
         height: 300px;
         max-height: 300px;
         overflow-y: scroll;
