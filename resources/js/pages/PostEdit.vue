@@ -49,7 +49,7 @@
         data: (vm) => {
             return {
                 post: {
-                    id: vm.$route.params.id,
+                    id: Number.parseInt(vm.$route.params.id),
                     title: '',
                     description: '',
                 },
@@ -98,13 +98,15 @@
                             })
                             formData.append('_method', 'PUT')
                             try {
-                                window.axios.post('/post/'+this.post.id, formData)
+                                window.axios.post('/post/'+this.post.id, formData).then(() => {
+                                    this.$router.push({name: "posts"});
+                                })
                             } catch (e) {
                                 this.$root.$children[0].snackbarText =  `Ошибка сохранения фотографии`
                                 this.$root.$children[0].snackbar = true
+                                this.$router.push({name: "posts"});
                             }
                         }
-                        this.$router.push({name: "posts"});
                     }).catch((e) => {
                     console.log(e);
                     if (e.response && e.response.status === 422) {

@@ -62,7 +62,7 @@
         </div>
 
         <v-btn class="save-btn"
-               v-if="$store.state.auth.user.role === 1"
+               v-if="$store.state.auth.user.role & 1 > 0"
                color="success"
                fab
                @click="$router.push('/request/0?role=' + ($route.fullPath === '/requests' ? 1024 : 128))"
@@ -79,7 +79,7 @@
                 :fullscreen="$vuetify.breakpoint.mobile"
         >
             <template slot:default>
-                <v-container class="px-0 mx-0 pt-0 mt-0 cover" style="background-color: white !important;">
+                <div class="px-0 mx-0 pt-0 mt-0 cover" style="background-color: white !important;">
 
                     <v-toolbar class="container py-1 my-0 justify-space-between elevation-0">
                         <v-toolbar-title>
@@ -93,8 +93,7 @@
                                     @click="
                                 show = false
                                 dialogModel = null
-                    ">X
-                            </v-icon>
+                    ">mdi-close</v-icon>
                         </v-toolbar-title>
                     </v-toolbar>
 
@@ -113,24 +112,11 @@
                         </div>
                     </v-container>
                     <v-container
-                            v-if="dialogModel.messages && dialogModel.messages.length || $store.state.auth.user.role >= 128"
-                            class="ma-0 pa-0">
+                            v-if="dialogModel.messages && dialogModel.messages.length || $store.state.auth.user.role >= 128">
                         <v-container class="ma-0 pa-0" v-if="dialogModel.messages && dialogModel.messages.length>0">
                             <div>
 
-                                <v-card>
-                                    <v-app-bar
-                                            flat
-                                            color="rgba(0, 0, 0, 0)"
-                                    >
-
-                                        <v-toolbar-title class="text-h6 white--text pl-0">
-                                            Сообщения
-                                        </v-toolbar-title>
-
-                                        <v-spacer></v-spacer>
-
-                                    </v-app-bar>
+                                <v-card elevation="0">
 
                                     <v-card-text>
 
@@ -165,7 +151,6 @@
                         </v-container>
 
                         <v-toolbar class="container pa-0 ma-0 justify-space-between elevation-0">
-                            <v-toolbar-title class="ml-3">
                                 <v-text-field
                                         type="text"
                                         name="title"
@@ -175,9 +160,6 @@
                                         :error-messages="messageText"
                                 >
                                 </v-text-field>
-                            </v-toolbar-title>
-                            <v-spacer/>
-                            <v-toolbar-title class="ml-1 mb-3">
                                 <v-btn
                                         class="rounded"
                                         :disabled="!message"
@@ -189,12 +171,11 @@
                                      ">mdi-check-outline
                                     </v-icon>
                                 </v-btn>
-                            </v-toolbar-title>
                         </v-toolbar>
 
                     </v-container>
 
-                </v-container>
+                </div>
             </template>
         </v-dialog>
     </v-container>
@@ -263,9 +244,11 @@
                     this.ml = r.data.last_page
                     this.message = '';
                 }).catch((e) => {
-                    console.log(e)
                     if (e.response && e.response.status === 422) {
-                        this.messageText = e.response.data.errors.text
+                        this.messageText = e.response.data.errors.text;
+                    }
+                    if (e.response && e.response.status === 500) {
+                        this.messageText =  e.response.data.message;
                     }
                 })
             }

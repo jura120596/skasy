@@ -54,16 +54,16 @@ class Controller extends BaseController
 
     public function isAdmin() : bool
     {
-        return Auth::user() && Auth::user()->role === User::ADMIN_ROLE;
+        return Auth::user() && ((Auth::user()->role & User::ADMIN_ROLE) > 0);
     }
 
     public function isLibrarian() : bool
     {
-        return Auth::user() && Auth::user()->role === User::LIBRARIAN_ROLE;
+        return Auth::user() && ((Auth::user()->role & User::LIBRARIAN_ROLE) > 0);
     }
 
     public function isVillageUser() : bool
     {
-        return Auth::user() && Auth::user()->role === User::VILLAGE_ROLE;
+        return Auth::user() && ((Auth::user()->role & User::VILLAGE_ROLE) > 0);
     }
 }

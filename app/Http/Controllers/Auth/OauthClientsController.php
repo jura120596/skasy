@@ -11,10 +11,6 @@ use Laravel\Passport\Passport;
 
 class OauthClientsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admins');
-    }
 
     public function token(Request $request) : JsonResponse
     {

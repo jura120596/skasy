@@ -92,24 +92,26 @@
                     .then((r) => {
                         let newPhotos = this.$refs.loader.getPhotos();
                         if (newPhotos.length) {
-                            const formData = new FormData()
+                            const formData = new FormData();
                             newPhotos.forEach((photo, i) => {
-                                if (photo.name) formData.append('post_photos['+i+']', photo, photo.name)
+                                if (photo.name) formData.append('post_photos['+i+']', photo, photo.name);
                                 else formData.append('delete_photos['+i+']', photo)
-                            })
-                            formData.append('_method', 'PUT')
+                            });
+                            formData.append('_method', 'PUT');
                             try {
-                                window.axios.post('/user/post/'+this.post.id, formData)
+                                window.axios.post('/user/post/'+this.post.id, formData).then(() => {
+                                    this.$router.push({name: "uposts"});
+                                });
                             } catch (e) {
-                                this.$root.$children[0].snackbarText =  `Ошибка сохранения фотографии`
-                                this.$root.$children[0].snackbar = true
+                                this.$root.$children[0].snackbarText =  `Ошибка сохранения фотографии`;
+                                this.$root.$children[0].snackbar = true;
+                                this.$router.push({name: "uposts"});
                             }
                         }
-                        this.$router.push({name: "uposts"});
                     }).catch((e) => {
                     console.log(e);
                     if (e.response && e.response.status === 422) {
-                        let errors = e.response.data.errors
+                        let errors = e.response.data.errors;
                         Object.keys(this.messages).forEach((k)=> {
                             this.messages[k] = errors[k]?.[0] || '';
                         });

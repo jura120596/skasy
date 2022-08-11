@@ -88,6 +88,7 @@ class PosttController extends Controller
             if ($photos) $post->photos()->saveMany($photos);
         }
         $post->save();
+        $post->load('photos');
         return $this->response(['Изменения сохранены', $post]);
     }
 
