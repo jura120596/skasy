@@ -12,7 +12,7 @@ use Laravel\Passport\Passport;
 class OauthClientsController extends Controller
 {
 
-    public function token(Request $request) : JsonResponse
+    public function token(Request $request)
     {
         $request->validate([
             'client_id' => 'required|string',
