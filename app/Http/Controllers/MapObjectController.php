@@ -17,7 +17,7 @@ class MapObjectController extends Controller
      */
     public function index()
     {
-        return $this->response(['Objects list', MapObject::query()->paginate(-1)]);
+        return $this->response(['Objects list', ['data' => MapObject::all()]]);
     }
 
     /**
