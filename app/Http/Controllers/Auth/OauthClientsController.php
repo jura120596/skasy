@@ -26,7 +26,7 @@ class OauthClientsController extends Controller
             'scope' => '*',
         ]);
         $response = json_decode(app()->handle($request)->getContent(), true);
-        return $this->response(['client_token', Arr::only($response, 'access_token')]);
+        return response(Arr::only($response, 'access_token'));
     }
 
 }
