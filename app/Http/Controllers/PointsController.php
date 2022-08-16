@@ -17,7 +17,7 @@ class PointsController extends Controller
         $this->middleware(Transaction::class);
     }
 
-    public function event(Request $request) {
+    public function arduinoEvent(Request $request) {
         $clientId = $request->get('psr')->getAttribute('oauth_client_id');
         $userCardId = $request->get('card_id');
         $mo = MapObject::query()->where(['client_id' => $clientId])->firstOrFail();

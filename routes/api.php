@@ -34,7 +34,7 @@ Route::group(['prefix' => 'auth' ], function (){
 
 });
 Route::any('/token/client', [\App\Http\Controllers\Auth\OauthClientsController::class, 'token']);
-Route::any('/client/event', [\App\Http\Controllers\PointsController::class, 'event']);
+Route::any('/client/event', [\App\Http\Controllers\PointsController::class, 'arduinoEvent']);
 Route::apiResource('post', PosttController::class);
 Route::post('/user/post/{post}/{any}', [UserPosttController::class, 'actions'])->where('any', '.*');
 Route::apiResource('user/post', UserPosttController::class);
