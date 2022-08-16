@@ -5,11 +5,11 @@
         </v-toolbar-title>
         <v-text-field
                 v-model="q"
-                label="ФИО"
+                label="Имя или фамилия или адрес"
                 :append-outer-icon="'mdi-magnify'"
                 @click:append-outer="getPage"
             />
-        <div v-if="users.length > 0">
+        <div v-if="users.length > 0 && $vuetify.breakpoint.mobile">
             <v-layout class="d-flex flex-row flex-wrap">
                 <v-flex
                         xs12
@@ -71,6 +71,17 @@
                 ></v-pagination>
             </div>
         </div>
+        <div v-else-if="users.length > 0">
+            <app-data-table
+                items-url="/user/"
+                :show-select="false"
+                :fixed-col="true"
+                :filter="{name:q}"
+                :headers="tableHeaders"
+                :toItem="toItem"
+                :editItem="editItem"
+            />
+        </div>
         <div v-else>
             <div class="text-center my-3">Пользователи не найдены</div>
         </div>
@@ -78,8 +89,10 @@
 </template>
 
 <script>
+    import AppDataTable from "../components/AppDataTable";
     export default {
         name: "Users",
+        components: {AppDataTable},
         data: (vm) => {
             return {
                 l: 1,
@@ -90,12 +103,29 @@
                 message: '',
                 messageText: '',
                 q: '',
+                tableHeaders: [
+                    {text:"ID", value:'id', fixed:false },
+                    {text:"ФИО", value:'full_name', fixed:false, sortable:false, link:true },
+                    {text:"Email", value:'email'},
+                    {text:"Телефон", value:'phone' },
+                    {text:"Адрес", value:'address' },
+                    {text:"Баллы", value:'points' },
+                    {text:"Блокировка", value:'block', sortable:false, link:true },
+                ]
             }
         },
         mounted() {
             this.getPage();
         },
         methods: {
+            toItem(item) {
+                item.block = item.blocked === 1 ? 'Разблокировать' : 'Заблокировать'
+                return item;
+            },
+            editItem(id, item, value) {
+                if(value == 'block') this.block_user = item;
+                if(value == 'full_name') this.$router.push('/user/'+item.id)
+            },
             getPage() {
                 window.axios.get('/user/', {params: {
                     page: this.page,

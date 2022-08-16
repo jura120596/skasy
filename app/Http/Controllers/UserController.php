@@ -21,6 +21,7 @@ class UserController extends Controller
     public function index(UserFilterRequest $request)
     {
         $query = $request->prepareQuery(User::query())->orderBy('id');
+//        dd($query->toSql());
         return $this->response([trans('responses.controllers.user.index'),
             $query->paginate(((int)$request->input('per_page')) ?: null)
         ]);
@@ -31,9 +32,9 @@ class UserController extends Controller
 
     public function update(UserEditRequest $request, User $user) {
         if ($request->user('admins') && $request->has('curator')) {
-            if ($request->curator) {
+            if ($request->curator == 'true') {
                 $user->role |= User::CURATOR_ROLE;
-            } else {
+            } else if (($user->role & User::CURATOR_ROLE) === User::CURATOR_ROLE){
                 $user->role ^= User::CURATOR_ROLE;
             }
         }

@@ -26,6 +26,7 @@ use Psy\Util\Str;
  * @property int role
  * @property boolean blocked
  * @property string password
+ * @property string address
  * @property int $points
  * @property string $card_id
  * @property Carbon|null password_reset_at
@@ -64,6 +65,7 @@ class User extends Authenticatable
         'points',
         'blocked',
         'card_id',
+        'address',
     ];
 
     /**
@@ -138,7 +140,8 @@ class User extends Authenticatable
     {
         $a = parent::toArray();
         $a['full_name'] = trim($this->second_name . ' ' . $this->name . ' ' . $this->last_name);
-        $a['curator'] = !!($this->role & self::CURATOR_ROLE);
+        $a['curator'] = ($this->role & self::CURATOR_ROLE) === self::CURATOR_ROLE;
+        $a['address'] = $a['address'] == 'null' || !$a['address'] ? '' : $a['address'];
         return $a;
     }
 

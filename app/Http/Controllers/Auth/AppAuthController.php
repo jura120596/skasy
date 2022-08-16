@@ -81,7 +81,7 @@ class AppAuthController extends Controller
             $u = VillageUser::query()->newModelInstance()->forceFill($u->getAttributes());
         return $this->response([
             "",
-            $u,
+            $u->refresh(),
         ]);
     }
 

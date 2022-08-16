@@ -43,6 +43,12 @@
                             name="last_name"
                             type="text"
                     />
+                    <v-text-field
+                        label="Адрес"
+                        v-model="user.address"
+                        type="text"
+                        :error-messages="messages.address"
+                    />
                 </v-form>
                 <v-form>
                     <v-text-field
@@ -90,6 +96,7 @@
                     email: '',
                     name: '',
                     second_name: '',
+                    address: '',
                     last_name: '',
                     password: '',
                     password_confirmation: '',
@@ -115,6 +122,7 @@
                     || this.user.second_name !== this.$store.state.auth.user.second_name
                     || this.user.name !== this.$store.state.auth.user.name
                     || this.user.last_name !== this.$store.state.auth.user.last_name
+                    || this.user.address !== this.$store.state.auth.user.address
                     || this.user.password && this.user.password_confirmation
             },
         },

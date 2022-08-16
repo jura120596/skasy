@@ -32,7 +32,7 @@
                 label="Телефон"
                 v-model="user.phone"
                 counter="10"
-                :disabled="messages.phone? false: !isAdmin"
+                :disabled="!isAdmin"
                 :error-messages="messages.phone"
         />
         <v-text-field
@@ -46,16 +46,22 @@
                 :disabled="!isAdmin"
                 :error-messages="messages.card_id"
         />
+        <v-text-field
+                label="Адрес"
+                v-model="user.address"
+                :disabled="!isAdmin"
+                :error-messages="messages.address"
+        />
         <v-checkbox
                 v-if="isAdmin"
-                label="Куратор"
+                label="Староста"
                 v-model="user.curator"
         />
         <v-spacer/>
         <v-btn class="save-btn-text"
                color="success"
                @click="save"
-               :disabled="!(user.name && user.second_name && user.email&& user.phone)">
+               :disabled="!isAdmin || !(user.name && user.second_name && user.email&& user.phone)">
             Сохранить
         </v-btn>
     </v-container>
@@ -72,6 +78,7 @@
                     name: '',
                     second_name: '',
                     email: '',
+                    address: '',
                     phone: '',
                     points: 0,
                     card_id: '',
@@ -80,6 +87,7 @@
                     name: '',
                     second_name: '',
                     last_name: '',
+                    address: '',
                     email: '',
                     phone: '',
                     points: '',
@@ -89,7 +97,7 @@
         },
         computed: {
             isAdmin() {
-                return this.$store.state.auth.user.role === 1024;
+                return this.$store.state.auth.user.role >= 1024;
             },
         },
         mounted() {

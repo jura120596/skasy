@@ -44,6 +44,12 @@
                             name="last_name"
                             type="text"
                     />
+                    <v-text-field
+                        label="Адрес"
+                        v-model="account.address"
+                        type="text"
+                        :error-messages="messages.address"
+                    />
                     <v-checkbox
                             v-model="account.accept"
                             :error-messages="messages.accept"
@@ -75,13 +81,14 @@
         name: "Registration",
         data: (vm) => ({
             account: {
-                email: 'jura96_@mail.ru',
-                name: 'Ми',
-                second_name: 'Юр',
+                email: '',
+                name: '',
+                second_name: '',
                 last_name: '',
-                password: 'qweqaz12',
-                password_confirmation: 'qweqaz12',
+                password: '',
+                password_confirmation: '',
                 phone: '',
+                address: '',
                 accept: false,
             },
             messages: {
@@ -90,6 +97,7 @@
                 name: '',
                 second_name: '',
                 last_name: '',
+                address: '',
                 password: '',
                 password_confirmation: '',
                 accept: '',

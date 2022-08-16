@@ -28,7 +28,8 @@ class UserSignUpRequest extends AppRequest
     public function sometimesRules(): array
     {
         return [
-            'last_name' => 'string|regex:/'.self::FIO_PATTERN . '/u|nullable'
+            'last_name' => 'string|regex:/'.self::FIO_PATTERN . '/u|nullable',
+            'address' => 'string|nullable',
         ];
     }
 

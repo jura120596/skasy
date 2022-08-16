@@ -31,10 +31,11 @@ class UserFilterRequest extends AppRequest
     {
 
         if (trim($this->name)) $query->where(function ($q) use($query) {
-            $name = strtolower(trim($this->name));
+            $name = mb_strtolower(trim($this->name));
             $query->orWhereRaw('lower(name)  like \'%'. $name . '%\'');
             $query->orWhereRaw('lower(second_name)  like \'%'. $name . '%\'');
             $query->orWhereRaw('lower(last_name)  like \'%'. $name . '%\'');
+            $query->orWhereRaw('lower(address)  like \'%'. $name . '%\'');
         });
         return parent::prepareQuery($query);
     }
