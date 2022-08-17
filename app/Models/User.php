@@ -141,7 +141,7 @@ class User extends Authenticatable
         $a = parent::toArray();
         $a['full_name'] = trim($this->second_name . ' ' . $this->name . ' ' . $this->last_name);
         $a['curator'] = ($this->role & self::CURATOR_ROLE) === self::CURATOR_ROLE;
-        $a['address'] = $a['address'] == 'null' || !$a['address'] ? '' : $a['address'];
+        $a['address'] = !isset($a['address']) || $a['address'] == 'null' || !$a['address'] ? '' : $a['address'];
         return $a;
     }
 
