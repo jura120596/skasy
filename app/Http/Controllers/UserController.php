@@ -32,7 +32,7 @@ class UserController extends Controller
 
     public function update(UserEditRequest $request, User $user) {
         if ($request->user('admins') && $request->has('curator')) {
-            if ($request->curator == 'true') {
+            if ($request->curator == 'true'|| $request->curator == '1') {
                 $user->role |= User::CURATOR_ROLE;
             } else if (($user->role & User::CURATOR_ROLE) === User::CURATOR_ROLE){
                 $user->role ^= User::CURATOR_ROLE;
