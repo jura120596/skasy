@@ -48,7 +48,7 @@ class FileController extends Controller
         $f = new UserFile();
         $f->title = str_replace(' ', '_', Auth::user()->toArray()['full_name'] . ' '. $request->title);
         $f->file = '/storage/'. Storage::disk('public')->put(
-            '/files/' .Carbon::now()->format('Y/m/d/'), $request->file('file')
+            '/files/' .Carbon::now()->format('Y/m/d'), $request->file('file')
             );
         $f->user_id = Auth::id();
         $f->save();

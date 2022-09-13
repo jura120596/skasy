@@ -40,7 +40,7 @@ class UserPosttController extends Controller
         $user = Auth::user();
         $userId = $user ? $user->id : 0;
         $likesRaw = <<<SQL
-            (select count(distinct user_id) from user_post_likes ul where ul.user_post_id = user_posts.id) 
+            (select count(distinct user_id) from user_post_likes ul where ul.user_post_id = user_posts.id)
 SQL;
         $query = \request('mode') === 'me' ? Auth::user()->posts() : UserPost::query();
         return $this->response([
@@ -107,7 +107,7 @@ SQL
             /** @var UploadedFile $photo */
             foreach ($v['post_photos'] as $photo) {
                 $photos[] = $pm = new UserPostPhoto();
-                $pm->file = '/storage/'. (Storage::disk('public')->put('user_posts/'.Carbon::now()->format('Y/m/d/'), $photo));
+                $pm->file = '/storage/'. (Storage::disk('public')->put('user_posts/'.Carbon::now()->format('Y/m/d'), $photo));
             }
             if ($photos) $post->photos()->saveMany($photos);
         }

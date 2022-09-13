@@ -103,7 +103,7 @@ class UserRewuestController extends Controller
             /** @var UploadedFile $photo */
             foreach ($r->post_files as $file) {
                 $files[] = $pm = new UserFile();
-                $pm->file = '/storage/'. (Storage::disk('public')->put('user_files/'.Carbon::now()->format('Y/m/d/'), $file));
+                $pm->file = '/storage/'. (Storage::disk('public')->put('user_files/'.Carbon::now()->format('Y/m/d'), $file));
             }
             if ($files) $request->user->files()->saveMany($files);
         }
