@@ -49,7 +49,7 @@ class UserRewuestController extends Controller
         }
 
         $query->with(['user' => function($q) {
-            $q->selectRaw('id, name, last_name, second_name');
+            $q->selectRaw('id, name, last_name, second_name, phone, email');
         }])->orderBy('id', 'desc');
         return $this->response([
             'Список запросов',
@@ -140,7 +140,7 @@ class UserRewuestController extends Controller
         $query = $request->messages();
 
         $query->with(['user' => function($q) {
-            $q->selectRaw('id, name, last_name, second_name');
+            $q->selectRaw('id, name, last_name, second_name, role');
         }]);
         return $this->response([
             '',
