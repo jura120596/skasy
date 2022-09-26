@@ -154,7 +154,7 @@ class UserRewuestController extends Controller
         $this->checkPostAccess($request);
         $this->validate(\request(), [
             'text' => 'required|string|min:1|max:255'
-        ]);
+        ], [],['text' => 'сообщение']);
         $last = $request->messages()->take(5)->get()->where('user_id', Auth::id())->count();
         if ($last >= 5) throw new AppException('Вы не можете отправить больше 5 сообщений подряд');
         $m = new UserRequestMessage(\request()->only('text'));
