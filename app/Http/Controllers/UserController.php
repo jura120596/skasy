@@ -13,8 +13,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admins')->except('index', 'show');
-        $this->middleware('auth:admins,curators')->only('index', 'show');
+        $this->middleware('auth:admins,curators');
     }
 
     /**
