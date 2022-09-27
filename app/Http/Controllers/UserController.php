@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\UserEditRequest;
 use App\Http\Requests\User\UserFilterRequest;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admins');
+        $this->middleware('auth:admins')->except('index', 'show');
+        $this->middleware('auth:admins,curators')->only('index', 'show');
     }
 
     /**
