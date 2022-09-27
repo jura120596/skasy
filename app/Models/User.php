@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Exceptions\AppException;
 use App\Mail\PasswordMail;
+use App\Utils\Qrator;
+use App\Utils\StorageHelper;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Passport\HasApiTokens;
@@ -30,6 +33,7 @@ use Psy\Util\Str;
  * @property int $points
  * @property string $card_id
  * @property Carbon|null password_reset_at
+ * @property mixed qr
  */
 class User extends Authenticatable
 {
@@ -139,6 +143,24 @@ class User extends Authenticatable
     public function toArray()
     {
         $a = parent::toArray();
+        if (!$this->qr && Auth::id() == $this->id) {
+            $this->setQrAttribute($val = StorageHelper::storageAs(
+                $this->id .
+                '_' . random_int(0, 1000000).
+                '.png',
+                (new Qrator())
+                    ->format('png')
+                    ->style('dot', 0.99)
+                    ->eye('circle_out')
+                    ->eyeColor(0, 82, 183, 136, 57, 57, 58)
+                    ->eyeColor(1, 82, 183, 136, 57, 57, 58)
+                    ->eyeColor(2, 82, 183, 136, 57, 57, 58)
+                    ->size(400)
+                    ->generate("{$this->id}"),
+                StorageHelper::QR_PATH));
+            $this->save();
+        }
+        $a['qr'] = isset($val) ? $val : $this->qr;
         $a['full_name'] = trim($this->second_name . ' ' . $this->name . ' ' . $this->last_name);
         $a['curator'] = ($this->role & self::CURATOR_ROLE) === self::CURATOR_ROLE;
         $a['address'] = !isset($a['address']) || $a['address'] == 'null' || !$a['address'] ? '' : $a['address'];
@@ -162,5 +184,13 @@ class User extends Authenticatable
     public function files() : HasMany
     {
         return $this->hasMany(UserFile::class, 'user_id');
+    }
+
+    public function getQrAttribute()
+    {
+        return $this->{$this->rememberTokenName};
+    }
+    public function setQrAttribute($val){
+        $this->{$this->rememberTokenName} = $val;
     }
 }
