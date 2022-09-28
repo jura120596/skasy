@@ -19,7 +19,7 @@ class UserMapEventController extends Controller
      */
     public function index()
     {
-        return $this->response(['user events', \request()->user()->events()->with('mapObject')->orderBy('id', 'desc')->paginate()]);
+        return $this->response(['user events', \request()->user()->events()->with('mapObject', 'event')->orderBy('id', 'desc')->paginate()]);
     }
 
 

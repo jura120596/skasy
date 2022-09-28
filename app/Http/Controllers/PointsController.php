@@ -6,7 +6,7 @@ use App\Exceptions\AppException;
 use App\Http\Middleware\Transaction;
 use App\Models\MapObject;
 use App\Models\User;
-use App\Models\UserMapEvent;
+use App\Models\UserHistory;
 use Illuminate\Http\Request;
 
 class PointsController extends Controller
@@ -26,7 +26,7 @@ class PointsController extends Controller
         if ($user->points >= $mo->points) {
             $user->points -= $mo->points;
             $user->save();
-            $user->events()->save(new UserMapEvent(['points' => $mo->points, 'map_object_id' => $mo->id]));
+            $user->events()->save(new UserHistory(['points' => $mo->points, 'map_object_id' => $mo->id]));
             return $this->response(['Success event']);
         }
         throw new AppException();

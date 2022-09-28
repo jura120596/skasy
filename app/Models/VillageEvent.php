@@ -64,13 +64,14 @@ class VillageEvent extends Model
      */
     public function addParticipant(?User $user = null)
     {
-        if (Carbon::now()->lt($this->date) || Carbon::now()->addHours(2)->gt($this->date)) {
+        if (Carbon::now()->lt($this->date) || Carbon::now()->subHours(2)->gt($this->date)) {
             throw new AppException('Участника можно добавить только в течение 2-х часов после начала мероприятия');
         }
         if ($user && !$this->participants()->find($user->id)) {
             $this->participants()->save($user);
             $user->points += $this->points;
             $user->save();
+            $user->events()->save(new UserHistory(['points' => $this->points, 'village_event_id' => $this->id]));
         }
     }
 }

@@ -153,7 +153,7 @@ class User extends Authenticatable
     public function save(array $options = [])
     {
 
-        if (!$this->qr && Auth::id() == $this->id) {
+        if (!$this->qr) {
             $this->qr = ($val = StorageHelper::storageAs(
                 $this->id . '.png',
                 (new Qrator())
@@ -178,7 +178,7 @@ class User extends Authenticatable
 
     public function events() : HasMany
     {
-        return $this->hasMany(UserMapEvent::class, 'user_id');
+        return $this->hasMany(UserHistory::class, 'user_id');
     }
 
     public function requests() : HasMany
