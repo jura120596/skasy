@@ -19,7 +19,7 @@ class TypesController extends Controller
 
     public function index() : JsonResponse
     {
-        $types = UserRequestType::query()->get();
+        $types = UserRequestType::query()->orderBy('name')->get();
         return $this->response(['types', $types]);
     }
 
