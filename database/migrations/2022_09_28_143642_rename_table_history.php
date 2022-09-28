@@ -15,6 +15,8 @@ class RenameTableHistory extends Migration
     {
         Schema::table('user_map_events', function (Blueprint $table) {
             $table->rename('user_histories');
+        });
+        Schema::table('user_histories', function (Blueprint $table) {
             $table->dropColumn('map_object_id');
             $table->unsignedBigInteger('village_event_id')->nullable();
         });
