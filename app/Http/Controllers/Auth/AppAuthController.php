@@ -24,6 +24,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
@@ -163,8 +164,12 @@ class AppAuthController extends Controller
 
     public function profileUpdate(UserProfileRequest $request) : JsonResponse
     {
+        /** @var User $u */
         $u = User::query()->findOrFail(Auth::id());
         $u->fill($request->validated());
+        if ($f = $request->file('photo')) {
+            $u->savePhoto($f);
+        }
         if ($pswd = Arr::get($request->validated(), 'password')){
             $u->password = Hash::make($pswd);
         }
