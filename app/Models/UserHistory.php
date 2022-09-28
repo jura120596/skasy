@@ -21,7 +21,7 @@ class UserHistory extends Model
     }
     public function event()
     {
-        return $this->belongsTo(VillageEvent::class);
+        return $this->belongsTo(VillageEvent::class, 'village_event_id');
     }
     public function toArray()
     {
