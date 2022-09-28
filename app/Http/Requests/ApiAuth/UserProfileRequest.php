@@ -16,7 +16,7 @@ class UserProfileRequest extends UserSignUpRequest {
         return Arr::except(array_merge(parent::requiredRules(), parent::sometimesRules(), [
             'password' => 'string|min:'.User::MIN_PASSWORD_LENGTH.'|confirmed' .
                 '|regex:/.*[a-z].*/|regex:/.*[0-9].*/|regex:/.*[\W\D\S].*/',
-        ]), ['email', 'accept', 'phone', $this->password? 'somevar' : 'password']);
+        ]), ['email', 'accept', 'phone', $this->password? 'somevar' : 'password', 'photo']);
     }
 
 }
