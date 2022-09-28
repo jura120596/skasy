@@ -48,8 +48,7 @@ SQL;
             $query->with(['photos', 'author' => function($q) {
                 $q->selectRaw('id, name, last_name, second_name');
             }])
-                ->orderByRaw(($user ? $user->role : 0) <= User::VILLAGE_ROLE ? 'id desc' : ($likesRaw . ' desc')
-            )
+                ->orderByRaw(($likesRaw . ' desc, id desc'))
                 ->selectRaw('* ,' .($likesRaw . ' as likes') . <<<SQL
                 , exists (select 1 from user_post_likes ul where ul.user_post_id = user_posts.id and ul.user_id = ${userId}) as user_like
 SQL
