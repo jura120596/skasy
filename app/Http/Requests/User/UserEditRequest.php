@@ -25,7 +25,7 @@ class UserEditRequest extends UserSignUpRequest
                 'email' => parent::requiredRules()['email'] . ',email,' . $this->route()->parameter('user')->id . ',id',
                 'phone' => parent::requiredRules()['phone'] . ',phone,' . $this->route()->parameter('user')->id . ',id',
                 'points' => 'int|min:0',
-                'card_id' => 'sometimes|string|nullable',
+                'card_id' => 'sometimes|string|nullable|unique:users,card_id,' .$this->route()->parameter('user')->id . ',id',
                 'blocked' => 'sometimes|boolean',
                 'curator' => 'sometimes|boolean',
             ] +
