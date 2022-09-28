@@ -153,7 +153,7 @@ class User extends Authenticatable
     public function save(array $options = [])
     {
 
-        if (!$this->qr) {
+        if (!$this->qr && $this->id>0) {
             $this->qr = ($val = StorageHelper::storageAs(
                 $this->id . '.png',
                 (new Qrator())
