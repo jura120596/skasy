@@ -30,7 +30,7 @@ class UserSignUpRequest extends AppRequest
         return [
             'last_name' => 'string|regex:/'.self::FIO_PATTERN . '/u|nullable',
             'address' => 'string|nullable',
-            'photo' => 'required|image|max:' .(2*1024),
+            'photo' => 'image|max:' .(2*1024),
         ];
     }
 
