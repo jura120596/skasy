@@ -13,7 +13,7 @@ class AddRequest extends AppRequest
         return [
             'text' => 'string|min:10|max:1000',
             'role' => 'in:'.User::LIBRARIAN_ROLE.','.User::ADMIN_ROLE,
-            'type' => 'exists:user_request_types,id'
+            'type_id' => 'exists:user_request_types,id'
         ];
     }
     public function messages()

@@ -68,7 +68,7 @@ class UserRewuestController extends Controller
     {
         $p = UserRequest::query()->newModelInstance($request->validated());
         $p->user()->associate($request->user());
-        $p->type_id = $request->type;
+        $p->type_id = $request->type_id;
         $p->save();
         return $this->response(['Запрос успешно сформирован', $p]);
     }
