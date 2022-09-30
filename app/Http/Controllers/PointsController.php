@@ -7,7 +7,9 @@ use App\Http\Middleware\Transaction;
 use App\Models\MapObject;
 use App\Models\User;
 use App\Models\UserHistory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PointsController extends Controller
 {
@@ -23,12 +25,15 @@ class PointsController extends Controller
         $mo = MapObject::query()->where(['client_id' => $clientId])->firstOrFail();
         $user = User::query()->whereNotNull('card_id')
             ->where(['card_id' => $userCardId])->firstOrFail();
-        if ($user->points >= $mo->points) {
-            $user->points -= $mo->points;
-            $user->save();
-            $user->events()->save(new UserHistory(['points' => $mo->points, 'map_object_id' => $mo->id]));
-            return $this->response(['Success event']);
+        $recently = UserHistory::where(['user_id' => $user->id, 'map_object_id' => $mo->id])
+            ->where('created_at', '>', Carbon::now()->subHours(3))->exists();
+        if ($recently) return $this->response([]);
+        $updated = User::whereKey($user->id)->where('points', '>', $mo->points)
+            ->update(['points' => DB::raw('points - ' . $this->points)]);
+        if (!$updated) {
+            return $this->response([], 404);
         }
-        throw new AppException();
+        $user->events()->save(new UserHistory(['points' => $mo->points, 'map_object_id' => $mo->id]));
+        return $this->response(['Success event']);
     }
 }
