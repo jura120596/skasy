@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class VillageEvent extends Model
 {
@@ -69,8 +70,9 @@ class VillageEvent extends Model
         }
         if ($user && !$this->participants()->find($user->id)) {
             $this->participants()->save($user);
-            $user->points += $this->points;
-            $user->save();
+//            $user->points += $this->points;
+//            $user->save();
+            $user->update(['points' => DB::raw('points + ' . $this->points)]);
             $user->events()->save(new UserHistory(['points' => $this->points, 'village_event_id' => $this->id]));
         }
     }
