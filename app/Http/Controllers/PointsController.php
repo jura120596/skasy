@@ -29,7 +29,7 @@ class PointsController extends Controller
             ->where('created_at', '>', Carbon::now()->subHours(3))->exists();
         if ($recently) return $this->response([]);
         $updated = User::whereKey($user->id)->where('points', '>', $mo->points)
-            ->update(['points' => DB::raw('points - ' . $this->points)]);
+            ->update(['points' => DB::raw('points - ' . $mo->points)]);
         if (!$updated) {
             return $this->response([], 404);
         }
