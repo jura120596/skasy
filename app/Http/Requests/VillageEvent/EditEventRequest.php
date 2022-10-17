@@ -14,8 +14,8 @@ class EditEventRequest extends AddVilageEventRequest
     public function sometimesRules(): array
     {
         return parent::requiredRules() + [
-            'participant_id' => 'int',
-            'participant_card_id' => 'int',
+            'participant_id' => 'string',
+            'participant_card_id' => 'string',
         ];
     }
 }
