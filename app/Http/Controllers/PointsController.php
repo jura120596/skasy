@@ -24,7 +24,7 @@ class PointsController extends Controller
         $userCardId = $request->get('card_id');
         if ($userCardId) {
             $parts = explode(' ', $userCardId);
-            foreach ($userCardId as $i => $p) {
+            foreach ($parts as $i => $p) {
                 $parts[$i] = str_pad($p, 2, '0', STR_PAD_LEFT);
             }
             $userCardId = implode(' ', $parts);
