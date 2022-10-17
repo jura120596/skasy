@@ -22,6 +22,13 @@ class PointsController extends Controller
     public function arduinoEvent(Request $request) {
         $clientId = $request->get('psr')->getAttribute('oauth_client_id');
         $userCardId = $request->get('card_id');
+        if ($userCardId) {
+            $parts = explode(' ', $userCardId);
+            foreach ($userCardId as $i => $p) {
+                $parts[$i] = str_pad($p, 2, '0', STR_PAD_LEFT);
+            }
+            $userCardId = implode(' ', $parts);
+        }
         $mo = MapObject::query()->where(['client_id' => $clientId])->firstOrFail();
         $user = User::query()->whereNotNull('card_id')
             ->where(['card_id' => $userCardId])->firstOrFail();
