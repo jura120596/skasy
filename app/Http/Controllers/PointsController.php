@@ -30,7 +30,7 @@ class PointsController extends Controller
             $userCardId = implode(' ', $parts);
         }
         $mo = MapObject::query()->where(['client_id' => $clientId])->firstOrFail();
-        $user = User::query()->whereNotNull('card_id')
+        $user = User::query()->whereBlocked(false)->whereNotNull('card_id')
             ->where(['card_id' => $userCardId])->firstOrFail();
         $recently = UserHistory::where(['user_id' => $user->id, 'map_object_id' => $mo->id])
             ->where('created_at', '>', Carbon::now()->subHours(3))->exists();
