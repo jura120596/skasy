@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AppAuthController;
 use App\Http\Controllers\BusEventController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PosttController;
 use App\Http\Controllers\TypesController;
@@ -43,6 +44,8 @@ Route::apiResource('event', VillageEventController::class);
 Route::apiResource('bus/event', BusEventController::class);
 Route::apiResource('type', TypesController::class);
 Route::apiResource('request', UserRewuestController::class);
+Route::get('district/region', [DistrictController::class, 'regions']);
+Route::apiResource('district', DistrictController::class);
 Route::get('request/{request}/messages', [UserRewuestController::class, 'messages']);
 Route::post('request/{request}/messages', [UserRewuestController::class, 'send']);
 Route::apiResource('file', FileController::class);

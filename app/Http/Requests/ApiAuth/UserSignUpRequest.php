@@ -23,6 +23,7 @@ class UserSignUpRequest extends AppRequest
             'second_name' => 'string|min:2|regex:/'.self::FIO_PATTERN . '/u',
             'accept' => 'boolean|in:1,true,TRUE',
             'phone' => 'digits:10|unique:users',
+            'district_id' => 'int|exists:districts,id',
         ];
     }
     public function sometimesRules(): array

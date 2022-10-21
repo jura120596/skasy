@@ -50,6 +50,21 @@
                         type="text"
                         :error-messages="messages.address"
                     />
+                    <v-autocomplete
+                        v-model="account.district_id"
+                        :items="items"
+                        :loading="isLoading"
+                        :search-input.sync="search"
+                        color="white"
+                        hide-no-data
+                        hide-selected
+                        item-text="Description"
+                        item-value="API"
+                        label="Район"
+                        placeholder="Введите название района"
+                        prepend-icon="mdi-database-search"
+                        return-object
+                    ></v-autocomplete>
                     <v-checkbox
                             v-model="account.accept"
                             :error-messages="messages.accept"
@@ -80,6 +95,10 @@
     export default {
         name: "Registration",
         data: (vm) => ({
+            entries: [],
+            isLoading: false,
+            search: null,
+            descriptionLimit: 60,
             account: {
                 email: '',
                 name: '',
@@ -90,6 +109,7 @@
                 phone: '',
                 address: '',
                 accept: false,
+                district_id: null,
             },
             messages: {
                 phone: '',
@@ -111,6 +131,11 @@
                     && this.account.accept
                     && this.account.phone
             },
+            items () {
+                return this.entries.map(entry => {
+                    return {value: entry.id, text: entry.name};
+                })
+            }
         },
         methods :{
             signUp() {
@@ -127,6 +152,28 @@
                             });
                         }
                 })
+            },
+        },
+        watch: {
+            search (val) {
+                // Items have already been loaded
+                if (this.items.length > 0) return
+
+                // Items have already been requested
+                if (this.isLoading) return
+
+                this.isLoading = true
+
+                // Lazily load input items
+                window.axios.get('/district?'+(new URLSearchParams({name: val, level:1, per_page:-1}).toString()), )
+                    .then(res => {
+                        this.count = res.data.total
+                        this.entries = res.data.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                    .finally(() => (this.isLoading = false))
             },
         }
     }

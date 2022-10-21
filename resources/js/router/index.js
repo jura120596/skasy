@@ -133,6 +133,21 @@ const routes = [
         name : 'file',
         component: () => import('@/pages/Files'),
     },
+    {
+        path: '/regions',
+        name : 'regions',
+        component: () => import('@/pages/Regions'),
+    },
+    {
+        path: '/regions/:region/show/:id',
+        name : 'districts',
+        component: () => import('@/pages/Districts'),
+    },
+    {
+        path: '/regions/:region/edit',
+        name : 'districts-edit',
+        component: () => import('@/pages/DistrictEdit'),
+    },
     // {
     //     path: '/file/:id',
     //     name : 'requests',
