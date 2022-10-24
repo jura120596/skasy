@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AppException;
+use App\Http\Requests\Post\AddPostRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -65,5 +67,16 @@ class Controller extends BaseController
     public function isVillageUser() : bool
     {
         return Auth::user() && ((Auth::user()->role & User::VILLAGE_ROLE) > 0);
+    }
+
+    /**
+     * @param AddPostRequest $request
+     * @throws AppException
+     */
+    public function checkDistrict($request)
+    {
+        if (!($d = $request->user()->district_id)) {
+            throw new AppException('Вы не можете оставлять обращения, пока не укажете адрес в профиле.', 498);
+        }
     }
 }

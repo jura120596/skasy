@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AppException;
 use App\Http\Requests\Post\AddPostRequest;
 use App\Http\Requests\Post\EditPostRequest;
 use App\Models\Post;
@@ -32,6 +33,7 @@ class PosttController extends Controller
             Post::with(['photos', 'author' => function($q) {
                 $q->selectRaw('id, name, last_name, second_name');
             }])
+                ->byDistrict()
                 ->orderBy('id', 'desc')
                 ->paginate(((int) \request('per_page'))?: null)
         ]);
@@ -45,7 +47,9 @@ class PosttController extends Controller
      */
     public function store(AddPostRequest $request)
     {
+        $this->checkDistrict($request);
         $p = Post::query()->newModelInstance($request->validated());
+        $p->district_id = $request->user()->district_id;
         $p->author()->associate($request->user());
         $p->save();
         return $this->response(['Новость успешно опубликована', $p]);
@@ -100,6 +104,7 @@ class PosttController extends Controller
      */
     public function destroy(Post $post)
     {
+        $post->canDeleteByDistrict();
         $post->delete();
         return $this->response([
             'Удалено',

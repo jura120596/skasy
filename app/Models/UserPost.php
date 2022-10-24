@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Class UserPost
+ * @package App\Models
+ * @property int district_id
+ */
 class UserPost extends Post
 {
     public const STATE_OPENED = 0;

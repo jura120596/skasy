@@ -42,7 +42,11 @@ class UserPosttController extends Controller
         $likesRaw = <<<SQL
             (select count(distinct user_id) from user_post_likes ul where ul.user_post_id = user_posts.id)
 SQL;
-        $query = \request('mode') === 'me' ? Auth::user()->posts() : UserPost::query();
+        $isMe = \request('mode') === 'me';
+        $query = $isMe ? Auth::user()->posts() : UserPost::query();
+        if (!$isMe) {
+            $query->byDistrict();
+        }
         return $this->response([
             'Список жалоб',
             $query->with(['photos', 'author' => function($q) {
@@ -65,10 +69,12 @@ SQL
      */
     public function store(AddPostRequest $request)
     {
+        $this->checkDistrict($request);
         $p = UserPost::query()->newModelInstance($request->validated());
+        $p->district_id = $request->user()->district_id;
         $p->author()->associate($request->user());
         $p->save();
-        return $this->response(['Жалоба успешно опубликована', $p]);
+        return $this->response(['Обращение успешно опубликовано', $p]);
     }
 
     /**
@@ -128,6 +134,7 @@ SQL
     public function destroy(UserPost $post)
     {
         if (!$this->isAdmin()) $this->checkPostAccess($post);
+        $post->canDeleteByDistrict(false);
         $post->delete();
         return $this->response([
             'Удалено',

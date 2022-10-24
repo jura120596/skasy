@@ -48,6 +48,7 @@
                         @input="(val) => user.district_id = val"
                         :value="user.district_id"
                         label="Район"
+                        :disabled="canDistrict"
                         placeholder="Введите название района"
                     />
                     <DistrictAutocomplete
@@ -57,6 +58,7 @@
                         @input="(val) => user.village_id = val"
                         :value="user.village_id"
                         level="2"
+                        :disabled="canDistrict"
                         label="Населенный пункт"
                         placeholder="Введите название района"
                     />
@@ -124,6 +126,7 @@
                     village_id: '',
                     district_id: '',
                 },
+                canDistrict: true,
                 show: false,
             })
         },
@@ -164,6 +167,7 @@
                             password: '',
                             password_confirmation: '',
                         };
+                        this.canDistrict = !this.user.district_id || !this.user.village_id;
                         this.$root.$children[0].snackbarText = 'Данные профиля успешно обновлены';
                         this.$root.$children[0].snackbar = true;
                     })

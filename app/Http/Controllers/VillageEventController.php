@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AppException;
 use App\Http\Middleware\Transaction;
 use App\Http\Requests\VillageEvent\AddVilageEventRequest;
 use App\Http\Requests\VillageEvent\EditEventRequest;
@@ -11,6 +12,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class VillageEventController extends Controller
 {
@@ -25,6 +27,7 @@ class VillageEventController extends Controller
     {
         $events = VillageEvent::query()->where('date', '>', Carbon::today()->setTime(0,0,0))
             ->orderBy('date', 'asc')
+            ->byDistrict()
             ->paginate(((int)\request('per_page'))?:null);
         return $this->response(['events', $events]);
     }
@@ -37,7 +40,9 @@ class VillageEventController extends Controller
     public function store(AddVilageEventRequest $request) : JsonResponse
     {
         if ($request->user('curators')) throw new AuthenticationException();
+        $this->checkDistrict();
         $e = new VillageEvent($request->validated());
+        $e->district_id = $request->user()->district_id;
         $e->author()->associate($request->user());
         $e->save();
         return $this->response(['Событие добавлено', $e]);
@@ -55,6 +60,7 @@ class VillageEventController extends Controller
     public function destroy(VillageEvent $event) : JsonResponse
     {
         if (request()->user('curators')) throw new AuthenticationException();
+        $event->canDeleteByDistrict();
         $event->delete();
         return $this->response(['Событие удалено',true]);
     }

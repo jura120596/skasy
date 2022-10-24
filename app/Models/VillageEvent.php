@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Exceptions\AppException;
+use App\Models\Traits\DistrictScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class VillageEvent extends Model
 {
-    use HasFactory;
+    use HasFactory, DistrictScope;
     protected $dates = ['date'];
     protected $fillable = [
         'date',

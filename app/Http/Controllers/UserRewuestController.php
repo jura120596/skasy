@@ -47,7 +47,7 @@ class UserRewuestController extends Controller
         }else if($this->isAdmin() || $this->isLibrarian()) {
             $query->where('role', Auth::user()->role);
         }
-
+        if (!$this->isVillageUser()) $query->byDistrict(true);
         $query->with(['user' => function($q) {
             $q->selectRaw('id, name, last_name, second_name, phone, email');
         }])->orderBy('id', 'desc');
@@ -69,6 +69,7 @@ class UserRewuestController extends Controller
         $p = UserRequest::query()->newModelInstance($request->validated());
         $p->user()->associate($request->user());
         $p->type_id = $request->type_id;
+        $request->district_id =$request->user()->district_id;
         $p->save();
         return $this->response(['Запрос успешно сформирован', $p]);
     }
@@ -126,6 +127,7 @@ class UserRewuestController extends Controller
     public function destroy(UserRequest $request)
     {
 //        $this->checkPostAccess($request);
+        $request->canDeleteByDistrict();
         $request->delete();
         return $this->response([
             'Удалено',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AppException;
 use App\Http\Requests\AddBusEventReques;
 use App\Http\Requests\AddVilageEventRequest;
 use App\Models\BusEvent;
@@ -22,6 +23,7 @@ class BusEventController extends Controller
     {
         $events = BusEvent::query()
             ->orderBy('time', 'asc')
+            ->byDistrict()
             ->get();
         return $this->response(['events', $events]);
     }
@@ -30,12 +32,15 @@ class BusEventController extends Controller
     {
         $e = new BusEvent($request->validated());
         $e->author()->associate($request->user());
+        $e->district_id = $request->user()->district_id;
+        if (!$e->district_id) throw new AppException('Расписание может создать только администратор района');
         $e->save();
         return $this->response(['Расписание добавлено', $e]);
     }
     public function destroy(BusEvent $event) : JsonResponse
     {
         $event->delete();
+        $event->canDeleteByDistrict();
         return $this->response(['Удалено',true]);
     }
 
