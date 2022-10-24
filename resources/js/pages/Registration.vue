@@ -44,27 +44,29 @@
                             name="last_name"
                             type="text"
                     />
+                    <DistrictAutocomplete
+                        :error-messages="messages.district_id"
+                        @input="(val) => account.district_id = val"
+                        label="Район"
+                        placeholder="Введите название района"
+                    />
+                    <DistrictAutocomplete
+                        v-if="account.district_id > 0"
+                        :district_id="account.district_id"
+                        :error-messages="messages.village_id"
+                        @input="(val) => account.village_id = val"
+                        level="2"
+                        label="Населенный пункт"
+                        placeholder="Введите название района"
+                    />
                     <v-text-field
-                        label="Адрес"
+                        v-if="account.district_id > 0"
+                        :disabled="!account.village_id"
+                        label="Улица, дом"
                         v-model="account.address"
                         type="text"
                         :error-messages="messages.address"
                     />
-                    <v-autocomplete
-                        v-model="account.district_id"
-                        :items="items"
-                        :loading="isLoading"
-                        :search-input.sync="search"
-                        color="white"
-                        hide-no-data
-                        hide-selected
-                        item-text="Description"
-                        item-value="API"
-                        label="Район"
-                        placeholder="Введите название района"
-                        prepend-icon="mdi-database-search"
-                        return-object
-                    ></v-autocomplete>
                     <v-checkbox
                             v-model="account.accept"
                             :error-messages="messages.accept"
@@ -92,13 +94,11 @@
 </template>
 
 <script>
+    import DistrictAutocomplete from "../components/DistrictAutocomplete";
     export default {
         name: "Registration",
+        components: {DistrictAutocomplete},
         data: (vm) => ({
-            entries: [],
-            isLoading: false,
-            search: null,
-            descriptionLimit: 60,
             account: {
                 email: '',
                 name: '',
@@ -110,6 +110,7 @@
                 address: '',
                 accept: false,
                 district_id: null,
+                village_id: null,
             },
             messages: {
                 phone: '',
@@ -121,6 +122,8 @@
                 password: '',
                 password_confirmation: '',
                 accept: '',
+                district_id: '',
+                village_id: '',
             },
         }),
         computed: {
@@ -130,16 +133,13 @@
                     && this.account.name
                     && this.account.accept
                     && this.account.phone
+                    && this.account.district_id
+                    && this.account.village_id
             },
-            items () {
-                return this.entries.map(entry => {
-                    return {value: entry.id, text: entry.name};
-                })
-            }
         },
         methods :{
             signUp() {
-                window.axios.post('/auth/signup', this.account)
+                this.isFormValid && window.axios.post('/auth/signup', this.account)
                     .then((r) => {
                         this.$root.$children[0].snackbarText = r.data.message;
                         this.$root.$children[0].snackbar = true;
@@ -154,28 +154,6 @@
                 })
             },
         },
-        watch: {
-            search (val) {
-                // Items have already been loaded
-                if (this.items.length > 0) return
-
-                // Items have already been requested
-                if (this.isLoading) return
-
-                this.isLoading = true
-
-                // Lazily load input items
-                window.axios.get('/district?'+(new URLSearchParams({name: val, level:1, per_page:-1}).toString()), )
-                    .then(res => {
-                        this.count = res.data.total
-                        this.entries = res.data.data
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-                    .finally(() => (this.isLoading = false))
-            },
-        }
     }
 </script>
 

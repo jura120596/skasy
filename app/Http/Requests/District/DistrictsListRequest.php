@@ -16,6 +16,7 @@ class DistrictsListRequest extends AppRequest
     public function sometimesRules(): array
     {
         return [
+            'name' => 'string|nullable',
             'level' => 'int|min:0|max:2',
             'region_id' => 'int',
             'parent_district_id' => 'int|nullable',
@@ -23,6 +24,9 @@ class DistrictsListRequest extends AppRequest
     }
     public function prepareQuery(Builder $query): Builder
     {
+        if (($n = $this->get('name')) && $n!== 'null') {
+            $query->where('name', 'like', '%' . $n . '%');
+        }
         if ($this->has('level')) {
             $query->where($this->only('level'));
         }

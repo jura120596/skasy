@@ -50,7 +50,7 @@
             create() {
                 window.axios.post('/district', this.model)
                     .then((r) => {
-                        this.$router.push({name: "districts"});
+                        this.$router.go(-1);
                     }).catch((e) => {
                         console.log(e);
                     if (e.response && e.response.status === 422) {

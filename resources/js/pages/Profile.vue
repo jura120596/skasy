@@ -43,8 +43,27 @@
                             name="last_name"
                             type="text"
                     />
+                    <DistrictAutocomplete
+                        :error-messages="messages.district_id"
+                        @input="(val) => user.district_id = val"
+                        :value="user.district_id"
+                        label="Район"
+                        placeholder="Введите название района"
+                    />
+                    <DistrictAutocomplete
+                        v-if="user.district_id > 0"
+                        :district_id="user.district_id"
+                        :error-messages="messages.village_id"
+                        @input="(val) => user.village_id = val"
+                        :value="user.village_id"
+                        level="2"
+                        label="Населенный пункт"
+                        placeholder="Введите название района"
+                    />
                     <v-text-field
-                        label="Адрес"
+                        v-if="user.district_id > 0"
+                        :disabled="!user.village_id"
+                        label="Улица, дом"
                         v-model="user.address"
                         type="text"
                         :error-messages="messages.address"
@@ -87,8 +106,10 @@
 </template>
 
 <script>
+    import DistrictAutocomplete from "../components/DistrictAutocomplete";
     export default {
         name: "Registration",
+        components: {DistrictAutocomplete},
         data: (vm) => {
             return ({
                 user: {},
@@ -100,6 +121,8 @@
                     last_name: '',
                     password: '',
                     password_confirmation: '',
+                    village_id: '',
+                    district_id: '',
                 },
                 show: false,
             })
@@ -124,6 +147,8 @@
                     || this.user.last_name !== this.$store.state.auth.user.last_name
                     || this.user.address !== this.$store.state.auth.user.address
                     || this.user.password && this.user.password_confirmation
+                    || this.user.village_id !== this.$store.state.auth.user.village_id
+                    || this.user.district_id !== this.$store.state.auth.user.district_id
             },
         },
         methods :{

@@ -38,6 +38,7 @@ class AddRegionsTable extends Migration
         Schema::table('users', function (Blueprint $t){
             $t->unsignedBigInteger('region_id')->nullable();
             $t->unsignedBigInteger('district_id')->nullable();
+            $t->unsignedBigInteger('village_id')->nullable();
         });
     }
 
@@ -48,6 +49,11 @@ class AddRegionsTable extends Migration
      */
     public function down()
     {
+        Schema::table('users', function (Blueprint $t){
+            $t->dropColumn('region_id');
+            $t->dropColumn('district_id');
+            $t->dropColumn('village_id');
+        });
         Schema::drop('districts');
         Schema::drop('regions');
     }

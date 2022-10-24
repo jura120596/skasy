@@ -16,7 +16,7 @@
                     <v-card
                             elevation="0"
                             outlined
-                            style="position: relative;"
+                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px;overflow:hidden"
                             class="ma-1"
                     >
                         <div
@@ -321,11 +321,11 @@
     .user-photo-module{
         height: 300px;
         max-height: 300px;
-        overflow-y: scroll;
+        overflow-y: hidden;
     }
     .user-post-description{
         height: 300px;
         max-height: 300px;
-        overflow-y: scroll;
+        overflow-y: hidden;
     }
 </style>

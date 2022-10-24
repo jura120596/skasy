@@ -16,7 +16,7 @@
                     <v-card
                             elevation="0"
                             outlined
-                            style="position: relative;"
+                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px;overflow:hidden"
                             class="ma-1"
                     >
                         <div v-if="$store.state.auth.user.id === req.user_id || $store.state.auth.user.role === 1024"

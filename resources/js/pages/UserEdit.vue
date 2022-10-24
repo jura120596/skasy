@@ -46,11 +46,31 @@
                 :disabled="!isAdmin"
                 :error-messages="messages.card_id"
         />
+        <DistrictAutocomplete
+            v-if="user.district_id !== undefined"
+            :error-messages="messages.district_id"
+            @input="(val) => user.district_id = val"
+            :value="user.district_id"
+            :disabled="!isAdmin"
+            label="Район"
+            placeholder="Введите название района"
+        />
+        <DistrictAutocomplete
+            v-if="user.district_id && user.village_id !== undefined"
+            :district_id="user.district_id"
+            :error-messages="messages.village_id"
+            @input="(val) => user.village_id = val"
+            :value="user.village_id"
+            :disabled="!isAdmin"
+            level="2"
+            label="Населенный пункт"
+            placeholder="Введите название района"
+        />
         <v-text-field
-                label="Адрес"
-                v-model="user.address"
-                :disabled="!isAdmin"
-                :error-messages="messages.address"
+            :disabled="!user.village_id || !isAdmin"
+            label="Улица, дом"
+            v-model="user.address"
+            :error-messages="messages.address"
         />
         <v-checkbox
                 v-if="isAdmin"
@@ -68,21 +88,13 @@
 </template>
 
 <script>
+    import DistrictAutocomplete from "../components/DistrictAutocomplete";
     export default {
         name: "UserEdit",
-        components: {},
+        components: {DistrictAutocomplete},
         data: (vm) => {
             return {
-                user: {
-                    id: vm.$route.params.id,
-                    name: '',
-                    second_name: '',
-                    email: '',
-                    address: '',
-                    phone: '',
-                    points: 0,
-                    card_id: '',
-                },
+                user: {},
                 messages: {
                     name: '',
                     second_name: '',
@@ -91,7 +103,9 @@
                     email: '',
                     phone: '',
                     points: '',
-                    card_id: ''
+                    card_id: '',
+                    village_id: '',
+                    district_id: '',
                 }
             }
         },
@@ -104,7 +118,7 @@
             let modelId = this.$route.params.id;
             if (modelId != 0) {
                 window.axios.get('/user/' + modelId).then((response) => {
-                    this.user = response.data.data;
+                    this.user = {...response.data.data};
                 }).catch((e) => {
                     console.log(e);
                     this.$root.$children[0].snackbarText = e?.response?.error || 'Произошла ошибка';

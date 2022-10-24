@@ -5,6 +5,7 @@
         </v-toolbar-title>
         <v-text-field
                 v-model="q"
+                class="mx-4"
                 label="Имя или фамилия или адрес"
                 :append-outer-icon="'mdi-magnify'"
                 @click:append-outer="getPage"
@@ -21,7 +22,7 @@
                     <v-card
                             elevation="0"
                             outlined
-                            style="position: relative;"
+                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px;overflow:hidden"
                             class="ma-1"
                     >
                         <div class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
@@ -108,9 +109,11 @@
                     {text:"ФИО", value:'full_name', fixed:false, sortable:false, link:true },
                     {text:"Email", value:'email'},
                     {text:"Телефон", value:'phone' },
-                    {text:"Адрес", value:'address' },
                     {text:"Баллы", value:'points' },
                     {text:"Блокировка", value:'block', sortable:false, link:true },
+                    {text:"МО", value:'district_name' },
+                    {text:"НП", value:'village_name' },
+                    {text:"Адрес", value:'address' },
                 ]
             }
         },
@@ -120,6 +123,8 @@
         methods: {
             toItem(item) {
                 item.block = item.blocked === 1 ? 'Разблокировать' : 'Заблокировать'
+                item.village_name = item.village ? item.village.name : '';
+                item.district_name = item.district ? item.district.name : '';
                 return item;
             },
             editItem(id, item, value) {

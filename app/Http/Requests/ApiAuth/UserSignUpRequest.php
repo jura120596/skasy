@@ -24,6 +24,7 @@ class UserSignUpRequest extends AppRequest
             'accept' => 'boolean|in:1,true,TRUE',
             'phone' => 'digits:10|unique:users',
             'district_id' => 'int|exists:districts,id',
+            'village_id' => 'int|exists:districts,id,parent_district_id,'.$this->input('district_id', -1),
         ];
     }
     public function sometimesRules(): array
@@ -31,7 +32,7 @@ class UserSignUpRequest extends AppRequest
         return [
             'last_name' => 'string|regex:/'.self::FIO_PATTERN . '/u|nullable',
             'address' => 'string|nullable',
-            'photo' => 'image|max:' .(2*1024),
+            'photo' => 'image|nullable|max:' .(2*1024),
         ];
     }
 

@@ -17,7 +17,7 @@ class DistrictCreateRequest extends DistrictsListRequest
     }
     public function requiredRules(): array
     {
-        return Arr::except(parent::sometimesRules(), 'parent_district_id') + [
+        return Arr::except(parent::sometimesRules(), ['parent_district_id', 'name']) + [
             'name' => 'string'
         ];
     }

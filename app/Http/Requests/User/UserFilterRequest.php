@@ -37,6 +37,17 @@ class UserFilterRequest extends AppRequest
             $query->orWhereRaw('lower(last_name)  like \'%'. $name . '%\'');
             $query->orWhereRaw('lower(address)  like \'%'. $name . '%\'');
         });
+
+        if ($column = $this->input('sortBy')) {
+            switch ($column){
+                case 'village_name':
+                case 'district_name':
+                    $sortDesc = $this->sortDesc === 'false' || !$this->sortDesc;
+                    $query->leftJoin('districts', str_replace('_name', '', $column) . '_id', '=', 'districts.id')
+                            ->orderBy('districts.name', $sortDesc ? 'desc' : 'asc');
+                    return $query;
+            }
+        }
         return parent::prepareQuery($query);
     }
 }

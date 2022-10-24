@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function index(UserFilterRequest $request)
     {
-        $query = $request->prepareQuery(User::query())->orderBy('id');
+        $query = $request->prepareQuery(User::query())->with(['village', 'district']);
 //        dd($query->toSql());
         return $this->response([trans('responses.controllers.user.index'),
             $query->paginate(((int)$request->input('per_page')) ?: null)
