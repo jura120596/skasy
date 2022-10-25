@@ -1,7 +1,7 @@
 <template>
     <v-container class="cover">
         <v-toolbar-title align="center" justify="center" class="mb-2"
-                         v-text="'Список районов'">
+                         v-text="'Список регионов'">
         </v-toolbar-title>
         <v-card class="d-flex flex-column justify-space-between mb-6" flat tile>
             <AppDataTable
@@ -39,6 +39,7 @@
                     regions: [
                         { value: 'code', text: 'Код региона' },
                         { value: 'name', text: 'Регион', link: true, id: 'id' },
+                        { value: 'districts_count', text: 'Активных районов'},
                     ],
                 },
                 vm,

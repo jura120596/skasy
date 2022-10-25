@@ -21,11 +21,12 @@ class UserEditRequest extends UserSignUpRequest
 
     public function sometimesRules(): array
     {
+        $id = $this->route()->parameter('user')? $this->route()->parameter('user')->id : -1;
         return ([
-                'email' => parent::requiredRules()['email'] . ',email,' . $this->route()->parameter('user')->id . ',id',
-                'phone' => parent::requiredRules()['phone'] . ',phone,' . $this->route()->parameter('user')->id . ',id',
+                'email' => parent::requiredRules()['email'] . ',email,' . $id . ',id',
+                'phone' => parent::requiredRules()['phone'] . ',phone,' . $id . ',id',
                 'points' => 'int|min:0',
-                'card_id' => 'sometimes|string|nullable|unique:users,card_id,' .$this->route()->parameter('user')->id . ',id',
+                'card_id' => 'sometimes|string|nullable|unique:users,card_id,' . $id . ',id',
                 'blocked' => 'sometimes|boolean',
                 'curator' => 'sometimes|boolean',
             ] +

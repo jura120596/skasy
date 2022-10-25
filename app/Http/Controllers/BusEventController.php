@@ -23,7 +23,7 @@ class BusEventController extends Controller
     {
         $events = BusEvent::query()
             ->orderBy('time', 'asc')
-            ->byDistrict()
+            ->byDistrict(true)
             ->get();
         return $this->response(['events', $events]);
     }

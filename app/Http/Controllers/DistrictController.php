@@ -28,7 +28,11 @@ class DistrictController extends Controller
      */
     public function regions()
     {
-        return $this->response(['Список регионов', Region::query()->orderBy('code', 'asc')->paginate(((int) \request('per_page'))?: null)]);
+        return $this->response(['Список регионов', Region::query()
+            ->withCount('districts')
+            ->orderBy('districts_count', 'desc')
+            ->orderBy('code', 'asc')
+            ->paginate(((int) \request('per_page'))?: null)]);
     }
 
     /**
@@ -40,7 +44,10 @@ class DistrictController extends Controller
         $query = District::query();
         return $this->response([
             'Список административных районов',
-            $request->prepareQuery($query)->paginate()
+            $request->prepareQuery($query)
+                ->withCount('childs')
+                ->orderBy('name', 'asc')
+                ->paginate()
         ]);
     }
 
@@ -57,10 +64,15 @@ class DistrictController extends Controller
     public function store(DistrictCreateRequest $request)
     {
         $this->checkPermissions();
+        $d = Auth::user()->district;
+        if ($request->level.'' == '0' && !is_null($d)
+            || $request->level > 0 && $d->id != $request->parent_district_id) {
+            throw new AccessDeniedHttpException('Доступ запрещен.');
+        }
         return $this->response([
             'Район создан',
             District::query()->create([
-                'region_id' => Auth::user()->region_id ?: $request->region_id,
+                'region_id' => $d ? $d->region_id : $request->region_id,
             ] + $request->all())
         ]);
     }

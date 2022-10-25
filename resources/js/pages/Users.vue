@@ -22,7 +22,7 @@
                     <v-card
                             elevation="0"
                             outlined
-                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px;overflow:hidden"
+                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px"
                             class="ma-1"
                     >
                         <div class="d-flex crud" style="position:absolute; right: 5px; top: -10px; font-size: 10px">
@@ -86,6 +86,15 @@
         <div v-else>
             <div class="text-center my-3">Пользователи не найдены</div>
         </div>
+
+        <v-btn class="save-btn"
+               v-if="$store.state.auth.user.role === 1024"
+               color="success"
+               fab
+               @click="$router.push('/user/0')"
+               dark>
+            <v-icon>mdi-plus</v-icon>
+        </v-btn>
     </v-container>
 </template>
 

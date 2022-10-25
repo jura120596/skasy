@@ -16,7 +16,7 @@
                     <v-card
                             elevation="0"
                             outlined
-                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px;overflow:hidden"
+                            style="position: relative;border: thin solid rgb(57 133 165 / 34%);border-radius:16px"
                             class="ma-1"
                     >
                         <div
@@ -323,9 +323,12 @@
         max-height: 300px;
         overflow-y: hidden;
     }
+    .user-post-description::-webkit-scrollbar {
+         display: none;
+     }
     .user-post-description{
+        overflow-y: scroll !important;
         height: 300px;
         max-height: 300px;
-        overflow-y: hidden;
     }
 </style>

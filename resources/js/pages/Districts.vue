@@ -1,9 +1,12 @@
 <template>
     <v-container class="cover">
         <v-toolbar-title align="center" justify="center" class="mb-2"
-                         v-text="'Список районов'">
+                         v-text="title">
         </v-toolbar-title>
-        <router-link :to="'/regions/' + $route.params.region + '/edit?level=' + level+'&parent_district_id=' + $route.params.id" class="ml-4">Добавить +</router-link>
+        <router-link
+            v-if="canAddDistrict"
+            :to="'/regions/' + $route.params.region + '/edit?level=' + level+'&parent_district_id=' + $route.params.id"
+            class="ml-4">Добавить +</router-link>
         <v-card class="d-flex flex-column justify-space-between mb-6" flat tile>
             <AppDataTable
                 v-show=" !notFound"
@@ -35,6 +38,7 @@
         },
         data: (vm) => {
             return {
+                level: Number.parseInt(vm.$route.query.level),
                 loading: false,
                 notFound: false,
                 filter: {
@@ -57,34 +61,50 @@
         async created() {
         },
         computed: {
+            canAddDistrict() {
+                if (this.$route.params.id+'' === '0') {
+                    return this.$store.state.auth.user.district_id === null;
+                } else
+                    return this.$store.state.auth.user.district_id+'' === this.$route.params.id+'';
+            },
             headers() {
                 return {
                     regions: [
                         { value: 'name', text: this.label, link:this.level < 2, id: 'id' },
-                    ],
+                    ].concat(this.level+'' == '2' ? [] : [
+                        {value: 'childs_count', text: 'Количество административных районов'}
+                    ]),
                 };
             },
             districtsItemsUrl() {
-                return '/district?level=' + this.level
-            },
-            level() {
-                if (this.$route.query.level) return  Number.parseInt(this.$route.query.level);
-                return 0;
+                return '/district?level=' + this.level+'&parent_district_id=' + this.$route.params.id
             },
             label() {
-                switch(this.$route.query.level){
+                switch(this.level){
                     case 2:
-                    case '2': return 'Сельское поселение';
+                    case '2': return 'Населенный пункт';
                     case 1:
-                    case '1': return 'Муниципалитет';
-                    case '0':
+                    case '1': return 'Сельское поселение';
+                    case 0:
+                    case '0': return 'Муниципалитет';
                     default: return 'Район';
+                }
+            },
+            title() {
+                switch(this.level){
+                    case 2:
+                    case '2': return 'Список населенных пунктов';
+                    case 1:
+                    case '1': return 'Список сельских поселений';
+                    case 0: case '0': return 'Список муниципалитетов';
+                    default: return 'Список районов';
                 }
             }
         },
         methods: {
             showItem(id) {
                 let l = this.level;
+                console.log(l)
                 this.$router.push({ name: 'districts', params: { region:this.$route.params.region, id: id},
                     query: {level: Number.isInteger(l) ? l + 1 : 1 }
                 })

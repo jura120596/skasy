@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\AppException;
+use App\Http\Requests\AppRequest;
 use App\Http\Requests\Post\AddPostRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -68,9 +69,13 @@ class Controller extends BaseController
     {
         return Auth::user() && ((Auth::user()->role & User::VILLAGE_ROLE) > 0);
     }
+    public function isCurator() : bool
+    {
+        return Auth::user() && ((Auth::user()->role & User::CURATOR_ROLE) > 0);
+    }
 
     /**
-     * @param AddPostRequest $request
+     * @param AppRequest $request
      * @throws AppException
      */
     public function checkDistrict($request)

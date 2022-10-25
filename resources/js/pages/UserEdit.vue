@@ -2,7 +2,7 @@
     <v-container
             class="cover">
         <v-toolbar-title align="center" justify="center" class="mb-2"
-                         v-text="'Редактирование пользователя'">
+                         v-text="user.id ? 'Редактирование пользователя' : 'Добавление сотрудника'">
         </v-toolbar-title>
         <v-text-field
                 label="Имя"
@@ -47,16 +47,17 @@
                 :error-messages="messages.card_id"
         />
         <DistrictAutocomplete
-            v-if="user.district_id !== undefined"
+            v-if="user.id != $store.state.auth.user.id"
             :error-messages="messages.district_id"
             @input="(val) => user.district_id = val"
             :value="user.district_id"
             :disabled="!isAdmin"
+            :key="user.district_id"
             label="Район"
             placeholder="Введите название района"
         />
         <DistrictAutocomplete
-            v-if="user.district_id && user.village_id !== undefined"
+            v-if="user.district_id && user.id != $store.state.auth.user.id"
             :district_id="user.district_id"
             :error-messages="messages.village_id"
             @input="(val) => user.village_id = val"
@@ -73,9 +74,22 @@
             :error-messages="messages.address"
         />
         <v-checkbox
-                v-if="isAdmin"
+                v-if="isAdmin && user.id && (user.role & 1)>0"
+                @change="() => {user.admin = false; user.librarian = false}"
                 label="Староста"
                 v-model="user.curator"
+        />
+        <v-checkbox
+                v-if="isAdmin && !user.id"
+                @change="() => {user.curator = false; user.librarian = false}"
+                label="Администратор"
+                v-model="user.admin"
+        />
+        <v-checkbox
+                v-if="isAdmin && !user.id"
+                label="Библиотекарь"
+                @change="() => {user.curator = false; user.admin = false}"
+                v-model="user.librarian"
         />
         <v-spacer/>
         <v-btn class="save-btn-text"
@@ -115,20 +129,24 @@
             },
         },
         mounted() {
-            let modelId = this.$route.params.id;
-            if (modelId != 0) {
+            let modelId = this.$route.params.id+'';
+            if (modelId !== '0') {
                 window.axios.get('/user/' + modelId).then((response) => {
                     this.user = {...response.data.data};
                 }).catch((e) => {
                     console.log(e);
                     this.$root.$children[0].snackbarText = e?.response?.error || 'Произошла ошибка';
                     this.$root.$children[0].snackbar = true;
-                });
+                })
+            } else {
+                this.user = { admin: false, librarian: true, district_id: this.$store.state.auth.user.district_id};
             }
         },
         methods: {
             save() {
-                window.axios.put('/user/' + (this.user.id), this.user)
+                (this.user.id
+                    ? window.axios.put('/user/' + (this.user.id), this.user)
+                    : window.axios.post('/user/', this.user))
                     .then((r) => {
                         this.$router.push({name: "users"});
                     }).catch((e) => {

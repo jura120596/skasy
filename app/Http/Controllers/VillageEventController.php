@@ -40,7 +40,7 @@ class VillageEventController extends Controller
     public function store(AddVilageEventRequest $request) : JsonResponse
     {
         if ($request->user('curators')) throw new AuthenticationException();
-        $this->checkDistrict();
+        $this->checkDistrict($request);
         $e = new VillageEvent($request->validated());
         $e->district_id = $request->user()->district_id;
         $e->author()->associate($request->user());
@@ -60,7 +60,7 @@ class VillageEventController extends Controller
     public function destroy(VillageEvent $event) : JsonResponse
     {
         if (request()->user('curators')) throw new AuthenticationException();
-        $event->canDeleteByDistrict();
+        $event->canDeleteByDistrict(true);
         $event->delete();
         return $this->response(['Событие удалено',true]);
     }

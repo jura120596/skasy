@@ -3,8 +3,10 @@
 namespace App\Http\Requests\District;
 
 use App\Http\Requests\AppRequest;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DistrictsListRequest extends AppRequest
 {
@@ -28,7 +30,9 @@ class DistrictsListRequest extends AppRequest
             $query->where('name', 'like', '%' . $n . '%');
         }
         if ($this->has('level')) {
-            $query->where($this->only('level'));
+            if (Auth::user()->district || (Auth::user()->role & User::ADMIN_ROLE) == 0) {
+                $query->where($this->only('level'));
+            }
         }
         if ($this->has('region_id')) {
             $query->where($this->only('region_id'));

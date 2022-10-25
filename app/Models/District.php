@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -21,4 +22,9 @@ class District extends Model
     protected $fillable = [
         'name', 'level', 'region_id', 'parent_district_id',
     ];
+
+    public function childs() : HasMany
+    {
+        return $this->hasMany(District::class, 'parent_district_id');
+    }
 }

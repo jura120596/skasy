@@ -10,11 +10,11 @@
                         <v-timeline-item
                                 small
                                 left
-                                :color="entry.map_object.color"
+                                :color="entry.map_object ? entry.map_object.color : '#00ff00'"
                         >
                             <v-card elevation="0" class="container ma-0 pa-0 d-flex flex-column">
-                                <h4>{{ entry.map_object.name  }}</h4>
-                                <span>{{ entry.points }} баллов благодарности</span>
+                                <h4>{{ entry.map_object ? entry.map_object.name  : (entry.event && entry.event.name)  }}</h4>
+                                <span>{{ entry.map_object ? '-' : '+'}}{{ entry.points }} баллов благодарности</span>
                                 <span
                                         class="text-right history-time"
                                         :title="entry.created_at"

@@ -5,6 +5,7 @@ namespace App\Http\Requests\ApiAuth;
 use App\Http\Requests\AppRequest;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserSignUpRequest extends AppRequest
 {
@@ -24,7 +25,8 @@ class UserSignUpRequest extends AppRequest
             'accept' => 'boolean|in:1,true,TRUE',
             'phone' => 'digits:10|unique:users',
             'district_id' => 'int|exists:districts,id',
-            'village_id' => 'int|exists:districts,id,parent_district_id,'.$this->input('district_id', -1),
+            'village_id' => 'int|exists:districts,id'
+                .((Auth::user()->role & User::ADMIN_ROLE) ?'': ',parent_district_id,'.$this->input('district_id', -1)),
         ];
     }
     public function sometimesRules(): array

@@ -46,8 +46,8 @@ class UserRewuestController extends Controller
             $query->where('role', (int) request('role'));
         }else if($this->isAdmin() || $this->isLibrarian()) {
             $query->where('role', Auth::user()->role);
+            $query->byDistrict(true, false);
         }
-        if (!$this->isVillageUser()) $query->byDistrict(true);
         $query->with(['user' => function($q) {
             $q->selectRaw('id, name, last_name, second_name, phone, email');
         }])->orderBy('id', 'desc');
