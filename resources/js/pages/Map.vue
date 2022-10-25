@@ -78,7 +78,7 @@
                     circle: false, // Turns off this drawing tool
                     circlemarker: false, // Turns off this drawing tool
                     rectangle: false,
-                    marker: false,
+                    marker: true,
                 },
                 edit: {
                     featureGroup: this.editableLayers, //REQUIRED!!
@@ -94,7 +94,7 @@
                 var type = e.layerType,
                     layer = e.layer;
                 this.place = {
-                    coords: layer._latlngs,
+                    coords: e.layerType === 'point' ? layer._latlngs : layer._latlng,
                     layer,
                     type,
                 };
@@ -129,13 +129,17 @@
             getPlaces() {
                 window.axios.get('/mapObject/', {params: {}}).then((response) => {
                     this.places = response.data.data;
-                    this.places.forEach((p,i) => {
+                    this.places.filter((v) => v.type === 'polygon').forEach((p,i) => {
                         let polygon = L.polygon(p.coords, {color: p.color});
                         polygon.addTo(this.mymap)
-                            .bindPopup(p.name+'<br/>'+'Требуются баллы: ' + p.points);
+                            .bindPopup(p.name+'<br/>'+(p.points > 0  ? 'Требуются баллы: ' + p.points : ''));
                         this.places[i].polygon = polygon;
                         polygon.place = p;
                         this.editableLayers.addLayer(polygon);
+                    })
+                    this.places.filter((v) => v.type === 'marker').forEach((p,i) => {
+                        L.marker(p.coords).addTo(this.mymap)
+                            .bindPopup(p.name+'<br/>'+(p.points > 0  ? 'Требуются баллы: ' + p.points : ''));
                     })
                 }).catch((e) => {
                     console.log(e);
