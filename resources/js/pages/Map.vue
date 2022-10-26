@@ -36,9 +36,6 @@
         name: "Map",
         data: (vm) => ({
             mymap : null,
-            markers: [
-                [[55.530648, 47.505122], 'Дом культуры<br> Администрация послеления'],
-            ],
             editableLayers:new L.FeatureGroup(),
             places: [],
             place: {},
@@ -56,11 +53,6 @@
                 accessToken: 'your.mapbox.access.token'
             })
             osm.addTo(this.mymap)
-            this.markers.forEach((v)=> {
-                L.marker(v[0]).addTo(this.mymap)
-                    .bindPopup(v[1])
-                    .openPopup()
-            });
             var options = {
                 position: 'topright',
                 draw: {
@@ -126,6 +118,21 @@
             this.getPlaces();
         },
         methods: {
+            addDivMarker(coords, color, popup) {
+                const myCustomColour = color.substr(0,7);
+                const markerHtmlStyles = `background-color: ${myCustomColour}; width: 2rem;height: 2rem;display: block;
+                          left: -1rem;top: -1rem;position: relative;border-radius: 2rem 2rem 0;transform: rotate(45deg);border: 1px solid #FFFFFF`
+                const icon = L.divIcon({
+                    className: "my-custom-pin",
+                    iconAnchor: [0, 24],
+                    labelAnchor: [-6, 0],
+                    popupAnchor: [0, -36],
+                    html: `<span style="${markerHtmlStyles}" />`
+                });
+                L.marker(coords, {icon})
+                    .addTo(this.mymap)
+                    .bindPopup(popup);
+            },
             getPlaces() {
                 window.axios.get('/mapObject/', {params: {}}).then((response) => {
                     this.places = response.data.data;
@@ -138,19 +145,7 @@
                         this.editableLayers.addLayer(polygon);
                     })
                     this.places.filter((v) => v.type === 'marker').forEach((p,i) => {
-                        const myCustomColour = p.color;
-                        const markerHtmlStyles = `background-color: ${myCustomColour}; width: 2rem;height: 2rem;display: block;
-                          left: -1rem;top: -1rem;position: relative;border-radius: 2rem 2rem 0;transform: rotate(45deg);border: 1px solid #FFFFFF`
-                        const icon = L.divIcon({
-                            className: "my-custom-pin",
-                            iconAnchor: [0, 24],
-                            labelAnchor: [-6, 0],
-                            popupAnchor: [0, -36],
-                            html: `<span style="${markerHtmlStyles}" />`
-                        })
-                        L.marker(p.coords, {icon})
-                            .addTo(this.mymap)
-                            .bindPopup(p.name+'<br/>'+(p.points > 0  ? 'Требуются баллы: ' + p.points : ''));
+                       this.addDivMarker({lat:p.lat, lng:p.lng}, p.color, p.name+'<br/>'+(p.points > 0  ? 'Требуются баллы: ' + p.points : ''));
                     })
                 }).catch((e) => {
                     console.log(e);

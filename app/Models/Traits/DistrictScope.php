@@ -21,6 +21,7 @@ trait DistrictScope
     public function scopeByDistrict(Builder $q, $onlySelf = false, $withParent = true): Builder
     {
 
+        if (!Auth::user()) return $q;
         return $q->where(function (Builder $q) use ($onlySelf, $withParent) {
             $did = Auth::user()->district_id;
             $ids = [$did];

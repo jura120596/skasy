@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use function Symfony\Component\String\u;
 
 class DistrictsListRequest extends AppRequest
 {
@@ -30,7 +31,8 @@ class DistrictsListRequest extends AppRequest
             $query->where('name', 'like', '%' . $n . '%');
         }
         if ($this->has('level')) {
-            if (Auth::user()->district || (Auth::user()->role & User::ADMIN_ROLE) == 0) {
+            $u = Auth::user();
+            if ($u && $u->district || (($u ? $u->role : 0) & User::ADMIN_ROLE) == 0) {
                 $query->where($this->only('level'));
             }
         }

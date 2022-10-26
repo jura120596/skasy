@@ -78,8 +78,10 @@ class AppAuthController extends Controller
      */
     public function profile()
     {
-        if (($u = Auth::user())->role == User::VILLAGE_ROLE)
+        if (($u = Auth::user())->role == User::VILLAGE_ROLE) {
             $u = VillageUser::query()->newModelInstance()->forceFill($u->getAttributes());
+        }
+        $u->load('village', 'district');
         return $this->response([
             "",
             $u->refresh(),

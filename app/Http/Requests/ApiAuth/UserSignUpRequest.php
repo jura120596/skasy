@@ -26,7 +26,7 @@ class UserSignUpRequest extends AppRequest
             'phone' => 'digits:10|unique:users',
             'district_id' => 'int|exists:districts,id',
             'village_id' => 'int|exists:districts,id'
-                .((Auth::user()->role & User::ADMIN_ROLE) ?'': ',parent_district_id,'.$this->input('district_id', -1)),
+                .(((Auth::user() ? Auth::user()->role:0) & User::ADMIN_ROLE) ?'': ',parent_district_id,'.$this->input('district_id', -1)),
         ];
     }
     public function sometimesRules(): array

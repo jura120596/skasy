@@ -27,4 +27,14 @@ class MapObject extends Model
         'coords'=> 'array',
         'color'=> 'string',
     ];
+    public function toArray()
+    {
+        $toArray = parent::toArray();
+        if ($this->type === 'marker') {
+            $toArray['lat'] = $toArray['coords']['lat'];
+            $toArray['lng'] = $toArray['coords']['lng'];
+            $toArray['coords'] = [];
+        }
+        return $toArray;
+    }
 }

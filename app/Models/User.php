@@ -176,9 +176,10 @@ class User extends Authenticatable
         }
         //Редактировать адрес админа может только глабальный админ
         //Редактировать адрес может только пользовтаель без адреса
-        if ($this->isDirty(['village_id', 'district_id'])
-            && ((($this->role & self::ADMIN_ROLE) > 0) && Auth::user() && Auth::user()->district_id
-                || (($this->role & self::VILLAGE_ROLE) > 0) && $this->village_id && (Auth::user()->role & self::ADMIN_ROLE == 0)
+        $u = Auth::user();
+        if ($this->isDirty(['village_id', 'district_id']) && $u
+            && ((($this->role & self::ADMIN_ROLE) > 0) && $u->district_id
+                || (($this->role & self::VILLAGE_ROLE) > 0) && $this->village_id && ($u->role & self::ADMIN_ROLE == 0)
             )
         ){
             $this->village_id = $this->getOriginal('village_id');
