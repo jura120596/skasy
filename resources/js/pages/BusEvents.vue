@@ -85,7 +85,7 @@
         },
         methods: {
             getPage() {
-                window.axios.get('/bus/event/', {params: {page: this.page, per_page: 10}}).then((response) => {
+                window.axios.get('/bus/event', {params: {page: this.page, per_page: 10}}).then((response) => {
                     response.data.data.forEach((event) => {
                         this.skipped += event.skip ? 1 : 0;
                     })

@@ -65,7 +65,8 @@
                 if (this.$route.params.id+'' === '0') {
                     return this.$store.state.auth.user.district_id === null;
                 } else
-                    return this.$store.state.auth.user.district_id+'' === this.$route.params.id+'';
+                    return this.$store.state.auth.user.district_id === null && this.level < 2
+                        || this.$store.state.auth.user.district_id+'' === this.$route.params.id+'';
             },
             headers() {
                 return {

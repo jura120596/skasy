@@ -146,7 +146,7 @@
             save() {
                 (this.user.id
                     ? window.axios.put('/user/' + (this.user.id), this.user)
-                    : window.axios.post('/user/', this.user))
+                    : window.axios.post('/user', this.user))
                     .then((r) => {
                         this.$router.push({name: "users"});
                     }).catch((e) => {

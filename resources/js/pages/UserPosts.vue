@@ -268,7 +268,7 @@
         },
         methods: {
             getPage() {
-                window.axios.get('/user/post/', {params: {page: this.page, per_page: 10, mode: this.$route.query.mode}}).then((response) => {
+                window.axios.get('/user/post', {params: {page: this.page, per_page: 10, mode: this.$route.query.mode}}).then((response) => {
                     this.posts = [...response.data.data];
                     this.l = response.data.last_page
                 }).catch((e) => {

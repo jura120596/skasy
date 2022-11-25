@@ -141,7 +141,7 @@
                 if(value == 'full_name') this.$router.push('/user/'+item.id)
             },
             getPage() {
-                window.axios.get('/user/', {params: {
+                window.axios.get('/user', {params: {
                     page: this.page,
                     per_page: 10,
                     name: this.q,

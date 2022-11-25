@@ -203,7 +203,7 @@
         },
         methods: {
             getPage() {
-                window.axios.get('/request/', {params: {
+                window.axios.get('/request', {params: {
                     page: this.page,
                     per_page: 10,
                     role: this.$route.fullPath === '/requests' ? 1024 : 128,

@@ -154,7 +154,7 @@
                     })
                     formData.append('title', this.file.title)
                     try {
-                        window.axios.post('/file/', formData).then((r) => {
+                        window.axios.post('/file', formData).then((r) => {
                             this.getPage()
 
                         })

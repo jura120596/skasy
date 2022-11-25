@@ -159,7 +159,7 @@
         },
         methods: {
             getPage() {
-                window.axios.get('/post/', {params: {page: this.page, per_page: 10}}).then((response) => {
+                window.axios.get('/post', {params: {page: this.page, per_page: 10}}).then((response) => {
                     this.posts = response.data.data;
                     this.l = response.data.last_page
                 }).catch((e) => {

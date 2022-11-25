@@ -134,7 +134,7 @@
                     .bindPopup(popup);
             },
             getPlaces() {
-                window.axios.get('/mapObject/', {params: {}}).then((response) => {
+                window.axios.get('/mapObject', {params: {}}).then((response) => {
                     this.places = response.data.data;
                     this.places.filter((v) => v.type === 'polygon').forEach((p,i) => {
                         let polygon = L.polygon(p.coords, {color: p.color});
