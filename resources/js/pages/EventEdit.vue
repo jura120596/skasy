@@ -76,7 +76,8 @@
         },
         methods: {
             save() {
-                window.axios[this.event.id ? 'put' : 'post']('/event/' + (this.event.id || ''), this.event)
+                let id = this.event.id;
+                window.axios[id ? 'put' : 'post']('/event' + (id ? '/' + id : ''), this.event)
                     .then((r) => {
                         this.$router.push({name: "events"});
                     }).catch((e) => {

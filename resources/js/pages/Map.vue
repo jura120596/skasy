@@ -161,7 +161,7 @@
                     type: this.place.type,
                 };
                 data.color = data.color.hexa || data.color;
-                window.axios[data.id ?'put' : 'post']('/mapObject/'+(data.id||''), data).then((response) => {
+                window.axios[data.id ?'put' : 'post']('/mapObject'+(data.id? '/' + data.id : ''), data).then((response) => {
                     this.getPlaces();
                     this.place = {};
                     this.show = false;
