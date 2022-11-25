@@ -42,7 +42,7 @@
                                     @click="
                                     dialogModel = req
                                     show =  true
-                            ">{{req.type.name}}
+                            ">{{req.type && req.type.name}}
                             </v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-container>
@@ -83,7 +83,7 @@
 
                     <v-toolbar class="container py-1 my-0 justify-space-between elevation-0">
                         <v-toolbar-title>
-                            <span class="headline">{{dialogModel.type.name}}</span>
+                            <span class="headline">{{dialogModel.type && dialogModel.type.name}}</span>
                         </v-toolbar-title>
                         <v-spacer/>
                         <v-toolbar-title>
