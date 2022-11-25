@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -54,12 +55,13 @@ class UserController extends Controller
         $d = Auth::user()->district_id;
         if ($this->isCurator()
             || $d && $d != $request->district_id && District::find($request->district_id)->parent_district_id != $d) throw new AppException('Доступ запрещен', 403);
-        $u = User::query()->newModelInstance()->fill($request->validated())->fill([
-                'district_id' => $request->district_id,
-            ]);
+        $u = User::query()->newModelInstance()->fill($request->validated());
         $u->password = '';
         $u->role = $request->admin ? User::ADMIN_ROLE : User::LIBRARIAN_ROLE;
         $u->save();
+        DB::table($u->getTable())->where('id', $u->id)->update([
+            'district_id' => $request->district_id,
+        ]);
         $u->sendPasswordMail();
         return $this->response(['created', $u]);
     }
