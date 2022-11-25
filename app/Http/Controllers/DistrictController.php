@@ -66,7 +66,7 @@ class DistrictController extends Controller
         $this->checkPermissions();
         $d = Auth::user()->district;
         if ($request->level.'' == '0' && !is_null($d)
-            || $request->level > 0 && $d->id != $request->parent_district_id) {
+            || $request->level > 0 && optional($d)->id != $request->parent_district_id) {
             throw new AccessDeniedHttpException('Доступ запрещен.');
         }
         return $this->response([
