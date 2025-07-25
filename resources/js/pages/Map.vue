@@ -52,7 +52,7 @@
                 zoomOffset: -1,
                 accessToken: 'your.mapbox.access.token'
             })
-            osm.addTo(this.mymap)
+            // osm.addTo(this.mymap)
             var options = {
                 position: 'topright',
                 draw: {
