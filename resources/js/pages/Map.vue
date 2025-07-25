@@ -44,15 +44,13 @@
         }),
         mounted() {
             this.mymap = L.map('mapid', {drawControl: false}).setView([55.536446, 47.498600], 13);
-            let osm = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoianVyYTk2IiwiYSI6ImNrcGw1MWVzODFkazQyd284bjY0ZWIxbmIifQ.CWG9L2rMStLO3i3AOgrnyQ', {
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                maxZoom: 18,
-                id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
-                accessToken: 'your.mapbox.access.token'
-            })
-            // osm.addTo(this.mymap)
+            let osm = L.tileLayer('https://mt1.google.com/vt/lyrs=m@152000000&hl=ru&x={x}&y={y}&z={z}&s=Gali', {
+                attribution: '<a href="yandex.ru" target="_blank">google</a>',
+                reuseTiles: true,
+                maxZoom: 19,
+                updateWhenIdle: false
+            });
+            osm.addTo(this.mymap)
             var options = {
                 position: 'topright',
                 draw: {
