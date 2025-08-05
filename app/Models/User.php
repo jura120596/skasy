@@ -217,6 +217,11 @@ class User extends Authenticatable
         return $this->hasMany(UserFile::class, 'user_id');
     }
 
+    public function villageEvents()
+    {
+        return $this->belongsToMany(VillageEvent::class, 'village_event_participants');
+    }
+
     public function savePhoto(\Illuminate\Http\UploadedFile $f)
     {
         $this->photo = '/storage/'. Storage::disk('public')->put('/user_photos/' .Carbon::now()->format('Y/m/d'),$f);

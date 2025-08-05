@@ -43,4 +43,12 @@ class UserSignUpRequest extends AppRequest
         return [
         ];
     }
+    public function attributes()
+    {
+        return [
+            'name' => 'имя'
+        ];
+    }
+
+
 }

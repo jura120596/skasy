@@ -14,6 +14,7 @@ class UserProfileRequest extends UserSignUpRequest {
     public function sometimesRules(): array
     {
         return Arr::except(array_merge(parent::requiredRules(), parent::sometimesRules(), [
+            'village_event_id' => 'int',
             'password' => 'string|min:'.User::MIN_PASSWORD_LENGTH.'|confirmed' .
                 '|regex:/.*[a-z].*/|regex:/.*[0-9].*/|regex:/.*[\W\D\S].*/',
         ]), ['email', 'accept', 'phone', $this->password? 'somevar' : 'password',]);

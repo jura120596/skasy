@@ -9,7 +9,6 @@ class UserMapEventController extends Controller
     public function __construct()
     {
         $this->middleware('auth:auth-api');
-
     }
 
     /**
@@ -19,7 +18,11 @@ class UserMapEventController extends Controller
      */
     public function index()
     {
-        return $this->response(['user events', \request()->user()->events()->with('mapObject', 'event')->orderBy('id', 'desc')->paginate()]);
+        $page = \request()->user()->events()
+            ->with('mapObject', 'event')
+            ->orderBy('id', 'desc')
+            ->paginate();
+        return $this->response(['user events', $page]);
     }
 
 

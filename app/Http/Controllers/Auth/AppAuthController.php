@@ -7,27 +7,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\Transaction;
 use App\Http\Requests\ApiAuth\LoginRequest;
 use App\Http\Requests\ApiAuth\ResetPasswordLinkRequest;
-use App\Http\Requests\ApiAuth\ResetPasswordRequest;
 use App\Http\Requests\ApiAuth\UserProfileRequest;
 use App\Http\Requests\ApiAuth\UserSignUpRequest;
-use App\Mail\PasswordMail;
 use App\Models\User;
 use App\Models\Users\Admin;
-use App\Models\Users\VillageUser;
 use App\Models\Users\Librarian;
+use App\Models\Users\VillageUser;
+use App\Models\VillageEvent;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Laravel\Passport\PersonalAccessTokenResult;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AppAuthController extends Controller
@@ -176,6 +170,9 @@ class AppAuthController extends Controller
             $u->password = Hash::make($pswd);
         }
         $u->save();
+        if ($e = VillageEvent::find($request->village_event_id)) {
+            $u->villageEvents()->syncWithoutDetaching($e);
+        }
         return $this->profile();
     }
 

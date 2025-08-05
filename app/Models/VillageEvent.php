@@ -70,9 +70,7 @@ class VillageEvent extends Model
             throw new AppException('Участника можно добавить только в течение 2-х часов после начала мероприятия');
         }
         if ($user && !$this->participants()->find($user->id)) {
-            $this->participants()->save($user);
-//            $user->points += $this->points;
-//            $user->save();
+            $this->participants()->syncWithoutDetaching($user);
             $user->update(['points' => DB::raw('points + ' . $this->points)]);
             $user->events()->save(new UserHistory(['points' => $this->points, 'village_event_id' => $this->id]));
         }

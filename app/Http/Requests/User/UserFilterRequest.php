@@ -50,4 +50,10 @@ class UserFilterRequest extends AppRequest
         }
         return parent::prepareQuery($query);
     }
+    public function attributes()
+    {
+        return [
+            'name' => 'имя'
+        ];
+    }
 }
