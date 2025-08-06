@@ -37,7 +37,7 @@ class UserController extends Controller
         } else if ($this->isCurator()) {
             $query
                 ->whereRaw('role & ' . User::VILLAGE_ROLE . '> 0')
-                ->where('village_id', $request->user()->village_id ?: -1);
+                ->where('district_id', $request->user()->district_id ?: -1);
         }
         $query = $request->prepareQuery($query)->with(['village', 'district']);
         return $this->response([trans('responses.controllers.user.index'),
