@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * Class UserFilterRequest
  * @property string name
+ * @property int village_event_id
  * @package App\Http\Requests\User
  */
 class UserFilterRequest extends AppRequest
@@ -20,6 +21,7 @@ class UserFilterRequest extends AppRequest
     {
         return [
             'name'=> 'string|nullable|max:20',
+            'village_event_id' => 'int',
         ];
     }
 
@@ -29,7 +31,11 @@ class UserFilterRequest extends AppRequest
      */
     public function prepareQuery(Builder $query) : Builder
     {
-
+        if($vid = $this->village_event_id) {
+            $query->whereHas('villageEvents', function ($q) use ($vid) {
+                $q->whereKey($vid);
+            });
+        }
         if (trim($this->name)) $query->where(function ($q) use($query) {
             $name = mb_strtolower(trim($this->name));
             $query->orWhereRaw('lower(name)  like \'%'. $name . '%\'');
