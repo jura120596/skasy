@@ -9,8 +9,8 @@ class AddVilageEventRequest extends AppRequest
     public function requiredRules(): array
     {
         return [
-            'title' => 'string|min:10|max:100',
-            'place' => 'string|min:10|max:50',
+            'title' => 'string|min:4|max:100',
+            'place' => 'string|min:4|max:50',
             'date' => 'date_format:d.m.Y H:i',
             'points' => 'int',
         ];
