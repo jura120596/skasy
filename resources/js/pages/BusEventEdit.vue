@@ -2,12 +2,12 @@
     <v-container
             class="cover">
         <v-toolbar-title align="center" justify="center" class="mb-2"
-        v-text="'Добавление рапсисания'">
+        v-text="'Добавление расписания'">
         </v-toolbar-title>
         <v-text-field
             type="text"
             name="title"
-            label="Мрашрут"
+            label="Маршрут"
             v-model="event.title"
             :error-messages="messages.title"
             >
